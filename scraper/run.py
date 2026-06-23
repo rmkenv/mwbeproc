@@ -19,8 +19,9 @@ log = logging.getLogger(__name__)
 
 # ── Config ──────────────────────────────────────────────────────────────────
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/").removesuffix("/api")
 OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_API_KEY  = os.getenv("OLLAMA_API_KEY", "")
 FIRM_NAME       = os.getenv("FIRM_NAME", "IQSpatial Legal")
 MIN_FIT_SCORE   = int(os.getenv("MIN_FIT_SCORE", "5"))
 DAYS_BACK       = 30
@@ -38,75 +39,120 @@ KEYWORDS = [
 # ── Scrapers ─────────────────────────────────────────────────────────────────
 
 def fetch_nyc_opendata(keyword: str) -> list[dict]:
-    """NYC contracts via Open Data API (no key required)."""
-    url = "https://data.cityofnewyork.us/resource/fmzz-s9dj.json"
-    params = {
-        "$where": f"UPPER(contract_purpose) LIKE '%{keyword.upper()}%'",
-        "$limit": 30,
-        "$order": "start_date DESC",
-    }
+    """
+    NYC current solicitations + recent contract awards via Open Data API.
+    Dataset IDs confirmed from DCAS procurement data sets page:
+      - Current Solicitations: 3khw-qi8f
+      - Recent Contract Awards: qyyg-4tf5
+    """
+    results = []
+
+    # Current Solicitations — active RFPs/bids (primary source)
     try:
-        r = requests.get(url, params=params, timeout=15)
+        r = requests.get(
+            "https://data.cityofnewyork.us/resource/3khw-qi8f.json",
+            params={
+                "$where": f"UPPER(description) LIKE '%{keyword.upper()}%' OR UPPER(agency) LIKE '%{keyword.upper()}%'",
+                "$limit": 30,
+                "$order": "due_date DESC",
+            },
+            timeout=15,
+        )
         r.raise_for_status()
-        results = []
         for c in r.json():
+            pin = c.get("pin", str(uuid.uuid4().hex[:8]))
             results.append({
-                "id": c.get("contract_id", str(uuid.uuid4())[:8]),
-                "title": c.get("contract_purpose", "Unknown"),
-                "agency": c.get("agency_name", ""),
+                "id": f"NYCRSOL-{pin}",
+                "title": c.get("description", c.get("title", "Unknown Solicitation")),
+                "agency": c.get("agency", ""),
                 "jurisdiction": "NYC",
-                "source": "NYC Open Data / PASSPort",
-                "source_url": "https://www1.nyc.gov/site/mocs/systems/passport.page",
-                "amount": float(c.get("current_amount", 0) or 0),
-                "start_date": c.get("start_date", ""),
-                "due_date": c.get("end_date", ""),
-                "issue_date": c.get("start_date", ""),
-                "contract_type": c.get("contract_type", "Contract"),
+                "source": "NYC Current Solicitations",
+                "source_url": f"https://a856-cityrecord.nyc.gov/RequestDetail/{pin}" if pin else "https://a856-cityrecord.nyc.gov",
+                "amount": float(c.get("estimated_amount", 0) or 0),
+                "due_date": c.get("due_date", ""),
+                "issue_date": c.get("published_date", ""),
+                "contract_type": c.get("type", "Solicitation"),
                 "keyword_match": keyword,
-                "raw_text": f"{c.get('contract_purpose','')} {c.get('agency_name','')}",
+                "raw_text": f"{c.get('description','')} {c.get('agency','')} {c.get('title','')}",
             })
-        return results
     except Exception as e:
-        log.warning(f"NYC Open Data failed for '{keyword}': {e}")
-        return []
+        log.warning(f"NYC Solicitations failed for '{keyword}': {e}")
 
-
-def fetch_checkbook(keyword: str) -> list[dict]:
-    """Checkbook NYC contracts."""
-    url = "https://www.checkbooknyc.com/api/contracts/search"
-    start = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%Y%m%d")
-    params = {
-        "search_type": "contracts", "value": keyword,
-        "start_date": start, "response_format": "json",
-        "records_from": 0, "record_size": 20,
-    }
+    # Recent Contract Awards — useful for identifying which agencies spend on legal services
     try:
-        r = requests.get(url, params=params, timeout=15)
+        r = requests.get(
+            "https://data.cityofnewyork.us/resource/qyyg-4tf5.json",
+            params={
+                "$where": f"UPPER(description) LIKE '%{keyword.upper()}%' OR UPPER(agency) LIKE '%{keyword.upper()}%'",
+                "$limit": 20,
+                "$order": "award_date DESC",
+            },
+            timeout=15,
+        )
         r.raise_for_status()
-        data = r.json()
-        contracts = data.get("contracts", {}).get("contract", [])
-        if isinstance(contracts, dict):
-            contracts = [contracts]
-        results = []
-        for c in contracts:
+        for c in r.json():
+            cid = c.get("contract_id", str(uuid.uuid4().hex[:8]))
             results.append({
-                "id": f"CB-{c.get('contract_id', uuid.uuid4().hex[:8])}",
-                "title": c.get("contract_purpose", c.get("vendor_name", "Unknown")),
-                "agency": c.get("agency_name", ""),
+                "id": f"NYCAWD-{cid}",
+                "title": c.get("description", "Unknown Award"),
+                "agency": c.get("agency", ""),
                 "jurisdiction": "NYC",
-                "source": "Checkbook NYC",
-                "source_url": f"https://www.checkbooknyc.com/contract_details/contractid/{c.get('contract_id','')}",
-                "amount": float(c.get("current_amount", 0) or 0),
+                "source": "NYC Contract Awards",
+                "source_url": f"https://www.checkbooknyc.com/contract_details/contractid/{cid}",
+                "amount": float(c.get("award_amount", 0) or 0),
                 "due_date": c.get("end_date", ""),
-                "issue_date": c.get("start_date", ""),
-                "contract_type": c.get("contract_type", "Contract"),
+                "issue_date": c.get("award_date", ""),
+                "contract_type": "Award",
                 "keyword_match": keyword,
-                "raw_text": f"{c.get('contract_purpose','')} {c.get('agency_name','')} {c.get('vendor_name','')}",
+                "raw_text": f"{c.get('description','')} {c.get('agency','')}",
             })
-        return results
     except Exception as e:
-        log.warning(f"Checkbook failed for '{keyword}': {e}")
-        return []
+        log.warning(f"NYC Contract Awards failed for '{keyword}': {e}")
+
+    return results
+
+
+def fetch_city_record(keyword: str) -> list[dict]:
+    """
+    NYC City Record solicitations via the public search page.
+    Supplements the Open Data API with additional solicitation detail.
+    """
+    results = []
+    try:
+        r = requests.get(
+            "https://a856-cityrecord.nyc.gov/Home/SearchByCategory",
+            params={"categoryId": "23", "keyword": keyword},  # 23 = Professional Services
+            timeout=15,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0)"},
+        )
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        for row in soup.select("table tbody tr"):
+            cols = row.find_all("td")
+            if len(cols) < 4:
+                continue
+            link = cols[0].find("a")
+            title = link.get_text(strip=True) if link else cols[0].get_text(strip=True)
+            href  = link["href"] if link and link.get("href") else ""
+            if href and not href.startswith("http"):
+                href = "https://a856-cityrecord.nyc.gov" + href
+            results.append({
+                "id": f"CR-{uuid.uuid4().hex[:8]}",
+                "title": title,
+                "agency": cols[1].get_text(strip=True) if len(cols) > 1 else "",
+                "jurisdiction": "NYC",
+                "source": "NYC City Record",
+                "source_url": href or "https://a856-cityrecord.nyc.gov",
+                "amount": 0,
+                "due_date": cols[3].get_text(strip=True) if len(cols) > 3 else "",
+                "issue_date": cols[2].get_text(strip=True) if len(cols) > 2 else "",
+                "contract_type": "Solicitation",
+                "keyword_match": keyword,
+                "raw_text": f"{title} {cols[1].get_text(strip=True) if len(cols) > 1 else ''}",
+            })
+    except Exception as e:
+        log.warning(f"City Record failed for '{keyword}': {e}")
+    return results
 
 
 def fetch_nys_contract_reporter(keyword: str) -> list[dict]:
@@ -258,6 +304,9 @@ Scoring guide:
 def score_opportunity(opp: dict) -> dict | None:
     prompt = SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
     try:
+        headers = {}
+        if OLLAMA_API_KEY:
+            headers["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
         r = requests.post(
             f"{OLLAMA_BASE_URL}/api/chat",
             json={
@@ -265,6 +314,7 @@ def score_opportunity(opp: dict) -> dict | None:
                 "messages": [{"role": "user", "content": prompt}],
                 "stream": False,
             },
+            headers=headers,
             timeout=60,
         )
         r.raise_for_status()
@@ -302,7 +352,7 @@ def main():
     for kw in KEYWORDS:
         log.info(f"Fetching keyword: {kw}")
         raw += fetch_nyc_opendata(kw)
-        raw += fetch_checkbook(kw)
+        raw += fetch_city_record(kw)
         raw += fetch_nys_contract_reporter(kw)
         raw += fetch_nassau(kw)
         raw += fetch_suffolk(kw)
