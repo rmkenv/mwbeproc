@@ -2,7 +2,7 @@ name: Scrape Procurement Portals
 
 on:
   schedule:
-    - cron: "0 12 * * 1,4"   # Mon + Thu at 7am ET
+    - cron: "0 13 * * 1-5"   # Mon–Fri at 8am ET (13:00 UTC)
   workflow_dispatch:           # manual trigger from GitHub UI
 
 jobs:
@@ -21,12 +21,16 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 python-dotenv pdfminer.six
+        run: pip install requests beautifulsoup4 python-dotenv pdfminer.six playwright
+
+      - name: Install Playwright browsers
+        run: playwright install chromium --with-deps
 
       - name: Run scraper
         env:
           OLLAMA_BASE_URL: ${{ secrets.OLLAMA_BASE_URL }}
           OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL }}
+          OLLAMA_VISION_MODEL: ${{ secrets.OLLAMA_VISION_MODEL }}
           OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
           FIRM_NAME: ${{ secrets.FIRM_NAME }}
           MIN_FIT_SCORE: "5"
