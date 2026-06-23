@@ -23,13 +23,14 @@ log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
-OLLAMA_API_KEY  = os.getenv("OLLAMA_API_KEY", "")
-FIRM_NAME       = os.getenv("FIRM_NAME", "IQSpatial Legal")
-MIN_FIT_SCORE   = int(os.getenv("MIN_FIT_SCORE", "5"))
-SAM_API_KEY     = os.getenv("SAM_API_KEY", "")   # optional — free at sam.gov/api
-DAYS_BACK       = 30
+OLLAMA_BASE_URL     = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
+OLLAMA_MODEL        = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
+OLLAMA_VISION_MODEL = os.getenv("OLLAMA_VISION_MODEL", "llava:7b")
+OLLAMA_API_KEY      = os.getenv("OLLAMA_API_KEY", "")
+FIRM_NAME           = os.getenv("FIRM_NAME", "IQSpatial Legal")
+MIN_FIT_SCORE       = int(os.getenv("MIN_FIT_SCORE", "5"))
+SAM_API_KEY         = os.getenv("SAM_API_KEY", "")
+DAYS_BACK           = 30
 
 OUTPUT_PATH = Path(__file__).parent.parent / "public" / "data" / "opportunities.json"
 SEEN_PATH   = Path(__file__).parent / "seen_ids.json"
@@ -75,10 +76,19 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
         from io import BytesIO
         text = extract_text(BytesIO(pdf_r.content))
 
-        # Step 4: Find PROCUREMENT section
-        proc_start = text.find("PROCUREMENT")
+        # Step 4: Find PROCUREMENT section — try multiple markers
+        import re
+        proc_start = -1
+        for marker in ["PROCUREMENT", "Procurement", "AWARD", "SOLICITATION"]:
+            idx = text.find(marker)
+            if idx != -1:
+                proc_start = idx
+                log.info(f"City Record PDF: found section marker '{marker}' at char {idx}")
+                break
+
         if proc_start == -1:
-            log.warning("City Record PDF: PROCUREMENT section not found")
+            # Log first 500 chars to help debug
+            log.warning(f"City Record PDF: no section found. Text preview: {text[:500]!r}")
             return []
 
         # Find end of procurement section (next major section)
@@ -91,8 +101,7 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
 
         procurement_text = text[proc_start:proc_end]
 
-        # Step 5: Split by agency blocks (all-caps lines followed by content)
-        import re
+        # Step 5: Split by agency blocks
         # Each agency block starts with agency name in ALL CAPS
         # Split on lines that are all-caps and not too long (agency headers)
         lines = procurement_text.split("\n")
@@ -315,9 +324,9 @@ def screenshot_and_extract(url: str, county: str) -> list[dict]:
         with sync_playwright() as p:
             browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
             page = browser.new_page(viewport={"width": 1400, "height": 900})
-            page.goto(url, wait_until="networkidle", timeout=30000)
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
             # Wait a bit for JS-rendered tables to populate
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(5000)
             screenshot_bytes = page.screenshot(full_page=True)
             browser.close()
         log.info(f"{county}: page rendered, screenshot {len(screenshot_bytes)} bytes")
