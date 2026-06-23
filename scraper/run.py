@@ -23,9 +23,9 @@ log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-OLLAMA_BASE_URL     = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-OLLAMA_MODEL        = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
-OLLAMA_VISION_MODEL = os.getenv("OLLAMA_VISION_MODEL", "llava:7b")
+OLLAMA_BASE_URL     = os.getenv("OLLAMA_BASE_URL", "https://ollama.com")
+OLLAMA_MODEL        = os.getenv("OLLAMA_MODEL", "gpt-oss:20b")
+OLLAMA_VISION_MODEL = os.getenv("OLLAMA_VISION_MODEL", "gemma4:12b")
 OLLAMA_API_KEY      = os.getenv("OLLAMA_API_KEY", "")
 FIRM_NAME           = os.getenv("FIRM_NAME", "IQSpatial Legal")
 MIN_FIT_SCORE       = int(os.getenv("MIN_FIT_SCORE", "5"))
@@ -49,7 +49,12 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0; +https://iqs
 # ── Source 1: NYC City Record — Daily PDF ────────────────────────────────────
 
 def fetch_nyc_city_record_pdf() -> list[dict]:
-    """NYC City Record PDF parser with full debug logging."""
+    """
+    NYC City Record PDF parser.
+    Key insight: the PDF has a TABLE OF CONTENTS near the top that also contains
+    the word "PROCUREMENT" — must skip past it to find actual entries.
+    Real entries contain PIN# numbers. Find the first PIN# and work from there.
+    """
     import re
     results  = []
     seen_ids = set()
@@ -65,50 +70,46 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
 
         pdf_r = requests.get(pdf_url, timeout=60, headers=HEADERS)
         pdf_r.raise_for_status()
-        log.info(f"City Record PDF downloaded: {len(pdf_r.content)} bytes")
+        log.info(f"City Record PDF: {len(pdf_r.content)} bytes")
 
         from pdfminer.high_level import extract_text
         from io import BytesIO
         text = extract_text(BytesIO(pdf_r.content))
-        log.info(f"City Record PDF text length: {len(text)} chars")
+        log.info(f"City Record PDF: {len(text)} chars extracted")
 
-        # Debug: show chars 2000-3000 to find section structure
-        log.info(f"PDF text sample [2000:2500]: {text[2000:2500]!r}")
-
-        # Try all possible procurement markers
-        for marker in ["\nPROCUREMENT\n", "PROCUREMENT\n", "PROCUREMENT", "PIN#", "E j"]:
-            idx = text.find(marker)
-            if idx != -1:
-                log.info(f"Found marker {marker!r} at position {idx}")
-                log.info(f"Context: {text[max(0,idx-50):idx+200]!r}")
-                break
-            else:
-                log.info(f"Marker {marker!r} NOT found")
-
-        # Find PROCUREMENT section
-        proc_start = -1
-        for marker in ["\nPROCUREMENT\n", "PROCUREMENT\n", "PROCUREMENT"]:
-            idx = text.find(marker)
-            if idx != -1:
-                proc_start = idx
-                log.info(f"Using marker {marker!r} at {idx}")
-                break
-
-        if proc_start == -1:
-            log.warning(f"No PROCUREMENT section. Full text preview: {text[:1000]!r}")
+        # Find the REAL procurement section — skip the TOC
+        # Strategy: find the first PIN# which only appears in actual entries
+        first_pin = text.find("PIN#")
+        if first_pin == -1:
+            log.warning("City Record PDF: no PIN# found — no procurement entries today")
             return []
 
-        proc_end = text.find("PUBLIC COMMENT ON", proc_start + 100)
+        # Walk backward from first PIN# to find the PROCUREMENT section header
+        search_back = text[max(0, first_pin - 3000):first_pin]
+        proc_offset = search_back.rfind("PROCUREMENT")
+        if proc_offset != -1:
+            proc_start = max(0, first_pin - 3000) + proc_offset
+        else:
+            # No header found, start from a bit before the first PIN#
+            proc_start = max(0, first_pin - 500)
+
+        # End section
+        proc_end = text.find("PUBLIC COMMENT ON CONTRACT AWARDS", proc_start)
         if proc_end == -1:
-            proc_end = min(proc_start + 50000, len(text))
+            proc_end = text.find("PUBLIC COMMENT ON", proc_start)
+        if proc_end == -1:
+            proc_end = min(proc_start + 80000, len(text))
 
         procurement_text = text[proc_start:proc_end]
-        log.info(f"PROCUREMENT section: {len(procurement_text)} chars")
-        log.info(f"First 500 chars of section: {procurement_text[:500]!r}")
+        log.info(f"City Record PDF: real PROCUREMENT section {len(procurement_text)} chars (starts at {proc_start})")
 
-        # Split on "E j" date markers
-        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n?", procurement_text)
-        log.info(f"Split into {len(raw_entries)} raw entries")
+        # Count total PINs to verify we're in the right section
+        pin_count = len(re.findall(r"PIN#", procurement_text))
+        log.info(f"City Record PDF: {pin_count} PIN# entries found in section")
+
+        # Split on "E j" date markers — each entry ends with one
+        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n", procurement_text)
+        log.info(f"City Record PDF: split into {len(raw_entries)} blocks")
 
         current_agency = "NYC Agency"
 
@@ -117,29 +118,57 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             if not raw or len(raw) < 30:
                 continue
 
+            # Skip TOC-style lines (dot leaders like ". . . . . 2670")
+            if re.search(r"\.\s*\.\s*\.\s*\.\s*\d{4}", raw):
+                continue
+
+            # Skip boilerplate blocks
+            if any(bp in raw for bp in [
+                "Compete To Win", "compete to win", "CompeteToWin",
+                "Vendors List brings contracting",
+                "Office of the Corporate Secretary",
+                "The City Record Online",
+                "CITY RECORD",
+            ]):
+                continue
+
+            # Update current agency from all-caps lines at start of block
             lines = [l.strip() for l in raw.split("\n") if l.strip()]
             for line in lines[:5]:
-                if line.isupper() and 5 < len(line) < 80 and not any(
-                    line.startswith(p) for p in ("PIN", "AMT", "TO:", "NYC", "FY")
-                ):
+                if (line.isupper() and 5 < len(line) < 80 
+                    and not any(line.startswith(p) for p in 
+                        ("PIN", "AMT", "TO:", "NYC", "FY", "THE ", "USE "))):
                     current_agency = line.title()
                     break
 
+            # Keyword filter
             matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
             if not matched_kw:
                 continue
 
-            pin_match = re.search(r"PIN#([\w\-]+)", raw)
+            # Extract PIN
+            pin_match = re.search(r"PIN#\s*([\w\-]+)", raw)
             pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
 
+            # Extract amount
             amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", raw)
             amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
 
+            # Extract vendor
+            vendor_match = re.search(r"\bTO:\s*([^,\n]{5,80})", raw)
+            vendor = vendor_match.group(1).strip() if vendor_match else ""
+
+            # Build title: first line with real content (not all-caps header, not PIN/AMT)
             title = ""
             for line in lines:
+                # Skip agency headers
                 if line.isupper() and len(line) < 80:
                     continue
-                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the")):
+                # Skip metadata lines
+                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the", "The City")):
+                    continue
+                # Skip dot-leader lines
+                if ". . ." in line:
                     continue
                 if len(line) > 15:
                     title = line[:120]
@@ -147,10 +176,18 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             if not title:
                 title = f"{current_agency} — {matched_kw} procurement"
 
+            # Notice type
             raw_upper = raw.upper()
-            notice_type = "AWARD" if " AWARD\n" in raw_upper or "\nAWARD\n" in raw_upper else \
-                          "SOLICITATION" if "SOLICITATION" in raw_upper[:400] else \
-                          "VENDOR LIST" if "VENDOR LIST" in raw_upper else "Notice"
+            if "AWARD" in raw_upper[:400]:
+                notice_type = "AWARD"
+            elif "SOLICITATION" in raw_upper[:400]:
+                notice_type = "SOLICITATION"
+            elif "INTENT TO AWARD" in raw_upper:
+                notice_type = "INTENT TO AWARD"
+            elif "VENDOR LIST" in raw_upper:
+                notice_type = "VENDOR LIST"
+            else:
+                notice_type = "Notice"
 
             uid = f"CROL-{pin}"
             if uid in seen_ids:
@@ -300,65 +337,75 @@ Each item must have:
 If no solicitations are visible, return [].
 """
 
+
+def ollama_call(prompt: str, model: str, image_b64: str = None) -> str:
+    """
+    Call Ollama Cloud API.
+    Direct API: https://ollama.com/api/chat with Bearer token.
+    Logs full response body on error for debugging.
+    """
+    base = OLLAMA_BASE_URL.rstrip("/")
+    url  = f"{base}/api/chat"
+
+    hdrs = {"Content-Type": "application/json"}
+    if OLLAMA_API_KEY:
+        hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
+
+    # Build message content
+    if image_b64:
+        # Ollama vision format: images array in the message
+        messages = [{"role": "user", "content": prompt, "images": [image_b64]}]
+    else:
+        messages = [{"role": "user", "content": prompt}]
+
+    r = requests.post(
+        url,
+        headers=hdrs,
+        json={"model": model, "messages": messages, "stream": False},
+        timeout=90,
+    )
+
+    if not r.ok:
+        # Log full response body to help diagnose 404/403
+        log.warning(f"Ollama API error {r.status_code} for model '{model}': {r.text[:500]}")
+        r.raise_for_status()
+
+    content = r.json()["message"]["content"].strip()
+
+    # Strip thinking tags
+    if "<think>" in content:
+        content = content.split("</think>")[-1].strip()
+
+    return content
+
+
 def screenshot_and_extract(url: str, county: str) -> list[dict]:
     """
-    Renders the procurement portal URL using Playwright headless Chromium,
-    takes a full-page screenshot, and sends it to the Ollama vision model
-    to extract all solicitation entries as structured JSON.
+    Playwright screenshot → Ollama vision model (gemma4:12b) → JSON extraction.
     """
     import base64
-
     results = []
 
-    # Step 1: Render page with Playwright
+    # Step 1: Playwright render
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
             browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
             page = browser.new_page(viewport={"width": 1400, "height": 900})
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            # Wait a bit for JS-rendered tables to populate
             page.wait_for_timeout(5000)
             screenshot_bytes = page.screenshot(full_page=True)
             browser.close()
-        log.info(f"{county}: page rendered, screenshot {len(screenshot_bytes)} bytes")
+        log.info(f"{county}: rendered, {len(screenshot_bytes)} bytes")
     except Exception as e:
         log.warning(f"{county}: Playwright failed: {e}")
         return []
 
-    # Step 2: Send to vision model
+    # Step 2: Vision extraction
     try:
         img_b64 = base64.b64encode(screenshot_bytes).decode("utf-8")
-        base = OLLAMA_BASE_URL.rstrip("/")
-        chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
+        content = ollama_call(VISION_PROMPT, model=OLLAMA_VISION_MODEL, image_b64=img_b64)
 
-        hdrs = {"Content-Type": "application/json"}
-        if OLLAMA_API_KEY:
-            hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
-
-        # Use vision-capable model — qwen2.5vl or llava
-        vision_model = os.getenv("OLLAMA_VISION_MODEL", OLLAMA_MODEL)
-
-        r = requests.post(
-            chat_url,
-            json={
-                "model": vision_model,
-                "messages": [{
-                    "role": "user",
-                    "content": VISION_PROMPT,
-                    "images": [img_b64],
-                }],
-                "stream": False,
-            },
-            headers=hdrs,
-            timeout=90,
-        )
-        r.raise_for_status()
-        content = r.json()["message"]["content"].strip()
-
-        # Strip think tags and fences
-        if "<think>" in content:
-            content = content.split("</think>")[-1].strip()
         if content.startswith("```"):
             content = content.split("```")[1]
             if content.startswith("json"):
@@ -367,31 +414,26 @@ def screenshot_and_extract(url: str, county: str) -> list[dict]:
         entries = json.loads(content.strip())
         if not isinstance(entries, list):
             entries = []
-
-        log.info(f"{county}: vision model extracted {len(entries)} entries")
-
+        log.info(f"{county}: extracted {len(entries)} entries")
     except Exception as e:
-        log.warning(f"{county}: vision extraction failed: {e}")
+        log.warning(f"{county}: vision failed: {e}")
         return []
 
-    # Step 3: Keyword-filter and normalize
+    # Step 3: Keyword filter
     jurisdiction = "Nassau" if county == "Nassau" else "Suffolk"
-    source_name  = f"{county} County Procurement Portal"
-
     for entry in entries:
         title   = entry.get("title", "").strip()
         raw     = f"{title} {entry.get('department', '')} {entry.get('type', '')}"
         matched = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
         if not matched or not title:
             continue
-
         doc_num = entry.get("doc_number", uuid.uuid4().hex[:6])
         results.append({
             "id": f"{jurisdiction.upper()}-{doc_num}",
             "title": title,
             "agency": entry.get("department", f"{county} County"),
             "jurisdiction": jurisdiction,
-            "source": source_name,
+            "source": f"{county} County Procurement Portal",
             "source_url": url,
             "amount": 0,
             "due_date": entry.get("due_date", ""),
@@ -401,23 +443,16 @@ def screenshot_and_extract(url: str, county: str) -> list[dict]:
             "raw_text": raw,
         })
 
-    log.info(f"{county}: {len(results)} keyword-matched after filtering")
+    log.info(f"{county}: {len(results)} keyword-matched")
     return results
 
 
 def fetch_nassau() -> list[dict]:
-    return screenshot_and_extract(
-        "https://apex5.nassaucountyny.gov/ords/f?p=533:226",
-        "Nassau",
-    )
+    return screenshot_and_extract("https://apex5.nassaucountyny.gov/ords/f?p=533:226", "Nassau")
 
 
 def fetch_suffolk() -> list[dict]:
-    return screenshot_and_extract(
-        "https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx",
-        "Suffolk",
-    )
-
+    return screenshot_and_extract("https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx", "Suffolk")
 
 # ── Deduplication ─────────────────────────────────────────────────────────────
 
@@ -459,27 +494,10 @@ Scoring guide:
 """
 
 def score_opportunity(opp: dict) -> dict | None:
-    # Prefix with /no_think to disable Qwen3.5 thinking mode — keeps output clean JSON
-    prompt = "/no_think\n\n" + SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
-    base = OLLAMA_BASE_URL.rstrip("/")
-    chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
-    log.info(f"Scoring '{opp['title'][:50]}' via {chat_url}")
+    prompt = SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
+    log.info(f"Scoring '{opp['title'][:60]}' with {OLLAMA_MODEL}")
     try:
-        hdrs = {"Content-Type": "application/json"}
-        if OLLAMA_API_KEY:
-            hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
-        r = requests.post(
-            chat_url,
-            json={"model": OLLAMA_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False},
-            headers=hdrs,
-            timeout=60,
-        )
-        r.raise_for_status()
-        content = r.json()["message"]["content"].strip()
-        # Strip <think>...</think> blocks if present
-        if "<think>" in content:
-            content = content.split("</think>")[-1].strip()
-        # Strip markdown fences
+        content = ollama_call(prompt, model=OLLAMA_MODEL)
         if content.startswith("```"):
             content = content.split("```")[1]
             if content.startswith("json"):
@@ -487,7 +505,6 @@ def score_opportunity(opp: dict) -> dict | None:
         return {**opp, **json.loads(content.strip())}
     except Exception as e:
         log.warning(f"LLM scoring failed for '{opp['title']}': {e}")
-        # Keyword fallback
         text  = opp.get("raw_text", "").lower()
         score = min(sum(3 for k in ["immigration", "legal services", "removal defense", "asylum"] if k in text), 10)
         score = max(score, 1)
