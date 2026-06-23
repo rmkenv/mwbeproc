@@ -45,50 +45,137 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0; +https://iqs
 
 # ── Source 1: NYC City Record Online (Open Data dataset dg92-zbpx) ────────────
 
-def fetch_nyc_city_record() -> list[dict]:
+# ── Source 1: NYC City Record — Daily PDF ────────────────────────────────────
+
+def fetch_nyc_city_record_pdf() -> list[dict]:
     """
-    NYC City Record Online via Open Data dataset dg92-zbpx.
-    NOTE: Cannot mix $q and $where on this dataset — use $q only.
+    Fetches today's NYC City Record print edition PDF via GetLatestPrintEditionUrl,
+    extracts the PROCUREMENT section, parses individual entries, and keyword-filters.
+    This is the authoritative daily source — updated every business day.
     """
     results  = []
     seen_ids = set()
 
-    for keyword in KEYWORDS:
-        try:
-            r = requests.get(
-                "https://data.cityofnewyork.us/resource/dg92-zbpx.json",
-                params={
-                    "$q": keyword,
-                    "$limit": 50,
-                },
-                timeout=20,
-                headers=HEADERS,
-            )
-            r.raise_for_status()
-            for c in r.json():
-                record_id = c.get("record_id", c.get("id", uuid.uuid4().hex[:8]))
-                uid = f"CROL-{record_id}"
+    try:
+        # Step 1: Get the PDF URL
+        r = requests.get(
+            "https://a856-cityrecord.nyc.gov/Home/GetLatestPrintEditionUrl",
+            timeout=15, headers=HEADERS,
+        )
+        r.raise_for_status()
+        pdf_url = r.text.strip()
+        log.info(f"City Record PDF URL: {pdf_url}")
+
+        # Step 2: Download the PDF
+        pdf_r = requests.get(pdf_url, timeout=60, headers=HEADERS)
+        pdf_r.raise_for_status()
+
+        # Step 3: Extract text using pdfminer
+        from pdfminer.high_level import extract_text
+        from io import BytesIO
+        text = extract_text(BytesIO(pdf_r.content))
+
+        # Step 4: Find PROCUREMENT section
+        proc_start = text.find("PROCUREMENT")
+        if proc_start == -1:
+            log.warning("City Record PDF: PROCUREMENT section not found")
+            return []
+
+        # Find end of procurement section (next major section)
+        end_markers = ["PUBLIC COMMENT ON", "AGENCY RULES", "SPECIAL MATERIALS"]
+        proc_end = len(text)
+        for marker in end_markers:
+            idx = text.find(marker, proc_start + 100)
+            if idx != -1 and idx < proc_end:
+                proc_end = idx
+
+        procurement_text = text[proc_start:proc_end]
+
+        # Step 5: Split by agency blocks (all-caps lines followed by content)
+        import re
+        # Each agency block starts with agency name in ALL CAPS
+        # Split on lines that are all-caps and not too long (agency headers)
+        lines = procurement_text.split("\n")
+        current_agency = ""
+        current_block  = []
+        blocks         = []
+
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            # Detect agency header: short all-caps line
+            if stripped.isupper() and 3 < len(stripped) < 60 and not stripped.startswith("PIN") and not stripped.startswith("AMT"):
+                if current_agency and current_block:
+                    blocks.append((current_agency, "\n".join(current_block)))
+                current_agency = stripped
+                current_block  = []
+            else:
+                current_block.append(stripped)
+
+        if current_agency and current_block:
+            blocks.append((current_agency, "\n".join(current_block)))
+
+        # Step 6: Parse each block into individual solicitation entries
+        for agency, block_text in blocks:
+            # Split on PIN# or E j (date markers) to find individual entries
+            # Each entry typically has: title, type (SOLICITATION/AWARD), PIN, AMT
+            entries = re.split(r"(?=PIN#|E\s+j\d)", block_text)
+
+            for entry in entries:
+                entry = entry.strip()
+                if not entry or len(entry) < 20:
+                    continue
+
+                # Keyword filter
+                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in entry.lower()), None)
+                if not matched_kw:
+                    continue
+
+                # Extract PIN
+                pin_match = re.search(r"PIN#([\w\-]+)", entry)
+                pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+
+                # Extract amount
+                amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", entry)
+                amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
+
+                # Extract title — first meaningful line before type indicator
+                title_match = re.search(r"([A-Z][A-Z\s\-\(\)\/,]{10,}?)\s*[-–]\s*(Renewal|Award|Solicitation|Request|Competitive|Negotiated|Sole Source|Intergovernmental)", entry)
+                title = title_match.group(1).strip() if title_match else entry[:80].strip()
+
+                # Notice type
+                notice_type = "AWARD" if "AWARD" in entry[:200].upper() else \
+                              "SOLICITATION" if "SOLICITATION" in entry[:200].upper() else \
+                              "VENDOR LIST" if "VENDOR LIST" in entry[:200].upper() else "Notice"
+
+                uid = f"CROL-{pin}"
                 if uid in seen_ids:
                     continue
                 seen_ids.add(uid)
+
                 results.append({
                     "id": uid,
-                    "title": c.get("title", c.get("notice_title", "Unknown")),
-                    "agency": c.get("agency_name", c.get("agency", "")),
+                    "title": title,
+                    "agency": agency.title(),
                     "jurisdiction": "NYC",
-                    "source": "NYC City Record Online",
-                    "source_url": f"https://a856-cityrecord.nyc.gov/Section/Details/{record_id}" if record_id else "https://a856-cityrecord.nyc.gov/Section",
-                    "amount": 0,
-                    "due_date": c.get("due_date", c.get("response_date", "")),
-                    "issue_date": c.get("published_date", ""),
-                    "contract_type": c.get("notice_type", c.get("type", "Solicitation")),
-                    "keyword_match": keyword,
-                    "raw_text": f"{c.get('title','')} {c.get('notice_title','')} {c.get('agency_name','')} {c.get('description','')}",
+                    "source": "NYC City Record (PDF)",
+                    "source_url": pdf_url,
+                    "amount": amount,
+                    "due_date": "",
+                    "issue_date": datetime.now().strftime("%Y-%m-%d"),
+                    "contract_type": notice_type,
+                    "keyword_match": matched_kw,
+                    "raw_text": entry[:500],
                 })
-        except Exception as e:
-            log.warning(f"City Record Online failed for '{keyword}': {e}")
 
-    log.info(f"NYC City Record Online: {len(results)} keyword-matched items")
+        log.info(f"NYC City Record PDF: {len(results)} keyword-matched procurement entries")
+
+    except ImportError:
+        log.warning("pdfminer not installed — skipping City Record PDF. Add 'pdfminer.six' to requirements.")
+    except Exception as e:
+        log.warning(f"City Record PDF fetch failed: {e}")
+
     return results
 
 
@@ -195,67 +282,175 @@ def fetch_nys_contract_reporter(keyword: str) -> list[dict]:
 
 # ── Source 4: Nassau County ───────────────────────────────────────────────────
 
-def fetch_nassau(keyword: str) -> list[dict]:
+def fetch_nassau() -> list[dict]:
+    """
+    Nassau County public formal solicitation board.
+    Oracle APEX app — fetch all current solicitations, no keyword filter needed.
+    URL: https://apex5.nassaucountyny.gov/ords/f?p=533:226
+    Returns all rows then lets LLM score for relevance.
+    """
+    results = []
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     try:
-        r    = requests.get("https://www.nassaucountyny.gov/1085/Procurement", timeout=15, headers=HEADERS)
+        # Load the public board page to get session
+        r = session.get(
+            "https://apex5.nassaucountyny.gov/ords/f?p=533:226",
+            timeout=20,
+        )
+        r.raise_for_status()
         soup = BeautifulSoup(r.text, "html.parser")
-        results = []
-        for link in soup.find_all("a", string=lambda t: t and keyword.lower() in t.lower()):
-            href = link.get("href", "")
-            if not href.startswith("http"):
-                href = "https://www.nassaucountyny.gov" + href
+
+        # Find the solicitations table — APEX renders a standard HTML table
+        table = soup.find("table", {"class": lambda c: c and "a-IRR-table" in c}) \
+             or soup.find("table", id=lambda i: i and "irr" in str(i).lower()) \
+             or soup.find("table")
+
+        if not table:
+            log.warning("Nassau: no table found on solicitation board")
+            return []
+
+        headers_row = table.find("tr")
+        col_names = [th.get_text(strip=True).lower() for th in headers_row.find_all(["th", "td"])] if headers_row else []
+
+        for row in table.find_all("tr")[1:]:
+            cols = row.find_all("td")
+            if not cols:
+                continue
+
+            # Extract text from each column
+            col_texts = [c.get_text(strip=True) for c in cols]
+            if not any(col_texts):
+                continue
+
+            # Find link to detail page
+            link = row.find("a")
+            href = link["href"] if link and link.get("href") else ""
+            if href and not href.startswith("http"):
+                href = "https://apex5.nassaucountyny.gov" + href
+
+            # Build title from first meaningful column
+            title = col_texts[0] if col_texts else "Nassau County Solicitation"
+            raw   = " ".join(col_texts)
+
+            # Only include if any keyword matches the raw text
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+            if not matched_kw:
+                continue
+
+            bid_id = col_texts[0].replace(" ", "-")[:20] if col_texts else uuid.uuid4().hex[:8]
             results.append({
-                "id": f"NASSAU-{uuid.uuid4().hex[:6]}",
-                "title": link.get_text(strip=True),
+                "id": f"NASSAU-{bid_id}-{uuid.uuid4().hex[:4]}",
+                "title": title,
                 "agency": "Nassau County",
                 "jurisdiction": "Nassau",
-                "source": "Nassau County Portal",
-                "source_url": href or "https://www.nassaucountyny.gov/1085/Procurement",
+                "source": "Nassau County Solicitation Board",
+                "source_url": href or "https://apex5.nassaucountyny.gov/ords/f?p=533:226",
                 "amount": 0,
-                "due_date": "",
-                "issue_date": "",
-                "contract_type": "Bid",
-                "keyword_match": keyword,
-                "raw_text": link.get_text(strip=True),
+                "due_date": col_texts[3] if len(col_texts) > 3 else "",
+                "issue_date": col_texts[2] if len(col_texts) > 2 else "",
+                "contract_type": col_texts[1] if len(col_texts) > 1 else "Solicitation",
+                "keyword_match": matched_kw,
+                "raw_text": raw,
             })
-        return results
+
+        log.info(f"Nassau: {len(results)} keyword-matched solicitations")
     except Exception as e:
-        log.warning(f"Nassau scrape failed for '{keyword}': {e}")
-        return []
+        log.warning(f"Nassau scrape failed: {e}")
+
+    return results
 
 
 # ── Source 5: Suffolk County ──────────────────────────────────────────────────
 
-def fetch_suffolk(keyword: str) -> list[dict]:
+def fetch_suffolk() -> list[dict]:
+    """
+    Suffolk County Office of Central Procurement offering search.
+    ASP.NET app with ViewState — fetch all open offerings then keyword-filter.
+    URL: https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx
+    """
+    results = []
+    base_url = "https://dpw.suffolkcountyny.gov"
+    search_url = f"{base_url}/RFP/Offering_Search.aspx"
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
     try:
-        r    = requests.get(
-            "https://www.suffolkcountyny.gov/Departments/County-Executive/Procurement",
-            timeout=15, headers=HEADERS,
-        )
+        # GET the search page first to grab ViewState
+        r = session.get(search_url, timeout=20)
+        r.raise_for_status()
         soup = BeautifulSoup(r.text, "html.parser")
-        results = []
-        for link in soup.find_all("a", string=lambda t: t and keyword.lower() in t.lower()):
-            href = link.get("href", "")
-            if not href.startswith("http"):
-                href = "https://www.suffolkcountyny.gov" + href
+
+        viewstate          = soup.find("input", {"id": "__VIEWSTATE"})
+        viewstategenerator = soup.find("input", {"id": "__VIEWSTATEGENERATOR"})
+        eventvalidation    = soup.find("input", {"id": "__EVENTVALIDATION"})
+
+        form_data = {
+            "__VIEWSTATE":          viewstate["value"]          if viewstate          else "",
+            "__VIEWSTATEGENERATOR": viewstategenerator["value"] if viewstategenerator else "",
+            "__EVENTVALIDATION":    eventvalidation["value"]    if eventvalidation    else "",
+            "__EVENTTARGET":        "",
+            "__EVENTARGUMENT":      "",
+            "ctl00$ContentPlaceHolder1$txtKeyword": "",   # blank = all offerings
+            "ctl00$ContentPlaceHolder1$btnSearch":  "Search",
+            "ctl00$ContentPlaceHolder1$ddlType":    "0",  # 0 = all types
+            "ctl00$ContentPlaceHolder1$ddlStatus":  "1",  # 1 = open
+        }
+
+        # POST to get results
+        r2 = session.post(search_url, data=form_data, timeout=20)
+        r2.raise_for_status()
+        soup2 = BeautifulSoup(r2.text, "html.parser")
+
+        # Find results table
+        table = soup2.find("table", id=lambda i: i and "Grid" in str(i)) \
+             or soup2.find("table", {"class": lambda c: c and "grid" in str(c).lower()}) \
+             or soup2.find("table")
+
+        if not table:
+            log.warning("Suffolk: no results table found")
+            return []
+
+        for row in table.find_all("tr")[1:]:
+            cols = row.find_all("td")
+            if len(cols) < 3:
+                continue
+
+            col_texts = [c.get_text(strip=True) for c in cols]
+            raw = " ".join(col_texts)
+
+            # Keyword filter
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+            if not matched_kw:
+                continue
+
+            link = row.find("a")
+            href = link["href"] if link and link.get("href") else ""
+            if href and not href.startswith("http"):
+                href = base_url + "/" + href.lstrip("/")
+
+            doc_num = col_texts[0] if col_texts else uuid.uuid4().hex[:8]
             results.append({
-                "id": f"SUFFOLK-{uuid.uuid4().hex[:6]}",
-                "title": link.get_text(strip=True),
+                "id": f"SUFFOLK-{doc_num.replace(' ','-')}",
+                "title": col_texts[1] if len(col_texts) > 1 else col_texts[0],
                 "agency": "Suffolk County",
                 "jurisdiction": "Suffolk",
-                "source": "Suffolk County Portal",
-                "source_url": href or "https://www.suffolkcountyny.gov",
+                "source": "Suffolk County Procurement",
+                "source_url": href or search_url,
                 "amount": 0,
-                "due_date": "",
-                "issue_date": "",
-                "contract_type": "Bid",
-                "keyword_match": keyword,
-                "raw_text": link.get_text(strip=True),
+                "due_date": col_texts[3] if len(col_texts) > 3 else "",
+                "issue_date": col_texts[2] if len(col_texts) > 2 else "",
+                "contract_type": col_texts[4] if len(col_texts) > 4 else "Solicitation",
+                "keyword_match": matched_kw,
+                "raw_text": raw,
             })
-        return results
+
+        log.info(f"Suffolk: {len(results)} keyword-matched solicitations")
     except Exception as e:
-        log.warning(f"Suffolk scrape failed for '{keyword}': {e}")
-        return []
+        log.warning(f"Suffolk scrape failed: {e}")
+
+    return results
 
 
 # ── Deduplication ─────────────────────────────────────────────────────────────
@@ -347,17 +542,21 @@ def main():
     seen = load_seen()
     raw: list[dict] = []
 
-    # NYC City Record Online — Procurement section
-    log.info("Fetching NYC City Record Online...")
-    raw += fetch_nyc_city_record()
+    # NYC City Record — daily PDF (authoritative source)
+    log.info("Fetching NYC City Record daily PDF...")
+    raw += fetch_nyc_city_record_pdf()
+
+    # Nassau and Suffolk — scrape all open solicitations once, keyword-filter internally
+    log.info("Fetching Nassau County solicitations...")
+    raw += fetch_nassau()
+    log.info("Fetching Suffolk County solicitations...")
+    raw += fetch_suffolk()
 
     # Keyword-based sources
     for kw in KEYWORDS:
         log.info(f"Fetching keyword: {kw}")
         raw += fetch_sam_gov(kw)
         raw += fetch_nys_contract_reporter(kw)
-        raw += fetch_nassau(kw)
-        raw += fetch_suffolk(kw)
 
     # Deduplicate
     unique = {}
