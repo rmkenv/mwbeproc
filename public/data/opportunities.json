@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-06-23T07:00:00Z",
-  "run_id": "seed-001",
+  "generated_at": "2026-06-23T18:30:08.319289Z",
+  "run_id": "e8aa156f",
   "opportunities": [
     {
       "id": "MOIA-2026-0042",
-      "title": "Immigrant Legal Services – Removal Defense Program",
+      "title": "Immigrant Legal Services \u2013 Removal Defense Program",
       "agency": "Mayor's Office of Immigrant Affairs (MOIA)",
       "jurisdiction": "NYC",
       "source": "NYC PASSPort",
@@ -16,8 +16,16 @@
       "fit_score": 9,
       "action": "PURSUE",
       "summary": "Seeking qualified legal service providers to deliver removal defense representation and immigration court preparation for low-income NYC residents. MWBE participation strongly encouraged. Scope includes individual hearings, appeals, and community know-your-rights programming.",
-      "keyword_matches": ["immigration", "removal defense", "legal services", "MWBE"],
-      "certifications_required": ["MWBE preferred", "Nonprofit 501(c)(3) or law firm"],
+      "keyword_matches": [
+        "immigration",
+        "removal defense",
+        "legal services",
+        "MWBE"
+      ],
+      "certifications_required": [
+        "MWBE preferred",
+        "Nonprofit 501(c)(3) or law firm"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     },
     {
@@ -34,13 +42,21 @@
       "fit_score": 9,
       "action": "PURSUE",
       "summary": "ACS seeks legal providers to represent children in family court proceedings where SIJS findings are sought. Work includes intake, family court representation, USCIS petition preparation, and case management coordination with ACS caseworkers.",
-      "keyword_matches": ["SIJS", "immigration", "legal services", "children"],
-      "certifications_required": ["MWBE", "Law firm or legal services org"],
+      "keyword_matches": [
+        "SIJS",
+        "immigration",
+        "legal services",
+        "children"
+      ],
+      "certifications_required": [
+        "MWBE",
+        "Law firm or legal services org"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     },
     {
       "id": "ONA-2026-0007",
-      "title": "New Americans Opportunity Center – Legal Services Component",
+      "title": "New Americans Opportunity Center \u2013 Legal Services Component",
       "agency": "NYS Office for New Americans (ONA)",
       "jurisdiction": "NYS",
       "source": "NYS Contract Reporter",
@@ -52,26 +68,16 @@
       "fit_score": 8,
       "action": "PURSUE",
       "summary": "Statewide RFP to operate an Opportunity Center providing direct legal services including naturalization, DACA renewals, asylum applications, and general immigration consultations. Applicants must demonstrate bilingual capacity and community ties.",
-      "keyword_matches": ["immigration", "naturalization", "DACA", "asylum", "legal services"],
-      "certifications_required": ["NYS MWBE preferred"],
-      "fetched_at": "2026-06-23T07:00:00Z"
-    },
-    {
-      "id": "HRA-2026-0031",
-      "title": "Public Benefits Navigation and Legal Screening Services",
-      "agency": "Human Resources Administration (HRA)",
-      "jurisdiction": "NYC",
-      "source": "Checkbook NYC",
-      "source_url": "https://www.checkbooknyc.com",
-      "amount": 310000,
-      "due_date": "2026-07-25",
-      "issue_date": "2026-06-12",
-      "contract_type": "RFP",
-      "fit_score": 7,
-      "action": "PURSUE",
-      "summary": "HRA seeks organizations to provide integrated public benefits navigation and legal screening at HRA centers, with a focus on immigrants facing Medicaid, SNAP, and cash assistance eligibility questions linked to immigration status.",
-      "keyword_matches": ["immigrant", "legal services", "community legal"],
-      "certifications_required": ["NYC MWBE"],
+      "keyword_matches": [
+        "immigration",
+        "naturalization",
+        "DACA",
+        "asylum",
+        "legal services"
+      ],
+      "certifications_required": [
+        "NYS MWBE preferred"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     },
     {
@@ -88,8 +94,63 @@
       "fit_score": 8,
       "action": "PURSUE",
       "summary": "Suffolk DSS seeks legal service providers to serve agricultural workers in the eastern county, including H-2A visa holders, undocumented workers, and TPS holders facing employer violations, housing insecurity, and removal proceedings.",
-      "keyword_matches": ["immigration", "legal services", "TPS", "agricultural"],
-      "certifications_required": ["Suffolk County MWBE preferred"],
+      "keyword_matches": [
+        "immigration",
+        "legal services",
+        "TPS",
+        "agricultural"
+      ],
+      "certifications_required": [
+        "Suffolk County MWBE preferred"
+      ],
+      "fetched_at": "2026-06-23T07:00:00Z"
+    },
+    {
+      "id": "HRA-2026-0031",
+      "title": "Public Benefits Navigation and Legal Screening Services",
+      "agency": "Human Resources Administration (HRA)",
+      "jurisdiction": "NYC",
+      "source": "Checkbook NYC",
+      "source_url": "https://www.checkbooknyc.com",
+      "amount": 310000,
+      "due_date": "2026-07-25",
+      "issue_date": "2026-06-12",
+      "contract_type": "RFP",
+      "fit_score": 7,
+      "action": "PURSUE",
+      "summary": "HRA seeks organizations to provide integrated public benefits navigation and legal screening at HRA centers, with a focus on immigrants facing Medicaid, SNAP, and cash assistance eligibility questions linked to immigration status.",
+      "keyword_matches": [
+        "immigrant",
+        "legal services",
+        "community legal"
+      ],
+      "certifications_required": [
+        "NYC MWBE"
+      ],
+      "fetched_at": "2026-06-23T07:00:00Z"
+    },
+    {
+      "id": "DCJS-2026-0003",
+      "title": "Crime Victim Services \u2013 Immigration Relief Components",
+      "agency": "NYS Division of Criminal Justice Services",
+      "jurisdiction": "NYS",
+      "source": "NYS Contract Reporter",
+      "source_url": "https://www.nyscr.ny.gov",
+      "amount": 290000,
+      "due_date": "2026-08-28",
+      "issue_date": "2026-06-21",
+      "contract_type": "RFP",
+      "fit_score": 7,
+      "action": "PURSUE",
+      "summary": "DCJS RFP for victim services organizations to provide U visa and T visa certification support, VAWA self-petition assistance, and crime victim legal representation.",
+      "keyword_matches": [
+        "immigration",
+        "legal services",
+        "humanitarian"
+      ],
+      "certifications_required": [
+        "NYS MWBE preferred"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     },
     {
@@ -106,8 +167,14 @@
       "fit_score": 6,
       "action": "MONITOR",
       "summary": "Nassau OHS RFP for wraparound services to immigrant families including case management, benefits navigation, and legal referral coordination. Legal services component is secondary to social services but could be expanded in scope negotiation.",
-      "keyword_matches": ["immigrant", "community legal", "legal services"],
-      "certifications_required": ["Nassau MWBE"],
+      "keyword_matches": [
+        "immigrant",
+        "community legal",
+        "legal services"
+      ],
+      "certifications_required": [
+        "Nassau MWBE"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     },
     {
@@ -124,26 +191,13 @@
       "fit_score": 5,
       "action": "MONITOR",
       "summary": "DOE seeks organizations to provide multilingual family engagement and language access services across 10 districts. Legal services not explicitly included but scope allows for know-your-rights and SIJS referral components.",
-      "keyword_matches": ["language access", "immigrant"],
-      "certifications_required": ["NYC MWBE"],
-      "fetched_at": "2026-06-23T07:00:00Z"
-    },
-    {
-      "id": "DCJS-2026-0003",
-      "title": "Crime Victim Services – Immigration Relief Components",
-      "agency": "NYS Division of Criminal Justice Services",
-      "jurisdiction": "NYS",
-      "source": "NYS Contract Reporter",
-      "source_url": "https://www.nyscr.ny.gov",
-      "amount": 290000,
-      "due_date": "2026-08-28",
-      "issue_date": "2026-06-21",
-      "contract_type": "RFP",
-      "fit_score": 7,
-      "action": "PURSUE",
-      "summary": "DCJS RFP for victim services organizations to provide U visa and T visa certification support, VAWA self-petition assistance, and crime victim legal representation.",
-      "keyword_matches": ["immigration", "legal services", "humanitarian"],
-      "certifications_required": ["NYS MWBE preferred"],
+      "keyword_matches": [
+        "language access",
+        "immigrant"
+      ],
+      "certifications_required": [
+        "NYC MWBE"
+      ],
       "fetched_at": "2026-06-23T07:00:00Z"
     }
   ]
