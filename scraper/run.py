@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 # ── Config ────────────────────────────────────────────────────────────────────
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
+OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
 OLLAMA_API_KEY  = os.getenv("OLLAMA_API_KEY", "")
 FIRM_NAME       = os.getenv("FIRM_NAME", "IQSpatial Legal")
 MIN_FIT_SCORE   = int(os.getenv("MIN_FIT_SCORE", "5"))
@@ -298,7 +298,8 @@ Scoring guide:
 """
 
 def score_opportunity(opp: dict) -> dict | None:
-    prompt = SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
+    # Prefix with /no_think to disable Qwen3.5 thinking mode — keeps output clean JSON
+    prompt = "/no_think\n\n" + SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
     base = OLLAMA_BASE_URL.rstrip("/")
     chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
     log.info(f"Scoring '{opp['title'][:50]}' via {chat_url}")
@@ -314,6 +315,10 @@ def score_opportunity(opp: dict) -> dict | None:
         )
         r.raise_for_status()
         content = r.json()["message"]["content"].strip()
+        # Strip <think>...</think> blocks if present
+        if "<think>" in content:
+            content = content.split("</think>")[-1].strip()
+        # Strip markdown fences
         if content.startswith("```"):
             content = content.split("```")[1]
             if content.startswith("json"):
