@@ -146,9 +146,11 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             if not matched_kw:
                 continue
 
-            # Extract PIN
+            # REQUIRE PIN# — entries without a PIN are boilerplate/headers, not solicitations
             pin_match = re.search(r"PIN#\s*([\w\-]+)", raw)
-            pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+            if not pin_match:
+                continue
+            pin = pin_match.group(1)
 
             # Extract amount
             amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", raw)
@@ -415,6 +417,12 @@ def screenshot_and_extract(url: str, county: str) -> list[dict]:
         if not isinstance(entries, list):
             entries = []
         log.info(f"{county}: extracted {len(entries)} entries")
+    except requests.exceptions.HTTPError as e:
+        if e.response is not None and e.response.status_code == 403:
+            log.warning(f"{county}: vision model '{OLLAMA_VISION_MODEL}' requires subscription upgrade — skipping. Upgrade at ollama.com/upgrade")
+        else:
+            log.warning(f"{county}: vision failed: {e}")
+        return []
     except Exception as e:
         log.warning(f"{county}: vision failed: {e}")
         return []
