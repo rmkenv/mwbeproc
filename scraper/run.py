@@ -52,9 +52,8 @@ def fetch_nyc_opendata(keyword: str) -> list[dict]:
         r = requests.get(
             "https://data.cityofnewyork.us/resource/3khw-qi8f.json",
             params={
-                "$where": f"UPPER(description) LIKE '%{keyword.upper()}%' OR UPPER(agency) LIKE '%{keyword.upper()}%'",
+                "$q": keyword,
                 "$limit": 30,
-                "$order": "due_date DESC",
             },
             timeout=15,
         )
@@ -83,9 +82,8 @@ def fetch_nyc_opendata(keyword: str) -> list[dict]:
         r = requests.get(
             "https://data.cityofnewyork.us/resource/qyyg-4tf5.json",
             params={
-                "$where": f"UPPER(description) LIKE '%{keyword.upper()}%' OR UPPER(agency) LIKE '%{keyword.upper()}%'",
+                "$q": keyword,
                 "$limit": 20,
-                "$order": "award_date DESC",
             },
             timeout=15,
         )
@@ -121,7 +119,7 @@ def fetch_city_record(keyword: str) -> list[dict]:
     try:
         r = requests.get(
             "https://a856-cityrecord.nyc.gov/Home/SearchByCategory",
-            params={"categoryId": "23", "keyword": keyword},  # 23 = Professional Services
+            params={"categoryId": "23", "keyword": keyword},
             timeout=15,
             headers={"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0)"},
         )
@@ -303,12 +301,19 @@ Scoring guide:
 
 def score_opportunity(opp: dict) -> dict | None:
     prompt = SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
+    # Build the chat endpoint — handle both https://ollama.com and https://ollama.com/api
+    base = OLLAMA_BASE_URL.rstrip("/")
+    if base.endswith("/api"):
+        chat_url = f"{base}/chat"
+    else:
+        chat_url = f"{base}/api/chat"
+    log.info(f"Ollama endpoint: {chat_url} model={OLLAMA_MODEL}")
     try:
-        headers = {}
+        headers = {"Content-Type": "application/json"}
         if OLLAMA_API_KEY:
             headers["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
         r = requests.post(
-            f"{OLLAMA_BASE_URL}/api/chat",
+            chat_url,
             json={
                 "model": OLLAMA_MODEL,
                 "messages": [{"role": "user", "content": prompt}],
@@ -319,7 +324,6 @@ def score_opportunity(opp: dict) -> dict | None:
         )
         r.raise_for_status()
         content = r.json()["message"]["content"].strip()
-        # Strip markdown fences if present
         if content.startswith("```"):
             content = content.split("```")[1]
             if content.startswith("json"):
@@ -370,7 +374,6 @@ def main():
         result = score_opportunity(opp)
         if result and result.get("fit_score", 0) >= MIN_FIT_SCORE:
             result["fetched_at"] = datetime.utcnow().isoformat() + "Z"
-            # Clean up internal field
             result.pop("raw_text", None)
             result.pop("keyword_match", None)
             scored.append(result)
