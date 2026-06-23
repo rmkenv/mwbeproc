@@ -3,7 +3,7 @@ name: Scrape Procurement Portals
 on:
   schedule:
     - cron: "0 13 * * 1-5"   # Mon–Fri at 8am ET (13:00 UTC)
-  workflow_dispatch:           # manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -40,6 +40,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/data/opportunities.json
+          git add public/data/opportunities.json scraper/seen_ids.json
           git diff --staged --quiet || git commit -m "data: update opportunities $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
           git push
