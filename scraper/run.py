@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 # ── Config ────────────────────────────────────────────────────────────────────
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
 OLLAMA_API_KEY  = os.getenv("OLLAMA_API_KEY", "")
 FIRM_NAME       = os.getenv("FIRM_NAME", "IQSpatial Legal")
 MIN_FIT_SCORE   = int(os.getenv("MIN_FIT_SCORE", "5"))
@@ -47,13 +47,11 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0; +https://iqs
 
 def fetch_nyc_city_record() -> list[dict]:
     """
-    NYC City Record Online via confirmed Open Data dataset dg92-zbpx.
-    Pulls Procurement section (solicitations + awards) filtered by keywords.
-    No API key required. Uses $q full-text search.
+    NYC City Record Online via Open Data dataset dg92-zbpx.
+    NOTE: Cannot mix $q and $where on this dataset — use $q only.
     """
     results  = []
     seen_ids = set()
-    cutoff   = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%Y-%m-%dT00:00:00")
 
     for keyword in KEYWORDS:
         try:
@@ -61,9 +59,7 @@ def fetch_nyc_city_record() -> list[dict]:
                 "https://data.cityofnewyork.us/resource/dg92-zbpx.json",
                 params={
                     "$q": keyword,
-                    "$where": f"section_name='Procurement' AND published_date >= '{cutoff}'",
                     "$limit": 50,
-                    "$order": "published_date DESC",
                 },
                 timeout=20,
                 headers=HEADERS,
@@ -100,27 +96,30 @@ def fetch_nyc_city_record() -> list[dict]:
 
 def fetch_sam_gov(keyword: str) -> list[dict]:
     """
-    SAM.gov Opportunities API — free, reliable, covers federal grants + contracts.
-    Register for a free key at https://sam.gov/content/entity-api
-    Works without a key at lower rate limits.
+    SAM.gov Opportunities API.
+    Correct production URL: https://api.sam.gov/prod/opportunities/v2/search
+    Requires free API key from sam.gov — add SAM_API_KEY secret.
+    Uses 'title' param (not 'keywords') for text search.
     """
+    if not SAM_API_KEY:
+        return []   # Skip entirely without a key — endpoint rejects keyless requests
+
     results = []
     posted_from = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%m/%d/%Y")
 
     params = {
-        "keywords": keyword,
+        "api_key": SAM_API_KEY,
+        "title": keyword,
         "postedFrom": posted_from,
         "postedTo": datetime.now().strftime("%m/%d/%Y"),
-        "ptype": "o,p,k,r",   # o=solicitation, p=presolicitation, k=combined, r=sources sought
+        "ptype": "o,p,k,r",
         "limit": 25,
         "offset": 0,
     }
-    if SAM_API_KEY:
-        params["api_key"] = SAM_API_KEY
 
     try:
         r = requests.get(
-            "https://api.sam.gov/opportunities/v2/search",
+            "https://api.sam.gov/prod/opportunities/v2/search",
             params=params,
             timeout=20,
             headers=HEADERS,
@@ -358,9 +357,13 @@ def main():
     # Deduplicate
     unique = {}
     for o in raw:
+        # Skip records with no meaningful title
+        title = o.get("title", "").strip()
+        if not title or title in ("Unknown Award", "Unknown Solicitation", "Unknown"):
+            continue
         if o["id"] not in seen and o["id"] not in unique:
             unique[o["id"]] = o
-    log.info(f"Found {len(unique)} new unique opportunities")
+    log.info(f"Found {len(unique)} new unique opportunities (with titles)")
 
     # Score
     scored = []
