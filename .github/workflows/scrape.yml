@@ -1,0 +1,41 @@
+name: Scrape Procurement Portals
+
+on:
+  schedule:
+    - cron: "0 12 * * 1,4"   # Mon + Thu at 7am ET
+  workflow_dispatch:           # manual trigger from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 python-dotenv
+
+      - name: Run scraper
+        env:
+          OLLAMA_BASE_URL: ${{ secrets.OLLAMA_BASE_URL }}
+          OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL }}
+          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
+          FIRM_NAME: ${{ secrets.FIRM_NAME }}
+          MIN_FIT_SCORE: "5"
+        run: python scraper/run.py
+
+      - name: Commit updated opportunities
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/data/opportunities.json
+          git diff --staged --quiet || git commit -m "data: update opportunities $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git push
