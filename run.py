@@ -50,14 +50,10 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0; +https://iqs
 
 def fetch_nyc_city_record_pdf() -> list[dict]:
     """
-    Fetches today's NYC City Record print edition PDF via GetLatestPrintEditionUrl,
-    extracts the PROCUREMENT section, parses individual entries, and keyword-filters.
-
-    Structure from actual PDF:
-    - Agency blocks: ALL CAPS headers (e.g. "ADMINISTRATION FOR CHILDREN'S SERVICES")
-    - Individual entries end with "E j" + date code (e.g. "E j23")
-    - Each entry: TITLE - Type - PIN#XXXXX - AMT: $X - TO: Vendor
-    - Section ends at "PUBLIC COMMENT ON CONTRACT AWARDS"
+    NYC City Record PDF parser.
+    Key insight: the PDF has a TABLE OF CONTENTS near the top that also contains
+    the word "PROCUREMENT" — must skip past it to find actual entries.
+    Real entries contain PIN# numbers. Find the first PIN# and work from there.
     """
     import re
     results  = []
@@ -74,28 +70,46 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
 
         pdf_r = requests.get(pdf_url, timeout=60, headers=HEADERS)
         pdf_r.raise_for_status()
+        log.info(f"City Record PDF: {len(pdf_r.content)} bytes")
 
         from pdfminer.high_level import extract_text
         from io import BytesIO
         text = extract_text(BytesIO(pdf_r.content))
+        log.info(f"City Record PDF: {len(text)} chars extracted")
 
-        # Find PROCUREMENT section — look for the section header
-        proc_start = text.find("\nPROCUREMENT\n")
-        if proc_start == -1:
-            proc_start = text.find("PROCUREMENT\n")
-        if proc_start == -1:
-            log.warning(f"City Record PDF: PROCUREMENT not found. Preview: {text[2000:2600]!r}")
+        # Find the REAL procurement section — skip the TOC
+        # Strategy: find the first PIN# which only appears in actual entries
+        first_pin = text.find("PIN#")
+        if first_pin == -1:
+            log.warning("City Record PDF: no PIN# found — no procurement entries today")
             return []
 
-        proc_end = text.find("PUBLIC COMMENT ON", proc_start + 100)
+        # Walk backward from first PIN# to find the PROCUREMENT section header
+        search_back = text[max(0, first_pin - 3000):first_pin]
+        proc_offset = search_back.rfind("PROCUREMENT")
+        if proc_offset != -1:
+            proc_start = max(0, first_pin - 3000) + proc_offset
+        else:
+            # No header found, start from a bit before the first PIN#
+            proc_start = max(0, first_pin - 500)
+
+        # End section
+        proc_end = text.find("PUBLIC COMMENT ON CONTRACT AWARDS", proc_start)
         if proc_end == -1:
-            proc_end = len(text)
+            proc_end = text.find("PUBLIC COMMENT ON", proc_start)
+        if proc_end == -1:
+            proc_end = min(proc_start + 80000, len(text))
 
         procurement_text = text[proc_start:proc_end]
-        log.info(f"City Record PDF: PROCUREMENT section {len(procurement_text)} chars")
+        log.info(f"City Record PDF: real PROCUREMENT section {len(procurement_text)} chars (starts at {proc_start})")
 
-        # Split on "E j" date markers — each contract entry ends with one
-        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n?", procurement_text)
+        # Count total PINs to verify we're in the right section
+        pin_count = len(re.findall(r"PIN#", procurement_text))
+        log.info(f"City Record PDF: {pin_count} PIN# entries found in section")
+
+        # Split on "E j" date markers — each entry ends with one
+        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n", procurement_text)
+        log.info(f"City Record PDF: split into {len(raw_entries)} blocks")
 
         current_agency = "NYC Agency"
 
@@ -104,12 +118,26 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             if not raw or len(raw) < 30:
                 continue
 
-            # Update current agency from all-caps lines
+            # Skip TOC-style lines (dot leaders like ". . . . . 2670")
+            if re.search(r"\.\s*\.\s*\.\s*\.\s*\d{4}", raw):
+                continue
+
+            # Skip boilerplate blocks
+            if any(bp in raw for bp in [
+                "Compete To Win", "compete to win", "CompeteToWin",
+                "Vendors List brings contracting",
+                "Office of the Corporate Secretary",
+                "The City Record Online",
+                "CITY RECORD",
+            ]):
+                continue
+
+            # Update current agency from all-caps lines at start of block
             lines = [l.strip() for l in raw.split("\n") if l.strip()]
             for line in lines[:5]:
-                if line.isupper() and 5 < len(line) < 80 and not any(
-                    line.startswith(p) for p in ("PIN", "AMT", "TO:", "NYC", "FY")
-                ):
+                if (line.isupper() and 5 < len(line) < 80 
+                    and not any(line.startswith(p) for p in 
+                        ("PIN", "AMT", "TO:", "NYC", "FY", "THE ", "USE "))):
                     current_agency = line.title()
                     break
 
@@ -119,7 +147,7 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
                 continue
 
             # Extract PIN
-            pin_match = re.search(r"PIN#([\w\-]+)", raw)
+            pin_match = re.search(r"PIN#\s*([\w\-]+)", raw)
             pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
 
             # Extract amount
@@ -127,15 +155,20 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
 
             # Extract vendor
-            vendor_match = re.search(r"\bTO:\s*([^,\n\.]{5,60})", raw)
+            vendor_match = re.search(r"\bTO:\s*([^,\n]{5,80})", raw)
             vendor = vendor_match.group(1).strip() if vendor_match else ""
 
-            # Title: first non-caps meaningful line
+            # Build title: first line with real content (not all-caps header, not PIN/AMT)
             title = ""
             for line in lines:
+                # Skip agency headers
                 if line.isupper() and len(line) < 80:
                     continue
-                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the")):
+                # Skip metadata lines
+                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the", "The City")):
+                    continue
+                # Skip dot-leader lines
+                if ". . ." in line:
                     continue
                 if len(line) > 15:
                     title = line[:120]
@@ -143,10 +176,18 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             if not title:
                 title = f"{current_agency} — {matched_kw} procurement"
 
+            # Notice type
             raw_upper = raw.upper()
-            notice_type = "AWARD" if " AWARD\n" in raw_upper or "\nAWARD\n" in raw_upper else \
-                          "SOLICITATION" if "SOLICITATION" in raw_upper[:400] else \
-                          "VENDOR LIST" if "VENDOR LIST" in raw_upper else "Notice"
+            if "AWARD" in raw_upper[:400]:
+                notice_type = "AWARD"
+            elif "SOLICITATION" in raw_upper[:400]:
+                notice_type = "SOLICITATION"
+            elif "INTENT TO AWARD" in raw_upper:
+                notice_type = "INTENT TO AWARD"
+            elif "VENDOR LIST" in raw_upper:
+                notice_type = "VENDOR LIST"
+            else:
+                notice_type = "Notice"
 
             uid = f"CROL-{pin}"
             if uid in seen_ids:
@@ -176,9 +217,6 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
         log.warning(f"City Record PDF fetch failed: {e}")
 
     return results
-    return results
-
-
 # ── Source 2: SAM.gov (federal) ───────────────────────────────────────────────
 
 def fetch_sam_gov(keyword: str) -> list[dict]:
