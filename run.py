@@ -52,13 +52,18 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
     """
     Fetches today's NYC City Record print edition PDF via GetLatestPrintEditionUrl,
     extracts the PROCUREMENT section, parses individual entries, and keyword-filters.
-    This is the authoritative daily source — updated every business day.
+
+    Structure from actual PDF:
+    - Agency blocks: ALL CAPS headers (e.g. "ADMINISTRATION FOR CHILDREN'S SERVICES")
+    - Individual entries end with "E j" + date code (e.g. "E j23")
+    - Each entry: TITLE - Type - PIN#XXXXX - AMT: $X - TO: Vendor
+    - Section ends at "PUBLIC COMMENT ON CONTRACT AWARDS"
     """
+    import re
     results  = []
     seen_ids = set()
 
     try:
-        # Step 1: Get the PDF URL
         r = requests.get(
             "https://a856-cityrecord.nyc.gov/Home/GetLatestPrintEditionUrl",
             timeout=15, headers=HEADERS,
@@ -67,124 +72,110 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
         pdf_url = r.text.strip()
         log.info(f"City Record PDF URL: {pdf_url}")
 
-        # Step 2: Download the PDF
         pdf_r = requests.get(pdf_url, timeout=60, headers=HEADERS)
         pdf_r.raise_for_status()
 
-        # Step 3: Extract text using pdfminer
         from pdfminer.high_level import extract_text
         from io import BytesIO
         text = extract_text(BytesIO(pdf_r.content))
 
-        # Step 4: Find PROCUREMENT section — try multiple markers
-        import re
-        proc_start = -1
-        for marker in ["PROCUREMENT", "Procurement", "AWARD", "SOLICITATION"]:
-            idx = text.find(marker)
-            if idx != -1:
-                proc_start = idx
-                log.info(f"City Record PDF: found section marker '{marker}' at char {idx}")
-                break
-
+        # Find PROCUREMENT section — look for the section header
+        proc_start = text.find("\nPROCUREMENT\n")
         if proc_start == -1:
-            # Log first 500 chars to help debug
-            log.warning(f"City Record PDF: no section found. Text preview: {text[:500]!r}")
+            proc_start = text.find("PROCUREMENT\n")
+        if proc_start == -1:
+            log.warning(f"City Record PDF: PROCUREMENT not found. Preview: {text[2000:2600]!r}")
             return []
 
-        # Find end of procurement section (next major section)
-        end_markers = ["PUBLIC COMMENT ON", "AGENCY RULES", "SPECIAL MATERIALS"]
-        proc_end = len(text)
-        for marker in end_markers:
-            idx = text.find(marker, proc_start + 100)
-            if idx != -1 and idx < proc_end:
-                proc_end = idx
+        proc_end = text.find("PUBLIC COMMENT ON", proc_start + 100)
+        if proc_end == -1:
+            proc_end = len(text)
 
         procurement_text = text[proc_start:proc_end]
+        log.info(f"City Record PDF: PROCUREMENT section {len(procurement_text)} chars")
 
-        # Step 5: Split by agency blocks
-        # Each agency block starts with agency name in ALL CAPS
-        # Split on lines that are all-caps and not too long (agency headers)
-        lines = procurement_text.split("\n")
-        current_agency = ""
-        current_block  = []
-        blocks         = []
+        # Split on "E j" date markers — each contract entry ends with one
+        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n?", procurement_text)
 
-        for line in lines:
-            stripped = line.strip()
-            if not stripped:
+        current_agency = "NYC Agency"
+
+        for raw in raw_entries:
+            raw = raw.strip()
+            if not raw or len(raw) < 30:
                 continue
-            # Detect agency header: short all-caps line
-            if stripped.isupper() and 3 < len(stripped) < 60 and not stripped.startswith("PIN") and not stripped.startswith("AMT"):
-                if current_agency and current_block:
-                    blocks.append((current_agency, "\n".join(current_block)))
-                current_agency = stripped
-                current_block  = []
-            else:
-                current_block.append(stripped)
 
-        if current_agency and current_block:
-            blocks.append((current_agency, "\n".join(current_block)))
+            # Update current agency from all-caps lines
+            lines = [l.strip() for l in raw.split("\n") if l.strip()]
+            for line in lines[:5]:
+                if line.isupper() and 5 < len(line) < 80 and not any(
+                    line.startswith(p) for p in ("PIN", "AMT", "TO:", "NYC", "FY")
+                ):
+                    current_agency = line.title()
+                    break
 
-        # Step 6: Parse each block into individual solicitation entries
-        for agency, block_text in blocks:
-            # Split on PIN# or E j (date markers) to find individual entries
-            # Each entry typically has: title, type (SOLICITATION/AWARD), PIN, AMT
-            entries = re.split(r"(?=PIN#|E\s+j\d)", block_text)
+            # Keyword filter
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+            if not matched_kw:
+                continue
 
-            for entry in entries:
-                entry = entry.strip()
-                if not entry or len(entry) < 20:
+            # Extract PIN
+            pin_match = re.search(r"PIN#([\w\-]+)", raw)
+            pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+
+            # Extract amount
+            amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", raw)
+            amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
+
+            # Extract vendor
+            vendor_match = re.search(r"\bTO:\s*([^,\n\.]{5,60})", raw)
+            vendor = vendor_match.group(1).strip() if vendor_match else ""
+
+            # Title: first non-caps meaningful line
+            title = ""
+            for line in lines:
+                if line.isupper() and len(line) < 80:
                     continue
-
-                # Keyword filter
-                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in entry.lower()), None)
-                if not matched_kw:
+                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the")):
                     continue
+                if len(line) > 15:
+                    title = line[:120]
+                    break
+            if not title:
+                title = f"{current_agency} — {matched_kw} procurement"
 
-                # Extract PIN
-                pin_match = re.search(r"PIN#([\w\-]+)", entry)
-                pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+            raw_upper = raw.upper()
+            notice_type = "AWARD" if " AWARD\n" in raw_upper or "\nAWARD\n" in raw_upper else \
+                          "SOLICITATION" if "SOLICITATION" in raw_upper[:400] else \
+                          "VENDOR LIST" if "VENDOR LIST" in raw_upper else "Notice"
 
-                # Extract amount
-                amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", entry)
-                amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
+            uid = f"CROL-{pin}"
+            if uid in seen_ids:
+                continue
+            seen_ids.add(uid)
 
-                # Extract title — first meaningful line before type indicator
-                title_match = re.search(r"([A-Z][A-Z\s\-\(\)\/,]{10,}?)\s*[-–]\s*(Renewal|Award|Solicitation|Request|Competitive|Negotiated|Sole Source|Intergovernmental)", entry)
-                title = title_match.group(1).strip() if title_match else entry[:80].strip()
+            results.append({
+                "id": uid,
+                "title": title,
+                "agency": current_agency,
+                "jurisdiction": "NYC",
+                "source": "NYC City Record (PDF)",
+                "source_url": pdf_url,
+                "amount": amount,
+                "due_date": "",
+                "issue_date": datetime.now().strftime("%Y-%m-%d"),
+                "contract_type": notice_type,
+                "keyword_match": matched_kw,
+                "raw_text": raw[:500],
+            })
 
-                # Notice type
-                notice_type = "AWARD" if "AWARD" in entry[:200].upper() else \
-                              "SOLICITATION" if "SOLICITATION" in entry[:200].upper() else \
-                              "VENDOR LIST" if "VENDOR LIST" in entry[:200].upper() else "Notice"
-
-                uid = f"CROL-{pin}"
-                if uid in seen_ids:
-                    continue
-                seen_ids.add(uid)
-
-                results.append({
-                    "id": uid,
-                    "title": title,
-                    "agency": agency.title(),
-                    "jurisdiction": "NYC",
-                    "source": "NYC City Record (PDF)",
-                    "source_url": pdf_url,
-                    "amount": amount,
-                    "due_date": "",
-                    "issue_date": datetime.now().strftime("%Y-%m-%d"),
-                    "contract_type": notice_type,
-                    "keyword_match": matched_kw,
-                    "raw_text": entry[:500],
-                })
-
-        log.info(f"NYC City Record PDF: {len(results)} keyword-matched procurement entries")
+        log.info(f"NYC City Record PDF: {len(results)} keyword-matched entries")
 
     except ImportError:
-        log.warning("pdfminer not installed — skipping City Record PDF. Add 'pdfminer.six' to requirements.")
+        log.warning("pdfminer not installed — skipping City Record PDF.")
     except Exception as e:
         log.warning(f"City Record PDF fetch failed: {e}")
 
+    return results
     return results
 
 
