@@ -395,4 +395,150 @@ def load_seen() -> set:
     return set()
 
 def save_seen(seen: set):
-    SEEN_PATH.write_text(json.dumps(sorted(s
+    SEEN_PATH.write_text(json.dumps(sorted(seen), indent=2))
+
+
+# ── LLM scoring ───────────────────────────────────────────────────────────────
+
+SCORE_PROMPT = """You are a procurement analyst for {firm}, an MWBE-certified immigration legal services firm.
+Evaluate this government opportunity and respond ONLY with a JSON object — no markdown, no preamble.
+
+Opportunity:
+Title: {title}
+Agency: {agency}
+Jurisdiction: {jurisdiction}
+Type: {contract_type}
+Raw text: {raw_text}
+
+Return exactly:
+{{
+  "fit_score": <integer 1-10>,
+  "action": "<PURSUE|MONITOR|SKIP>",
+  "summary": "<2-3 sentence plain-English description of scope and fit>",
+  "keyword_matches": [<list of matching keywords from the text>],
+  "certifications_required": [<list of certifications or eligibility requirements mentioned>]
+}}
+
+Scoring guide:
+9-10: Direct immigration legal services RFP, MWBE preferred/required
+7-8: Strong legal services fit, immigration adjacent
+5-6: Partial fit — legal services component or referral opportunity
+1-4: Weak match, monitor only
+"""
+
+def score_opportunity(opp: dict) -> dict | None:
+    prompt   = "/no_think\n\n" + SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
+    base     = OLLAMA_BASE_URL.rstrip("/")
+    chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
+    log.info(f"Scoring '{opp['title'][:50]}' via {chat_url}")
+    try:
+        hdrs = {"Content-Type": "application/json"}
+        if OLLAMA_API_KEY:
+            hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
+        r = requests.post(
+            chat_url,
+            json={"model": OLLAMA_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False},
+            headers=hdrs,
+            timeout=60,
+        )
+        r.raise_for_status()
+        content = r.json()["message"]["content"].strip()
+        if "<think>" in content:
+            content = content.split("</think>")[-1].strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+        return {**opp, **json.loads(content.strip())}
+    except Exception as e:
+        log.warning(f"LLM scoring failed for '{opp['title']}': {e}")
+        text  = opp.get("raw_text", "").lower()
+        score = min(sum(3 for k in ["immigration", "legal services", "removal defense", "asylum"] if k in text), 10)
+        score = max(score, 1)
+        return {
+            **opp,
+            "fit_score": score,
+            "action": "PURSUE" if score >= 7 else "MONITOR" if score >= 5 else "SKIP",
+            "summary": f"{opp['title']} from {opp['agency']}. Keyword: '{opp['keyword_match']}'.",
+            "keyword_matches": [opp["keyword_match"]],
+            "certifications_required": [],
+        }
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    log.info("Starting MWBE procurement scrape run")
+    seen = load_seen()
+    raw: list[dict] = []
+
+    log.info("Fetching NYC City Record daily PDF...")
+    raw += fetch_nyc_city_record_pdf()
+
+    log.info("Fetching Nassau County solicitations...")
+    raw += fetch_nassau()
+
+    log.info("Fetching Suffolk County solicitations...")
+    raw += fetch_suffolk()
+
+    for kw in KEYWORDS:
+        log.info(f"Fetching keyword: {kw}")
+        raw += fetch_sam_gov(kw)
+        raw += fetch_nys_contract_reporter(kw)
+
+    # Deduplicate
+    unique = {}
+    for o in raw:
+        title = o.get("title", "").strip()
+        if not title or title in ("Unknown Award", "Unknown Solicitation", "Unknown"):
+            continue
+        if o["id"] not in seen and o["id"] not in unique:
+            unique[o["id"]] = o
+    log.info(f"Found {len(unique)} new unique opportunities (with titles)")
+
+    # Score
+    scored = []
+    for opp in unique.values():
+        result = score_opportunity(opp)
+        if result and result.get("fit_score", 0) >= MIN_FIT_SCORE:
+            result["fetched_at"] = datetime.utcnow().isoformat() + "Z"
+            result.pop("raw_text", None)
+            result.pop("keyword_match", None)
+            scored.append(result)
+
+    scored.sort(key=lambda x: x.get("fit_score", 0), reverse=True)
+    log.info(f"{len(scored)} opportunities meet fit threshold ≥{MIN_FIT_SCORE}")
+
+    # Merge with existing (keep up to 90 days)
+    existing = []
+    if OUTPUT_PATH.exists():
+        try:
+            existing = json.loads(OUTPUT_PATH.read_text()).get("opportunities", [])
+        except Exception:
+            existing = []
+
+    cutoff = datetime.utcnow() - timedelta(days=90)
+    kept = [
+        o for o in existing
+        if o["id"] not in unique
+        and datetime.fromisoformat(o.get("fetched_at", "2000-01-01T00:00:00").rstrip("Z")) > cutoff
+    ]
+
+    all_opps = scored + kept
+    all_opps.sort(key=lambda x: x.get("fit_score", 0), reverse=True)
+
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.write_text(json.dumps({
+        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "run_id":       uuid.uuid4().hex[:8],
+        "opportunities": all_opps,
+    }, indent=2))
+    log.info(f"Wrote {len(all_opps)} total opportunities to {OUTPUT_PATH}")
+
+    seen.update(unique.keys())
+    save_seen(seen)
+    log.info("Done.")
+
+
+if __name__ == "__main__":
+    main()
