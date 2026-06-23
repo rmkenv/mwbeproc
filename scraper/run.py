@@ -1,12 +1,11 @@
 """
 MWBE Procurement Monitor — scraper entry point.
 Sources:
-  - NYC City Record daily PDF (authoritative)
-  - Nassau County — Playwright screenshot + vision model
-  - Suffolk County — Playwright screenshot + vision model
-  - SAM.gov REST API (federal, requires free key)
+  - NYC City Record RSS feed (reliable, no API key)
+  - SAM.gov REST API (federal opportunities, free)
   - NYS Contract Reporter (form POST)
-Triggered by GitHub Actions Mon–Fri at 8am ET.
+  - Nassau / Suffolk county page scrapes
+Triggered by GitHub Actions Mon/Thu at 7am ET.
 """
 
 import json
@@ -24,14 +23,14 @@ log = logging.getLogger(__name__)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-OLLAMA_BASE_URL    = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-OLLAMA_MODEL       = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
-OLLAMA_VISION_MODEL = os.getenv("OLLAMA_VISION_MODEL", "qwen2.5vl:7b")
-OLLAMA_API_KEY     = os.getenv("OLLAMA_API_KEY", "")
-FIRM_NAME          = os.getenv("FIRM_NAME", "IQSpatial Legal")
-MIN_FIT_SCORE      = int(os.getenv("MIN_FIT_SCORE", "5"))
-SAM_API_KEY        = os.getenv("SAM_API_KEY", "")
-DAYS_BACK          = 30
+OLLAMA_BASE_URL     = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
+OLLAMA_MODEL        = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
+OLLAMA_VISION_MODEL = os.getenv("OLLAMA_VISION_MODEL", "llava:7b")
+OLLAMA_API_KEY      = os.getenv("OLLAMA_API_KEY", "")
+FIRM_NAME           = os.getenv("FIRM_NAME", "IQSpatial Legal")
+MIN_FIT_SCORE       = int(os.getenv("MIN_FIT_SCORE", "5"))
+SAM_API_KEY         = os.getenv("SAM_API_KEY", "")
+DAYS_BACK           = 30
 
 OUTPUT_PATH = Path(__file__).parent.parent / "public" / "data" / "opportunities.json"
 SEEN_PATH   = Path(__file__).parent / "seen_ids.json"
@@ -45,14 +44,13 @@ KEYWORDS = [
 
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; MWBEMonitor/1.0; +https://iqspatial.com)"}
 
+# ── Source 1: NYC City Record Online (Open Data dataset dg92-zbpx) ────────────
 
-# ── Source 1: NYC City Record — Daily PDF ─────────────────────────────────────
+# ── Source 1: NYC City Record — Daily PDF ────────────────────────────────────
 
 def fetch_nyc_city_record_pdf() -> list[dict]:
-    """
-    Fetches today's NYC City Record print edition PDF via GetLatestPrintEditionUrl,
-    extracts the PROCUREMENT section, parses individual entries, and keyword-filters.
-    """
+    """NYC City Record PDF parser with full debug logging."""
+    import re
     results  = []
     seen_ids = set()
 
@@ -67,89 +65,112 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
 
         pdf_r = requests.get(pdf_url, timeout=60, headers=HEADERS)
         pdf_r.raise_for_status()
+        log.info(f"City Record PDF downloaded: {len(pdf_r.content)} bytes")
 
         from pdfminer.high_level import extract_text
         from io import BytesIO
         text = extract_text(BytesIO(pdf_r.content))
+        log.info(f"City Record PDF text length: {len(text)} chars")
 
-        proc_start = text.find("PROCUREMENT")
+        # Debug: show chars 2000-3000 to find section structure
+        log.info(f"PDF text sample [2000:2500]: {text[2000:2500]!r}")
+
+        # Try all possible procurement markers
+        for marker in ["\nPROCUREMENT\n", "PROCUREMENT\n", "PROCUREMENT", "PIN#", "E j"]:
+            idx = text.find(marker)
+            if idx != -1:
+                log.info(f"Found marker {marker!r} at position {idx}")
+                log.info(f"Context: {text[max(0,idx-50):idx+200]!r}")
+                break
+            else:
+                log.info(f"Marker {marker!r} NOT found")
+
+        # Find PROCUREMENT section
+        proc_start = -1
+        for marker in ["\nPROCUREMENT\n", "PROCUREMENT\n", "PROCUREMENT"]:
+            idx = text.find(marker)
+            if idx != -1:
+                proc_start = idx
+                log.info(f"Using marker {marker!r} at {idx}")
+                break
+
         if proc_start == -1:
-            log.warning("City Record PDF: PROCUREMENT section not found")
+            log.warning(f"No PROCUREMENT section. Full text preview: {text[:1000]!r}")
             return []
 
-        end_markers = ["PUBLIC COMMENT ON", "AGENCY RULES", "SPECIAL MATERIALS"]
-        proc_end = len(text)
-        for marker in end_markers:
-            idx = text.find(marker, proc_start + 100)
-            if idx != -1 and idx < proc_end:
-                proc_end = idx
+        proc_end = text.find("PUBLIC COMMENT ON", proc_start + 100)
+        if proc_end == -1:
+            proc_end = min(proc_start + 50000, len(text))
 
         procurement_text = text[proc_start:proc_end]
+        log.info(f"PROCUREMENT section: {len(procurement_text)} chars")
+        log.info(f"First 500 chars of section: {procurement_text[:500]!r}")
 
-        import re
-        lines = procurement_text.split("\n")
-        current_agency = ""
-        current_block  = []
-        blocks         = []
+        # Split on "E j" date markers
+        raw_entries = re.split(r"\nE\s+j[\w\-]+\s*\n?", procurement_text)
+        log.info(f"Split into {len(raw_entries)} raw entries")
 
-        for line in lines:
-            stripped = line.strip()
-            if not stripped:
+        current_agency = "NYC Agency"
+
+        for raw in raw_entries:
+            raw = raw.strip()
+            if not raw or len(raw) < 30:
                 continue
-            if stripped.isupper() and 3 < len(stripped) < 60 and not stripped.startswith("PIN") and not stripped.startswith("AMT"):
-                if current_agency and current_block:
-                    blocks.append((current_agency, "\n".join(current_block)))
-                current_agency = stripped
-                current_block  = []
-            else:
-                current_block.append(stripped)
 
-        if current_agency and current_block:
-            blocks.append((current_agency, "\n".join(current_block)))
+            lines = [l.strip() for l in raw.split("\n") if l.strip()]
+            for line in lines[:5]:
+                if line.isupper() and 5 < len(line) < 80 and not any(
+                    line.startswith(p) for p in ("PIN", "AMT", "TO:", "NYC", "FY")
+                ):
+                    current_agency = line.title()
+                    break
 
-        for agency, block_text in blocks:
-            entries = re.split(r"(?=PIN#|E\s+j\d)", block_text)
-            for entry in entries:
-                entry = entry.strip()
-                if not entry or len(entry) < 20:
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+            if not matched_kw:
+                continue
+
+            pin_match = re.search(r"PIN#([\w\-]+)", raw)
+            pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+
+            amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", raw)
+            amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
+
+            title = ""
+            for line in lines:
+                if line.isupper() and len(line) < 80:
                     continue
-
-                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in entry.lower()), None)
-                if not matched_kw:
+                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the")):
                     continue
+                if len(line) > 15:
+                    title = line[:120]
+                    break
+            if not title:
+                title = f"{current_agency} — {matched_kw} procurement"
 
-                pin_match = re.search(r"PIN#([\w\-]+)", entry)
-                pin = pin_match.group(1) if pin_match else uuid.uuid4().hex[:8]
+            raw_upper = raw.upper()
+            notice_type = "AWARD" if " AWARD\n" in raw_upper or "\nAWARD\n" in raw_upper else \
+                          "SOLICITATION" if "SOLICITATION" in raw_upper[:400] else \
+                          "VENDOR LIST" if "VENDOR LIST" in raw_upper else "Notice"
 
-                amt_match = re.search(r"AMT:\s*\$([\d,\.]+)", entry)
-                amount = float(amt_match.group(1).replace(",", "")) if amt_match else 0
+            uid = f"CROL-{pin}"
+            if uid in seen_ids:
+                continue
+            seen_ids.add(uid)
 
-                title_match = re.search(r"([A-Z][A-Z\s\-\(\)\/,]{10,}?)\s*[-–]\s*(Renewal|Award|Solicitation|Request|Competitive|Negotiated|Sole Source|Intergovernmental)", entry)
-                title = title_match.group(1).strip() if title_match else entry[:80].strip()
-
-                notice_type = "AWARD" if "AWARD" in entry[:200].upper() else \
-                              "SOLICITATION" if "SOLICITATION" in entry[:200].upper() else \
-                              "VENDOR LIST" if "VENDOR LIST" in entry[:200].upper() else "Notice"
-
-                uid = f"CROL-{pin}"
-                if uid in seen_ids:
-                    continue
-                seen_ids.add(uid)
-
-                results.append({
-                    "id": uid,
-                    "title": title,
-                    "agency": agency.title(),
-                    "jurisdiction": "NYC",
-                    "source": "NYC City Record (PDF)",
-                    "source_url": pdf_url,
-                    "amount": amount,
-                    "due_date": "",
-                    "issue_date": datetime.now().strftime("%Y-%m-%d"),
-                    "contract_type": notice_type,
-                    "keyword_match": matched_kw,
-                    "raw_text": entry[:500],
-                })
+            results.append({
+                "id": uid,
+                "title": title,
+                "agency": current_agency,
+                "jurisdiction": "NYC",
+                "source": "NYC City Record (PDF)",
+                "source_url": pdf_url,
+                "amount": amount,
+                "due_date": "",
+                "issue_date": datetime.now().strftime("%Y-%m-%d"),
+                "contract_type": notice_type,
+                "keyword_match": matched_kw,
+                "raw_text": raw[:500],
+            })
 
         log.info(f"NYC City Record PDF: {len(results)} keyword-matched entries")
 
@@ -159,169 +180,42 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
         log.warning(f"City Record PDF fetch failed: {e}")
 
     return results
-
-
-# ── Source 2: Nassau + Suffolk via Playwright + Vision Model ──────────────────
-
-VISION_PROMPT = """You are reviewing a screenshot of a government procurement portal page.
-Extract ALL solicitation/bid entries visible in the table.
-Return ONLY a JSON array — no markdown, no preamble.
-
-Each item must have:
-{
-  "title": "solicitation title or description",
-  "doc_number": "bid/RFP/doc number if visible",
-  "type": "RFP|RFQ|IFB|Bid|Solicitation",
-  "due_date": "due date if visible, else empty string",
-  "issue_date": "issue/posted date if visible, else empty string",
-  "department": "department or agency name if visible, else empty string"
-}
-
-If no solicitations are visible, return [].
-"""
-
-def screenshot_and_extract(url: str, county: str) -> list[dict]:
-    """
-    Renders the procurement portal URL using Playwright headless Chromium,
-    takes a full-page screenshot, and sends it to the Ollama vision model
-    to extract all solicitation entries as structured JSON.
-    """
-    import base64
-    results = []
-
-    # Step 1: Render page with Playwright
-    try:
-        from playwright.sync_api import sync_playwright
-        with sync_playwright() as p:
-            browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
-            page = browser.new_page(viewport={"width": 1400, "height": 900})
-            page.goto(url, wait_until="networkidle", timeout=30000)
-            page.wait_for_timeout(3000)
-            screenshot_bytes = page.screenshot(full_page=True)
-            browser.close()
-        log.info(f"{county}: page rendered, screenshot {len(screenshot_bytes)} bytes")
-    except Exception as e:
-        log.warning(f"{county}: Playwright failed: {e}")
-        return []
-
-    # Step 2: Send to vision model
-    try:
-        img_b64  = base64.b64encode(screenshot_bytes).decode("utf-8")
-        base     = OLLAMA_BASE_URL.rstrip("/")
-        chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
-
-        hdrs = {"Content-Type": "application/json"}
-        if OLLAMA_API_KEY:
-            hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
-
-        r = requests.post(
-            chat_url,
-            json={
-                "model": OLLAMA_VISION_MODEL,
-                "messages": [{
-                    "role": "user",
-                    "content": VISION_PROMPT,
-                    "images": [img_b64],
-                }],
-                "stream": False,
-            },
-            headers=hdrs,
-            timeout=90,
-        )
-        r.raise_for_status()
-        content = r.json()["message"]["content"].strip()
-
-        if "<think>" in content:
-            content = content.split("</think>")[-1].strip()
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
-
-        entries = json.loads(content.strip())
-        if not isinstance(entries, list):
-            entries = []
-
-        log.info(f"{county}: vision model extracted {len(entries)} entries")
-
-    except Exception as e:
-        log.warning(f"{county}: vision extraction failed: {e}")
-        return []
-
-    # Step 3: Keyword-filter and normalize
-    jurisdiction = "Nassau" if county == "Nassau" else "Suffolk"
-
-    for entry in entries:
-        title   = entry.get("title", "").strip()
-        raw     = f"{title} {entry.get('department', '')} {entry.get('type', '')}"
-        matched = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
-        if not matched or not title:
-            continue
-
-        doc_num = entry.get("doc_number", uuid.uuid4().hex[:6])
-        results.append({
-            "id": f"{jurisdiction.upper()}-{doc_num}",
-            "title": title,
-            "agency": entry.get("department", f"{county} County"),
-            "jurisdiction": jurisdiction,
-            "source": f"{county} County Procurement Portal",
-            "source_url": url,
-            "amount": 0,
-            "due_date": entry.get("due_date", ""),
-            "issue_date": entry.get("issue_date", ""),
-            "contract_type": entry.get("type", "Solicitation"),
-            "keyword_match": matched,
-            "raw_text": raw,
-        })
-
-    log.info(f"{county}: {len(results)} keyword-matched after filtering")
-    return results
-
-
-def fetch_nassau() -> list[dict]:
-    return screenshot_and_extract(
-        "https://apex5.nassaucountyny.gov/ords/f?p=533:226",
-        "Nassau",
-    )
-
-
-def fetch_suffolk() -> list[dict]:
-    return screenshot_and_extract(
-        "https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx",
-        "Suffolk",
-    )
-
-
-# ── Source 3: SAM.gov (federal) ───────────────────────────────────────────────
+# ── Source 2: SAM.gov (federal) ───────────────────────────────────────────────
 
 def fetch_sam_gov(keyword: str) -> list[dict]:
     """
-    SAM.gov Opportunities API — requires free API key from sam.gov.
-    Production URL: https://api.sam.gov/prod/opportunities/v2/search
+    SAM.gov Opportunities API.
+    Correct production URL: https://api.sam.gov/prod/opportunities/v2/search
+    Requires free API key from sam.gov — add SAM_API_KEY secret.
+    Uses 'title' param (not 'keywords') for text search.
     """
     if not SAM_API_KEY:
-        return []
+        return []   # Skip entirely without a key — endpoint rejects keyless requests
 
-    results     = []
+    results = []
     posted_from = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%m/%d/%Y")
+
+    params = {
+        "api_key": SAM_API_KEY,
+        "title": keyword,
+        "postedFrom": posted_from,
+        "postedTo": datetime.now().strftime("%m/%d/%Y"),
+        "ptype": "o,p,k,r",
+        "limit": 25,
+        "offset": 0,
+    }
 
     try:
         r = requests.get(
             "https://api.sam.gov/prod/opportunities/v2/search",
-            params={
-                "api_key":    SAM_API_KEY,
-                "title":      keyword,
-                "postedFrom": posted_from,
-                "postedTo":   datetime.now().strftime("%m/%d/%Y"),
-                "ptype":      "o,p,k,r",
-                "limit":      25,
-                "offset":     0,
-            },
+            params=params,
             timeout=20,
             headers=HEADERS,
         )
         r.raise_for_status()
-        for opp in r.json().get("opportunitiesData", []):
+        data = r.json()
+
+        for opp in data.get("opportunitiesData", []):
             opp_id = opp.get("noticeId", uuid.uuid4().hex[:8])
             results.append({
                 "id": f"SAM-{opp_id}",
@@ -343,10 +237,10 @@ def fetch_sam_gov(keyword: str) -> list[dict]:
     return results
 
 
-# ── Source 4: NYS Contract Reporter ───────────────────────────────────────────
+# ── Source 3: NYS Contract Reporter ──────────────────────────────────────────
 
 def fetch_nys_contract_reporter(keyword: str) -> list[dict]:
-    """NYS Contract Reporter via form POST."""
+    """NYS Contract Reporter via form POST — working in prior runs."""
     session = requests.Session()
     session.headers.update(HEADERS)
     try:
@@ -385,6 +279,144 @@ def fetch_nys_contract_reporter(keyword: str) -> list[dict]:
     except Exception as e:
         log.warning(f"NYS CR failed for '{keyword}': {e}")
         return []
+
+
+# ── Source 4 & 5: Nassau + Suffolk via Playwright + Vision Model ──────────────
+
+VISION_PROMPT = """You are reviewing a screenshot of a government procurement portal page.
+Extract ALL solicitation/bid entries visible in the table.
+Return ONLY a JSON array — no markdown, no preamble.
+
+Each item must have:
+{{
+  "title": "solicitation title or description",
+  "doc_number": "bid/RFP/doc number if visible",
+  "type": "RFP|RFQ|IFB|Bid|Solicitation",
+  "due_date": "due date if visible, else empty string",
+  "issue_date": "issue/posted date if visible, else empty string",
+  "department": "department or agency name if visible, else empty string"
+}}
+
+If no solicitations are visible, return [].
+"""
+
+def screenshot_and_extract(url: str, county: str) -> list[dict]:
+    """
+    Renders the procurement portal URL using Playwright headless Chromium,
+    takes a full-page screenshot, and sends it to the Ollama vision model
+    to extract all solicitation entries as structured JSON.
+    """
+    import base64
+
+    results = []
+
+    # Step 1: Render page with Playwright
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
+            page = browser.new_page(viewport={"width": 1400, "height": 900})
+            page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            # Wait a bit for JS-rendered tables to populate
+            page.wait_for_timeout(5000)
+            screenshot_bytes = page.screenshot(full_page=True)
+            browser.close()
+        log.info(f"{county}: page rendered, screenshot {len(screenshot_bytes)} bytes")
+    except Exception as e:
+        log.warning(f"{county}: Playwright failed: {e}")
+        return []
+
+    # Step 2: Send to vision model
+    try:
+        img_b64 = base64.b64encode(screenshot_bytes).decode("utf-8")
+        base = OLLAMA_BASE_URL.rstrip("/")
+        chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
+
+        hdrs = {"Content-Type": "application/json"}
+        if OLLAMA_API_KEY:
+            hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
+
+        # Use vision-capable model — qwen2.5vl or llava
+        vision_model = os.getenv("OLLAMA_VISION_MODEL", OLLAMA_MODEL)
+
+        r = requests.post(
+            chat_url,
+            json={
+                "model": vision_model,
+                "messages": [{
+                    "role": "user",
+                    "content": VISION_PROMPT,
+                    "images": [img_b64],
+                }],
+                "stream": False,
+            },
+            headers=hdrs,
+            timeout=90,
+        )
+        r.raise_for_status()
+        content = r.json()["message"]["content"].strip()
+
+        # Strip think tags and fences
+        if "<think>" in content:
+            content = content.split("</think>")[-1].strip()
+        if content.startswith("```"):
+            content = content.split("```")[1]
+            if content.startswith("json"):
+                content = content[4:]
+
+        entries = json.loads(content.strip())
+        if not isinstance(entries, list):
+            entries = []
+
+        log.info(f"{county}: vision model extracted {len(entries)} entries")
+
+    except Exception as e:
+        log.warning(f"{county}: vision extraction failed: {e}")
+        return []
+
+    # Step 3: Keyword-filter and normalize
+    jurisdiction = "Nassau" if county == "Nassau" else "Suffolk"
+    source_name  = f"{county} County Procurement Portal"
+
+    for entry in entries:
+        title   = entry.get("title", "").strip()
+        raw     = f"{title} {entry.get('department', '')} {entry.get('type', '')}"
+        matched = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+        if not matched or not title:
+            continue
+
+        doc_num = entry.get("doc_number", uuid.uuid4().hex[:6])
+        results.append({
+            "id": f"{jurisdiction.upper()}-{doc_num}",
+            "title": title,
+            "agency": entry.get("department", f"{county} County"),
+            "jurisdiction": jurisdiction,
+            "source": source_name,
+            "source_url": url,
+            "amount": 0,
+            "due_date": entry.get("due_date", ""),
+            "issue_date": entry.get("issue_date", ""),
+            "contract_type": entry.get("type", "Solicitation"),
+            "keyword_match": matched,
+            "raw_text": raw,
+        })
+
+    log.info(f"{county}: {len(results)} keyword-matched after filtering")
+    return results
+
+
+def fetch_nassau() -> list[dict]:
+    return screenshot_and_extract(
+        "https://apex5.nassaucountyny.gov/ords/f?p=533:226",
+        "Nassau",
+    )
+
+
+def fetch_suffolk() -> list[dict]:
+    return screenshot_and_extract(
+        "https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx",
+        "Suffolk",
+    )
 
 
 # ── Deduplication ─────────────────────────────────────────────────────────────
@@ -427,8 +459,9 @@ Scoring guide:
 """
 
 def score_opportunity(opp: dict) -> dict | None:
-    prompt   = "/no_think\n\n" + SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
-    base     = OLLAMA_BASE_URL.rstrip("/")
+    # Prefix with /no_think to disable Qwen3.5 thinking mode — keeps output clean JSON
+    prompt = "/no_think\n\n" + SCORE_PROMPT.format(firm=FIRM_NAME, **opp)
+    base = OLLAMA_BASE_URL.rstrip("/")
     chat_url = f"{base}/api/chat" if not base.endswith("/api") else f"{base}/chat"
     log.info(f"Scoring '{opp['title'][:50]}' via {chat_url}")
     try:
@@ -443,8 +476,10 @@ def score_opportunity(opp: dict) -> dict | None:
         )
         r.raise_for_status()
         content = r.json()["message"]["content"].strip()
+        # Strip <think>...</think> blocks if present
         if "<think>" in content:
             content = content.split("</think>")[-1].strip()
+        # Strip markdown fences
         if content.startswith("```"):
             content = content.split("```")[1]
             if content.startswith("json"):
@@ -452,6 +487,7 @@ def score_opportunity(opp: dict) -> dict | None:
         return {**opp, **json.loads(content.strip())}
     except Exception as e:
         log.warning(f"LLM scoring failed for '{opp['title']}': {e}")
+        # Keyword fallback
         text  = opp.get("raw_text", "").lower()
         score = min(sum(3 for k in ["immigration", "legal services", "removal defense", "asylum"] if k in text), 10)
         score = max(score, 1)
@@ -472,15 +508,17 @@ def main():
     seen = load_seen()
     raw: list[dict] = []
 
+    # NYC City Record — daily PDF (authoritative source)
     log.info("Fetching NYC City Record daily PDF...")
     raw += fetch_nyc_city_record_pdf()
 
+    # Nassau and Suffolk — scrape all open solicitations once, keyword-filter internally
     log.info("Fetching Nassau County solicitations...")
     raw += fetch_nassau()
-
     log.info("Fetching Suffolk County solicitations...")
     raw += fetch_suffolk()
 
+    # Keyword-based sources
     for kw in KEYWORDS:
         log.info(f"Fetching keyword: {kw}")
         raw += fetch_sam_gov(kw)
@@ -489,6 +527,7 @@ def main():
     # Deduplicate
     unique = {}
     for o in raw:
+        # Skip records with no meaningful title
         title = o.get("title", "").strip()
         if not title or title in ("Unknown Award", "Unknown Solicitation", "Unknown"):
             continue
@@ -530,7 +569,7 @@ def main():
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(json.dumps({
         "generated_at": datetime.utcnow().isoformat() + "Z",
-        "run_id":       uuid.uuid4().hex[:8],
+        "run_id": uuid.uuid4().hex[:8],
         "opportunities": all_opps,
     }, indent=2))
     log.info(f"Wrote {len(all_opps)} total opportunities to {OUTPUT_PATH}")
