@@ -599,7 +599,7 @@ def main():
     }, indent=2))
     log.info(f"Wrote {len(all_opps)} total opportunities to {OUTPUT_PATH}")
 
-    seen.update(unique.keys())
+    seen.update(o["id"] for o in all_opps)
     save_seen(seen)
     log.info("Done.")
 
