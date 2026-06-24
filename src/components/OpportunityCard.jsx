@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import DraftResponseModal from './DraftResponseModal'
+
 function fmt(n) {
   if (!n) return '—'
   if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`
@@ -63,8 +66,10 @@ function JurisdictionBadge({ jurisdiction }) {
 }
 
 export default function OpportunityCard({ opp, expanded, onToggle }) {
+  const [showDraft, setShowDraft] = useState(false)
   const days = daysUntil(opp.due_date)
   const urgent = days !== null && days <= 14
+  const isLegistar = opp.source && opp.source.includes('Legistar')
 
   return (
     <div style={{
@@ -95,6 +100,13 @@ export default function OpportunityCard({ opp, expanded, onToggle }) {
             <span style={{ fontSize: 11, padding: '2px 7px', borderRadius: 4, background: 'var(--surface2)', color: 'var(--text2)' }}>
               {opp.contract_type}
             </span>
+            {isLegistar && (
+              <span style={{
+                fontSize: 11, padding: '2px 8px', borderRadius: 4, fontWeight: 600,
+                background: 'var(--amber-dim)', color: 'var(--amber)',
+                border: '1px solid var(--amber)',
+              }}>📡 ADVANCE SIGNAL</span>
+            )}
           </div>
 
           {/* Meta row */}
@@ -173,6 +185,16 @@ export default function OpportunityCard({ opp, expanded, onToggle }) {
               View Posting ↗
             </a>
             <button
+              onClick={() => setShowDraft(true)}
+              style={{
+                padding: '8px 16px', borderRadius: 'var(--radius-sm)',
+                background: 'var(--purple)', color: '#fff',
+                fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer',
+              }}
+            >
+              ✍ Draft Response
+            </button>
+            <button
               onClick={() => {
                 const text = `${opp.title}\n${opp.agency} | ${opp.jurisdiction} | ${opp.contract_type}\nDue: ${fmtDate(opp.due_date)} | Value: ${fmt(opp.amount)}\nFit Score: ${opp.fit_score}/10 | ${opp.action}\n\n${opp.summary}\n\nSource: ${opp.source_url}`
                 navigator.clipboard.writeText(text)
@@ -180,13 +202,14 @@ export default function OpportunityCard({ opp, expanded, onToggle }) {
               style={{
                 padding: '8px 16px', borderRadius: 'var(--radius-sm)',
                 background: 'transparent', border: '1px solid var(--border)',
-                color: 'var(--text2)', fontSize: 13, fontWeight: 600,
+                color: 'var(--text2)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
               }}
             >
               Copy Brief
             </button>
             <span style={{ fontSize: 12, color: 'var(--text2)', alignSelf: 'center' }}>ID: {opp.id}</span>
           </div>
+          {showDraft && <DraftResponseModal opp={opp} onClose={() => setShowDraft(false)} />}
         </div>
       )}
     </div>

@@ -336,75 +336,18 @@ def fetch_nys_contract_reporter(keyword: str) -> list[dict]:
         return []
 
 
-# ── Source 4 & 5: Nassau + Suffolk via Playwright + Vision Model ──────────────
 
-VISION_PROMPT = """You are reviewing a screenshot of a government procurement portal page.
-Extract ALL solicitation/bid entries visible in the table.
-Return ONLY a JSON array — no markdown, no preamble.
+# ── Source 4 & 5: Nassau + Suffolk via Playwright HTML extraction ─────────────
 
-Each item must have:
-{{
-  "title": "solicitation title or description",
-  "doc_number": "bid/RFP/doc number if visible",
-  "type": "RFP|RFQ|IFB|Bid|Solicitation",
-  "due_date": "due date if visible, else empty string",
-  "issue_date": "issue/posted date if visible, else empty string",
-  "department": "department or agency name if visible, else empty string"
-}}
-
-If no solicitations are visible, return [].
-"""
-
-
-def ollama_call(prompt: str, model: str, image_b64: str = None) -> str:
+def render_and_parse(url: str, county: str) -> list[dict]:
     """
-    Call Ollama Cloud API.
-    Direct API: https://ollama.com/api/chat with Bearer token.
-    Logs full response body on error for debugging.
+    Renders the procurement portal with Playwright (handles JS tables),
+    extracts the rendered HTML, and parses with BeautifulSoup.
+    No vision model needed — works on free Ollama tier.
     """
-    base = OLLAMA_BASE_URL.rstrip("/")
-    url  = f"{base}/api/chat"
-
-    hdrs = {"Content-Type": "application/json"}
-    if OLLAMA_API_KEY:
-        hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
-
-    # Build message content
-    if image_b64:
-        # Ollama vision format: images array in the message
-        messages = [{"role": "user", "content": prompt, "images": [image_b64]}]
-    else:
-        messages = [{"role": "user", "content": prompt}]
-
-    r = requests.post(
-        url,
-        headers=hdrs,
-        json={"model": model, "messages": messages, "stream": False},
-        timeout=90,
-    )
-
-    if not r.ok:
-        # Log full response body to help diagnose 404/403
-        log.warning(f"Ollama API error {r.status_code} for model '{model}': {r.text[:500]}")
-        r.raise_for_status()
-
-    content = r.json()["message"]["content"].strip()
-
-    # Strip thinking tags
-    if "<think>" in content:
-        content = content.split("</think>")[-1].strip()
-
-    return content
-
-
-def screenshot_and_extract(url: str, county: str) -> list[dict]:
-    """
-    Playwright screenshot → Ollama vision model (gemma4:12b) → JSON extraction.
-    """
-    import base64
     results = []
+    jurisdiction = "Nassau" if county == "Nassau" else "Suffolk"
 
-    # Step 1: Playwright render
     try:
         from playwright.sync_api import sync_playwright
         with sync_playwright() as p:
@@ -412,71 +355,210 @@ def screenshot_and_extract(url: str, county: str) -> list[dict]:
             page = browser.new_page(viewport={"width": 1400, "height": 900})
             page.goto(url, wait_until="domcontentloaded", timeout=30000)
             page.wait_for_timeout(5000)
-            screenshot_bytes = page.screenshot(full_page=True)
+            html = page.content()
             browser.close()
-        log.info(f"{county}: rendered, {len(screenshot_bytes)} bytes")
+        log.info(f"{county}: page rendered, {len(html)} chars of HTML")
     except Exception as e:
         log.warning(f"{county}: Playwright failed: {e}")
         return []
 
-    # Step 2: Vision extraction
     try:
-        img_b64 = base64.b64encode(screenshot_bytes).decode("utf-8")
-        content = ollama_call(VISION_PROMPT, model=OLLAMA_VISION_MODEL, image_b64=img_b64)
+        soup = BeautifulSoup(html, "html.parser")
 
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
+        # Find all tables — try common selectors
+        tables = (
+            soup.find_all("table", class_=lambda c: c and any(x in str(c).lower() for x in ["irr", "grid", "result", "bid", "rfp"]))
+            or soup.find_all("table")
+        )
 
-        entries = json.loads(content.strip())
-        if not isinstance(entries, list):
-            entries = []
-        log.info(f"{county}: extracted {len(entries)} entries")
-    except requests.exceptions.HTTPError as e:
-        if e.response is not None and e.response.status_code == 403:
-            log.warning(f"{county}: vision model '{OLLAMA_VISION_MODEL}' requires subscription upgrade — skipping. Upgrade at ollama.com/upgrade")
-        else:
-            log.warning(f"{county}: vision failed: {e}")
-        return []
+        if not tables:
+            log.warning(f"{county}: no tables found in rendered HTML")
+            return []
+
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) < 2:
+                continue
+
+            # Get headers
+            header_row = rows[0]
+            headers = [th.get_text(strip=True).lower() for th in header_row.find_all(["th", "td"])]
+
+            for row in rows[1:]:
+                cols = row.find_all("td")
+                if not cols:
+                    continue
+
+                col_texts = [c.get_text(strip=True) for c in cols]
+                raw = " ".join(col_texts)
+                if not raw.strip():
+                    continue
+
+                # Keyword filter
+                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+                if not matched_kw:
+                    continue
+
+                # Find link
+                link = row.find("a")
+                href = link.get("href", "") if link else ""
+                if href and not href.startswith("http"):
+                    base = "https://apex5.nassaucountyny.gov" if county == "Nassau" else "https://dpw.suffolkcountyny.gov"
+                    href = base + "/" + href.lstrip("/")
+
+                # Best guess at field positions
+                title    = col_texts[0] if col_texts else raw[:80]
+                due_date = next((t for t in col_texts if re.search(r"\d{1,2}/\d{1,2}/\d{2,4}", t)), "")
+                doc_num  = re.sub(r"\s+", "-", col_texts[0])[:20] if col_texts else uuid.uuid4().hex[:6]
+
+                results.append({
+                    "id": f"{jurisdiction.upper()}-{doc_num}-{uuid.uuid4().hex[:4]}",
+                    "title": title,
+                    "agency": f"{county} County",
+                    "jurisdiction": jurisdiction,
+                    "source": f"{county} County Procurement Portal",
+                    "source_url": href or url,
+                    "amount": 0,
+                    "due_date": due_date,
+                    "issue_date": "",
+                    "contract_type": "Solicitation",
+                    "keyword_match": matched_kw,
+                    "raw_text": raw[:500],
+                })
+
+        log.info(f"{county}: {len(results)} keyword-matched solicitations")
     except Exception as e:
-        log.warning(f"{county}: vision failed: {e}")
-        return []
+        log.warning(f"{county}: HTML parse failed: {e}")
 
-    # Step 3: Keyword filter
-    jurisdiction = "Nassau" if county == "Nassau" else "Suffolk"
-    for entry in entries:
-        title   = entry.get("title", "").strip()
-        raw     = f"{title} {entry.get('department', '')} {entry.get('type', '')}"
-        matched = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
-        if not matched or not title:
-            continue
-        doc_num = entry.get("doc_number", uuid.uuid4().hex[:6])
-        results.append({
-            "id": f"{jurisdiction.upper()}-{doc_num}",
-            "title": title,
-            "agency": entry.get("department", f"{county} County"),
-            "jurisdiction": jurisdiction,
-            "source": f"{county} County Procurement Portal",
-            "source_url": url,
-            "amount": 0,
-            "due_date": entry.get("due_date", ""),
-            "issue_date": entry.get("issue_date", ""),
-            "contract_type": entry.get("type", "Solicitation"),
-            "keyword_match": matched,
-            "raw_text": raw,
-        })
-
-    log.info(f"{county}: {len(results)} keyword-matched")
     return results
 
 
 def fetch_nassau() -> list[dict]:
-    return screenshot_and_extract("https://apex5.nassaucountyny.gov/ords/f?p=533:226", "Nassau")
+    return render_and_parse("https://apex5.nassaucountyny.gov/ords/f?p=533:226", "Nassau")
 
 
 def fetch_suffolk() -> list[dict]:
-    return screenshot_and_extract("https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx", "Suffolk")
+    return render_and_parse("https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx", "Suffolk")
+
+
+# ── Source 6: NYC Council Legistar — advance intelligence ─────────────────────
+
+def fetch_legistar_advance_intel() -> list[dict]:
+    """
+    NYC Council Legistar API — surfaces contract discussions, budget hearings,
+    and legislation that signals an RFP is coming 3-6 months out.
+    Public API, no key required.
+    Monitors: Committee hearings mentioning immigration/legal services topics.
+    """
+    results  = []
+    seen_ids = set()
+    base_url = "https://webapi.legistar.com/v1/nyc"
+    cutoff   = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%Y-%m-%d")
+
+    # Search matters (legislation/resolutions/contract approvals)
+    for keyword in ["immigration", "legal services", "immigrant", "asylum", "language access", "refugee"]:
+        try:
+            r = requests.get(
+                f"{base_url}/matters",
+                params={
+                    "$filter": f"MatterLastModifiedUtc ge datetime'{cutoff}T00:00:00' and substringof('{keyword}', MatterTitle)",
+                    "$top": 20,
+                    "$orderby": "MatterLastModifiedUtc desc",
+                },
+                timeout=15,
+                headers=HEADERS,
+            )
+            r.raise_for_status()
+            matters = r.json()
+
+            for m in matters:
+                matter_id  = str(m.get("MatterId", ""))
+                matter_type = m.get("MatterTypeName", "")
+                title      = m.get("MatterTitle", "").strip()
+                status     = m.get("MatterStatusName", "")
+                body       = m.get("MatterBodyName", "")
+                modified   = m.get("MatterLastModifiedUtc", "")[:10]
+
+                if not title or matter_id in seen_ids:
+                    continue
+                seen_ids.add(matter_id)
+
+                # Only keep relevant matter types
+                relevant_types = ["Contract", "Budget", "Oversight", "Resolution",
+                                  "Introduction", "Communication", "Report"]
+                if not any(t.lower() in matter_type.lower() for t in relevant_types):
+                    continue
+
+                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in title.lower()), keyword)
+
+                results.append({
+                    "id": f"LEGISTAR-{matter_id}",
+                    "title": f"[COUNCIL SIGNAL] {title}",
+                    "agency": body or "NYC Council",
+                    "jurisdiction": "NYC",
+                    "source": "NYC Council Legistar (Advance Intel)",
+                    "source_url": f"https://legistar.council.nyc.gov/MatterDetail.aspx?ID={matter_id}&GUID=placeholder",
+                    "amount": 0,
+                    "due_date": "",
+                    "issue_date": modified,
+                    "contract_type": matter_type or "Council Action",
+                    "keyword_match": matched_kw,
+                    "raw_text": f"{title} {body} {status} {matter_type}",
+                })
+
+        except Exception as e:
+            log.warning(f"Legistar matters failed for '{keyword}': {e}")
+
+    # Also check upcoming committee hearings
+    try:
+        r = requests.get(
+            f"{base_url}/events",
+            params={
+                "$filter": f"EventDate ge datetime'{datetime.now().strftime('%Y-%m-%d')}T00:00:00'",
+                "$top": 50,
+                "$orderby": "EventDate asc",
+            },
+            timeout=15,
+            headers=HEADERS,
+        )
+        r.raise_for_status()
+        events = r.json()
+
+        for event in events:
+            event_id   = str(event.get("EventId", ""))
+            body       = event.get("EventBodyName", "")
+            event_date = event.get("EventDate", "")[:10]
+            location   = event.get("EventLocation", "")
+            comment    = event.get("EventComment", "") or ""
+
+            raw = f"{body} {comment}"
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+            if not matched_kw or event_id in seen_ids:
+                continue
+            seen_ids.add(event_id)
+
+            results.append({
+                "id": f"LEGISTAR-EVT-{event_id}",
+                "title": f"[UPCOMING HEARING] {body}",
+                "agency": body,
+                "jurisdiction": "NYC",
+                "source": "NYC Council Legistar (Upcoming Hearing)",
+                "source_url": f"https://legistar.council.nyc.gov/Calendar.aspx",
+                "amount": 0,
+                "due_date": event_date,
+                "issue_date": datetime.now().strftime("%Y-%m-%d"),
+                "contract_type": "Hearing",
+                "keyword_match": matched_kw,
+                "raw_text": raw[:500],
+            })
+
+    except Exception as e:
+        log.warning(f"Legistar events failed: {e}")
+
+    log.info(f"Legistar advance intel: {len(results)} items")
+    return results
+
+
 
 # ── Deduplication ─────────────────────────────────────────────────────────────
 
@@ -489,7 +571,28 @@ def save_seen(seen: set):
     SEEN_PATH.write_text(json.dumps(sorted(seen), indent=2))
 
 
-# ── LLM scoring ───────────────────────────────────────────────────────────────
+# ── LLM scoring via Ollama Cloud ─────────────────────────────────────────────
+
+def ollama_call(prompt: str, model: str) -> str:
+    """Call Ollama Cloud API for text scoring."""
+    base = OLLAMA_BASE_URL.rstrip("/")
+    url  = f"{base}/api/chat"
+    hdrs = {"Content-Type": "application/json"}
+    if OLLAMA_API_KEY:
+        hdrs["Authorization"] = f"Bearer {OLLAMA_API_KEY}"
+    r = requests.post(
+        url, headers=hdrs,
+        json={"model": model, "messages": [{"role": "user", "content": prompt}], "stream": False},
+        timeout=60,
+    )
+    if not r.ok:
+        log.warning(f"Ollama error {r.status_code}: {r.text[:300]}")
+        r.raise_for_status()
+    content = r.json()["message"]["content"].strip()
+    if "<think>" in content:
+        content = content.split("</think>")[-1].strip()
+    return content
+
 
 SCORE_PROMPT = """You are a procurement analyst for {firm}, an MWBE-certified immigration legal services firm.
 Evaluate this government opportunity and respond ONLY with a JSON object — no markdown, no preamble.
@@ -553,7 +656,11 @@ def main():
     log.info("Fetching NYC City Record daily PDF...")
     raw += fetch_nyc_city_record_pdf()
 
-    # Nassau and Suffolk — scrape all open solicitations once, keyword-filter internally
+    # NYC Council Legistar — advance intelligence (3-6 months ahead of RFPs)
+    log.info("Fetching NYC Council Legistar advance intel...")
+    raw += fetch_legistar_advance_intel()
+
+    # Nassau and Suffolk — Playwright HTML extraction (no vision model needed)
     log.info("Fetching Nassau County solicitations...")
     raw += fetch_nassau()
     log.info("Fetching Suffolk County solicitations...")
