@@ -372,8 +372,41 @@ def render_and_parse(url: str, county: str) -> list[dict]:
         )
 
         if not tables:
-            log.warning(f"{county}: no tables found in rendered HTML")
-            return []
+            # Suffolk uses div-based layout — search for row containers
+            log.info(f"{county}: no tables found, trying div-based layout")
+            row_containers = (
+                soup.find_all("div", class_=lambda c: c and any(x in str(c).lower() for x in ["row", "item", "result", "bid", "rfp", "offering", "record"]))
+            )
+            for container in row_containers:
+                raw = container.get_text(separator=" ", strip=True)
+                if len(raw) < 20:
+                    continue
+                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
+                if not matched_kw:
+                    continue
+                link = container.find("a")
+                href = link.get("href", "") if link else ""
+                if href and not href.startswith("http"):
+                    base_u = "https://apex5.nassaucountyny.gov" if county == "Nassau" else "https://dpw.suffolkcountyny.gov"
+                    href = base_u + "/" + href.lstrip("/")
+                results.append({
+                    "id": f"{jurisdiction.upper()}-DIV-{uuid.uuid4().hex[:8]}",
+                    "title": raw[:120],
+                    "agency": f"{county} County",
+                    "jurisdiction": jurisdiction,
+                    "source": f"{county} County Procurement Portal",
+                    "source_url": href or url,
+                    "amount": 0,
+                    "due_date": "",
+                    "issue_date": "",
+                    "contract_type": "Solicitation",
+                    "keyword_match": matched_kw,
+                    "raw_text": raw[:500],
+                })
+            if not results:
+                log.warning(f"{county}: no tables or div rows found — portal may require login")
+            log.info(f"{county}: {len(results)} keyword-matched solicitations")
+            return results
 
         for table in tables:
             rows = table.find_all("tr")
@@ -441,123 +474,123 @@ def fetch_suffolk() -> list[dict]:
     return render_and_parse("https://dpw.suffolkcountyny.gov/RFP/Offering_Search.aspx", "Suffolk")
 
 
-# ── Source 6: NYC Council Legistar — advance intelligence ─────────────────────
+# ── Source 6: NYC Council advance intelligence ────────────────────────────────
 
-def fetch_legistar_advance_intel() -> list[dict]:
+def fetch_nyc_council_advance_intel() -> list[dict]:
     """
-    NYC Council Legistar API — surfaces contract discussions, budget hearings,
-    and legislation that signals an RFP is coming 3-6 months out.
-    Public API, no key required.
-    Monitors: Committee hearings mentioning immigration/legal services topics.
+    Advance intelligence from two public NYC sources (no API token required):
+
+    1. NYC Council public calendar (legistar.council.nyc.gov/Calendar.aspx)
+       — upcoming hearings for committees that fund immigration/legal services
+    2. NYC Comptroller contract search (comptroller.nyc.gov)
+       — recently registered contracts signal agency spending priorities
     """
     results  = []
     seen_ids = set()
-    base_url = "https://webapi.legistar.com/v1/nyc"
-    cutoff   = (datetime.now() - timedelta(days=DAYS_BACK)).strftime("%Y-%m-%d")
 
-    # Search matters (legislation/resolutions/contract approvals)
-    for keyword in ["immigration", "legal services", "immigrant", "asylum", "language access", "refugee"]:
-        try:
-            r = requests.get(
-                f"{base_url}/matters",
-                params={
-                    "$filter": f"MatterLastModifiedUtc ge datetime'{cutoff}T00:00:00' and substringof('{keyword}', MatterTitle)",
-                    "$top": 20,
-                    "$orderby": "MatterLastModifiedUtc desc",
-                },
-                timeout=15,
-                headers=HEADERS,
-            )
-            r.raise_for_status()
-            matters = r.json()
-
-            for m in matters:
-                matter_id  = str(m.get("MatterId", ""))
-                matter_type = m.get("MatterTypeName", "")
-                title      = m.get("MatterTitle", "").strip()
-                status     = m.get("MatterStatusName", "")
-                body       = m.get("MatterBodyName", "")
-                modified   = m.get("MatterLastModifiedUtc", "")[:10]
-
-                if not title or matter_id in seen_ids:
-                    continue
-                seen_ids.add(matter_id)
-
-                # Only keep relevant matter types
-                relevant_types = ["Contract", "Budget", "Oversight", "Resolution",
-                                  "Introduction", "Communication", "Report"]
-                if not any(t.lower() in matter_type.lower() for t in relevant_types):
-                    continue
-
-                matched_kw = next((kw for kw in KEYWORDS if kw.lower() in title.lower()), keyword)
-
-                results.append({
-                    "id": f"LEGISTAR-{matter_id}",
-                    "title": f"[COUNCIL SIGNAL] {title}",
-                    "agency": body or "NYC Council",
-                    "jurisdiction": "NYC",
-                    "source": "NYC Council Legistar (Advance Intel)",
-                    "source_url": f"https://legistar.council.nyc.gov/MatterDetail.aspx?ID={matter_id}&GUID=placeholder",
-                    "amount": 0,
-                    "due_date": "",
-                    "issue_date": modified,
-                    "contract_type": matter_type or "Council Action",
-                    "keyword_match": matched_kw,
-                    "raw_text": f"{title} {body} {status} {matter_type}",
-                })
-
-        except Exception as e:
-            log.warning(f"Legistar matters failed for '{keyword}': {e}")
-
-    # Also check upcoming committee hearings
+    # ── 1. NYC Council public calendar (Playwright-rendered) ──────────────────
+    RELEVANT_COMMITTEES = [
+        "immigration", "legal", "social services", "human services",
+        "aging", "children", "health", "youth", "public safety",
+        "women", "cultural affairs",
+    ]
     try:
-        r = requests.get(
-            f"{base_url}/events",
-            params={
-                "$filter": f"EventDate ge datetime'{datetime.now().strftime('%Y-%m-%d')}T00:00:00'",
-                "$top": 50,
-                "$orderby": "EventDate asc",
-            },
-            timeout=15,
-            headers=HEADERS,
-        )
-        r.raise_for_status()
-        events = r.json()
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
+            page = browser.new_page(viewport={"width": 1280, "height": 900})
+            page.goto("https://legistar.council.nyc.gov/Calendar.aspx",
+                      wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(3000)
+            html = page.content()
+            browser.close()
 
-        for event in events:
-            event_id   = str(event.get("EventId", ""))
-            body       = event.get("EventBodyName", "")
-            event_date = event.get("EventDate", "")[:10]
-            location   = event.get("EventLocation", "")
-            comment    = event.get("EventComment", "") or ""
+        soup = BeautifulSoup(html, "html.parser")
+        rows = soup.find_all("tr")
 
-            raw = f"{body} {comment}"
-            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in raw.lower()), None)
-            if not matched_kw or event_id in seen_ids:
+        for row in rows:
+            cells = row.find_all("td")
+            if len(cells) < 3:
                 continue
-            seen_ids.add(event_id)
+            row_text = row.get_text(separator=" ", strip=True)
+            matched_kw = next((kw for kw in KEYWORDS if kw.lower() in row_text.lower()), None)
+            committee_match = any(c in row_text.lower() for c in RELEVANT_COMMITTEES)
+            if not matched_kw and not committee_match:
+                continue
 
+            # Extract date and committee name
+            date_match = re.search(r"\d{1,2}/\d{1,2}/\d{4}", row_text)
+            event_date = date_match.group(0) if date_match else ""
+            link = row.find("a")
+            href = link.get("href", "") if link else ""
+            if href and not href.startswith("http"):
+                href = "https://legistar.council.nyc.gov/" + href.lstrip("/")
+
+            uid = f"COUNCIL-{uuid.uuid4().hex[:8]}"
+            if uid in seen_ids:
+                continue
+            seen_ids.add(uid)
+
+            title_text = cells[0].get_text(strip=True) if cells else row_text[:80]
             results.append({
-                "id": f"LEGISTAR-EVT-{event_id}",
-                "title": f"[UPCOMING HEARING] {body}",
-                "agency": body,
+                "id": uid,
+                "title": f"[ADVANCE SIGNAL] {title_text[:100]}",
+                "agency": "NYC Council",
                 "jurisdiction": "NYC",
-                "source": "NYC Council Legistar (Upcoming Hearing)",
-                "source_url": f"https://legistar.council.nyc.gov/Calendar.aspx",
+                "source": "NYC Council Calendar",
+                "source_url": href or "https://legistar.council.nyc.gov/Calendar.aspx",
                 "amount": 0,
                 "due_date": event_date,
                 "issue_date": datetime.now().strftime("%Y-%m-%d"),
                 "contract_type": "Hearing",
-                "keyword_match": matched_kw,
-                "raw_text": raw[:500],
+                "keyword_match": matched_kw or "committee",
+                "raw_text": row_text[:500],
             })
 
+        log.info(f"NYC Council calendar: {len(results)} relevant hearings")
     except Exception as e:
-        log.warning(f"Legistar events failed: {e}")
+        log.warning(f"NYC Council calendar failed: {e}")
 
-    log.info(f"Legistar advance intel: {len(results)} items")
+    # ── 2. NYC Comptroller registered contracts ────────────────────────────────
+    try:
+        for kw in ["immigration", "legal services", "immigrant services", "language access"]:
+            r = requests.get(
+                "https://comptroller.nyc.gov/api/contracts/",
+                params={"keyword": kw, "status": "registered", "limit": 10},
+                timeout=15, headers=HEADERS,
+            )
+            if not r.ok:
+                continue
+            data = r.json()
+            contracts = data.get("results", data if isinstance(data, list) else [])
+            for c in contracts:
+                cid = str(c.get("id", c.get("contract_number", uuid.uuid4().hex[:8])))
+                uid = f"COMPTROLLER-{cid}"
+                if uid in seen_ids:
+                    continue
+                seen_ids.add(uid)
+                title = c.get("contract_description", c.get("description", "NYC Contract"))
+                agency = c.get("agency_name", c.get("agency", "NYC Agency"))
+                matched_kw = next((k for k in KEYWORDS if k.lower() in f"{title} {agency}".lower()), kw)
+                results.append({
+                    "id": uid,
+                    "title": f"[REGISTERED CONTRACT] {title[:100]}",
+                    "agency": agency,
+                    "jurisdiction": "NYC",
+                    "source": "NYC Comptroller",
+                    "source_url": f"https://comptroller.nyc.gov/contracts/",
+                    "amount": float(c.get("amount", c.get("contract_amount", 0)) or 0),
+                    "due_date": c.get("end_date", ""),
+                    "issue_date": c.get("registered_date", c.get("start_date", "")),
+                    "contract_type": "Registered Contract",
+                    "keyword_match": matched_kw,
+                    "raw_text": f"{title} {agency}"[:500],
+                })
+    except Exception as e:
+        log.warning(f"Comptroller contracts failed: {e}")
+
+    log.info(f"NYC advance intel total: {len(results)} items")
     return results
-
 
 
 # ── Deduplication ─────────────────────────────────────────────────────────────
@@ -656,9 +689,9 @@ def main():
     log.info("Fetching NYC City Record daily PDF...")
     raw += fetch_nyc_city_record_pdf()
 
-    # NYC Council Legistar — advance intelligence (3-6 months ahead of RFPs)
-    log.info("Fetching NYC Council Legistar advance intel...")
-    raw += fetch_legistar_advance_intel()
+    # NYC Council + Comptroller — advance intelligence (3-6 months ahead)
+    log.info("Fetching NYC Council advance intel...")
+    raw += fetch_nyc_council_advance_intel()
 
     # Nassau and Suffolk — Playwright HTML extraction (no vision model needed)
     log.info("Fetching Nassau County solicitations...")
