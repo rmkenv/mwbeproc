@@ -10,6 +10,7 @@ Triggered by GitHub Actions Mon/Thu at 7am ET.
 
 import json
 import os
+import re
 import uuid
 import logging
 from datetime import datetime, timedelta
@@ -374,9 +375,13 @@ def render_and_parse(url: str, county: str) -> list[dict]:
         if not tables:
             # Suffolk uses div-based layout — search for row containers
             log.info(f"{county}: no tables found, trying div-based layout")
-            row_containers = (
-                soup.find_all("div", class_=lambda c: c and any(x in str(c).lower() for x in ["row", "item", "result", "bid", "rfp", "offering", "record"]))
-            )
+            # Get all divs with substantial text content
+            row_containers = [
+                d for d in soup.find_all("div")
+                if len(d.get_text(strip=True)) > 30
+                and len(d.get_text(strip=True)) < 500
+                and not d.find("div")  # leaf divs only
+            ]
             for container in row_containers:
                 raw = container.get_text(separator=" ", strip=True)
                 if len(raw) < 20:
