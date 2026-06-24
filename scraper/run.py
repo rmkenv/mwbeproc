@@ -724,7 +724,27 @@ def main():
     # Score
     scored = []
     for opp in unique.values():
-        result = score_opportunity(opp)
+        # Advance signals (council hearings) get a floor score so they appear as MONITOR
+        # The LLM would score them low since they're not RFPs, but they're valuable leads
+        is_advance = opp.get("title", "").startswith("[ADVANCE SIGNAL]") or \
+                     opp.get("title", "").startswith("[REGISTERED CONTRACT]")
+        if is_advance:
+            # Score directly without LLM — assign 5 (MONITOR) as baseline
+            # Boost to 7 if Committee on Immigration or directly relevant committee
+            high_value = any(kw in opp.get("raw_text", "").lower() for kw in
+                             ["immigration", "immigrant", "legal services", "language access", "refugee"])
+            fit_score = 7 if high_value else 5
+            result = {
+                **opp,
+                "fit_score": fit_score,
+                "action": "PURSUE" if fit_score >= 7 else "MONITOR",
+                "summary": f"NYC Council advance intelligence signal. {opp.get('agency', '')} activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+                "keyword_matches": [opp.get("keyword_match", "")],
+                "certifications_required": [],
+            }
+        else:
+            result = score_opportunity(opp)
+
         if result and result.get("fit_score", 0) >= MIN_FIT_SCORE:
             result["fetched_at"] = datetime.utcnow().isoformat() + "Z"
             result.pop("raw_text", None)
