@@ -160,23 +160,39 @@ def fetch_nyc_city_record_pdf() -> list[dict]:
             vendor_match = re.search(r"\bTO:\s*([^,\n]{5,80})", raw)
             vendor = vendor_match.group(1).strip() if vendor_match else ""
 
-            # Build title: first line with real content (not all-caps header, not PIN/AMT)
+            # Extract title from the line containing PIN# — everything before "PIN#"
+            # City Record format: "Language Access Services – Renewal – PIN#XXXXX – AMT: $X – TO: Vendor"
             title = ""
             for line in lines:
-                # Skip agency headers
-                if line.isupper() and len(line) < 80:
-                    continue
-                # Skip metadata lines
-                if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the", "The City")):
-                    continue
-                # Skip dot-leader lines
-                if ". . ." in line:
-                    continue
-                if len(line) > 15:
-                    title = line[:120]
+                if "PIN#" in line:
+                    # Take everything before the PIN# marker
+                    before_pin = line.split("PIN#")[0].strip()
+                    # Clean trailing separators (–, -, —)
+                    before_pin = re.sub(r"[\s\-–—]+$", "", before_pin).strip()
+                    if len(before_pin) > 10:
+                        title = before_pin[:150]
                     break
+
+            # Fallback: first non-caps, non-boilerplate line
+            if not title:
+                for line in lines:
+                    if line.isupper() and len(line) < 80:
+                        continue
+                    if any(line.startswith(p) for p in ("PIN#", "AMT:", "TO:", "E j", "Use the", "The City", "Vendors should")):
+                        continue
+                    if ". . ." in line or len(line) < 10:
+                        continue
+                    title = line[:150]
+                    break
+
             if not title:
                 title = f"{current_agency} — {matched_kw} procurement"
+
+            # Skip if title is still boilerplate
+            boilerplate = ["frequently review", "Compete To Win", "compete to win",
+                           "Services (other than", "vendorsshould", "City Record Online"]
+            if any(b.lower() in title.lower() for b in boilerplate):
+                continue
 
             # Notice type
             raw_upper = raw.upper()
