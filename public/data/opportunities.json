@@ -1,7 +1,27 @@
 {
-  "generated_at": "2026-06-30T15:24:52.345870Z",
-  "run_id": "a9b288f5",
+  "generated_at": "2026-07-01T15:37:04.955947Z",
+  "run_id": "4f452e7b",
   "opportunities": [
+    {
+      "id": "COUNCIL-fa934574",
+      "title": "[ADVANCE SIGNAL] Committee on Immigration",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1422717&GUID=060326E1-215F-4173-90E5-3637C06652AD",
+      "amount": 0,
+      "due_date": "6/11/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 7,
+      "action": "PURSUE",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "immigration"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954875Z"
+    },
     {
       "id": "COUNCIL-936dc455",
       "title": "[ADVANCE SIGNAL] Committee on Immigration",
@@ -121,6 +141,406 @@
       ],
       "certifications_required": [],
       "fetched_at": "2026-06-24T00:34:15.962795Z"
+    },
+    {
+      "id": "COUNCIL-1e769704",
+      "title": "[ADVANCE SIGNAL] Search:",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/Calendar.aspx",
+      "amount": 0,
+      "due_date": "",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "immigration"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954611Z"
+    },
+    {
+      "id": "COUNCIL-dd13f446",
+      "title": "[ADVANCE SIGNAL] Committee on Public Safety",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1425932&GUID=B8FA51EF-C655-4E6D-9E55-F4237FE04122",
+      "amount": 0,
+      "due_date": "6/30/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954646Z"
+    },
+    {
+      "id": "COUNCIL-349db03c",
+      "title": "[ADVANCE SIGNAL] Committee on Women and Gender Equity",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1425948&GUID=26E8CD9C-289C-482C-BBC2-AED4D4D773C5",
+      "amount": 0,
+      "due_date": "6/30/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954662Z"
+    },
+    {
+      "id": "COUNCIL-ce4a14c8",
+      "title": "[ADVANCE SIGNAL] Committee on Cultural Affairs, Libraries and International Relations",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1425949&GUID=9FD65B19-DC97-49B7-98DE-951D9008782C",
+      "amount": 0,
+      "due_date": "6/30/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954675Z"
+    },
+    {
+      "id": "COUNCIL-f9843f7a",
+      "title": "[ADVANCE SIGNAL] Committee on Public Safety",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1425340&GUID=7745646C-3481-44C7-BB5F-2D0B324D08B5",
+      "amount": 0,
+      "due_date": "6/29/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954687Z"
+    },
+    {
+      "id": "COUNCIL-39f90d1f",
+      "title": "[ADVANCE SIGNAL] Committee on Cultural Affairs, Libraries and International Relations",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1423944&GUID=D5A200E0-607D-4B28-95FE-8F3EBB838247",
+      "amount": 0,
+      "due_date": "6/29/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954699Z"
+    },
+    {
+      "id": "COUNCIL-4329f3aa",
+      "title": "[ADVANCE SIGNAL] Committee on Women and Gender Equity",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1425375&GUID=43323F23-79E8-45A8-A15D-B051E07A422E",
+      "amount": 0,
+      "due_date": "6/29/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954714Z"
+    },
+    {
+      "id": "COUNCIL-64d2f2ae",
+      "title": "[ADVANCE SIGNAL] Committee on Mental Health and Substance Use",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416936&GUID=0F1B3B44-315E-4527-BE5B-022CBE1AE73E",
+      "amount": 0,
+      "due_date": "6/26/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954751Z"
+    },
+    {
+      "id": "COUNCIL-b10d5c4c",
+      "title": "[ADVANCE SIGNAL] Committee on Hospitals",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416959&GUID=ECD6691A-F70D-406F-866A-36275FCA47FE",
+      "amount": 0,
+      "due_date": "6/26/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954778Z"
+    },
+    {
+      "id": "COUNCIL-997c8cbc",
+      "title": "[ADVANCE SIGNAL] Committee on Women and Gender Equity",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416960&GUID=144FB2AE-5B3D-4FF2-A7D3-401655F45388",
+      "amount": 0,
+      "due_date": "6/26/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954793Z"
+    },
+    {
+      "id": "COUNCIL-dc29cfd4",
+      "title": "[ADVANCE SIGNAL] Committee on General Welfare",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1411046&GUID=7CE14248-098A-4E86-830F-29643FD126C2",
+      "amount": 0,
+      "due_date": "6/24/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954805Z"
+    },
+    {
+      "id": "COUNCIL-32c9ed73",
+      "title": "[ADVANCE SIGNAL] Committee on Women and Gender Equity",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1411047&GUID=17F4D9F3-B248-475A-96A3-68A7B7596C42",
+      "amount": 0,
+      "due_date": "6/24/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954816Z"
+    },
+    {
+      "id": "COUNCIL-b9baceb9",
+      "title": "[ADVANCE SIGNAL] Committee on Children and Youth",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416202&GUID=B9569ED6-8DA4-4C69-8751-BC43C16B3542",
+      "amount": 0,
+      "due_date": "6/23/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954826Z"
+    },
+    {
+      "id": "COUNCIL-ac4a073d",
+      "title": "[ADVANCE SIGNAL] Committee on Aging",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1413206&GUID=366B6C95-6EFA-492B-85A5-07D94ACAC977",
+      "amount": 0,
+      "due_date": "6/16/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954836Z"
+    },
+    {
+      "id": "COUNCIL-41c9a749",
+      "title": "[ADVANCE SIGNAL] Committee on Health",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416937&GUID=0E04B702-2B6C-4364-834B-355AD425CF36",
+      "amount": 0,
+      "due_date": "6/15/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954847Z"
+    },
+    {
+      "id": "COUNCIL-56e38f9c",
+      "title": "[ADVANCE SIGNAL] Committee on Hospitals",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416938&GUID=3BF0CC59-B321-46E6-8112-0693916FEFD9",
+      "amount": 0,
+      "due_date": "6/15/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954858Z"
+    },
+    {
+      "id": "COUNCIL-f431f9d1",
+      "title": "[ADVANCE SIGNAL] Committee on Disabilities",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1416939&GUID=C2AFE37C-A9F0-4862-8105-964236D1126F",
+      "amount": 0,
+      "due_date": "6/15/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954869Z"
+    },
+    {
+      "id": "COUNCIL-7dc472e2",
+      "title": "[ADVANCE SIGNAL] Committee on Aging",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1422650&GUID=1996F28C-438A-48A7-82F3-CE0F85076175",
+      "amount": 0,
+      "due_date": "6/10/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954886Z"
+    },
+    {
+      "id": "COUNCIL-e758d60d",
+      "title": "[ADVANCE SIGNAL] Committee on Cultural Affairs, Libraries and International Relations",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1422763&GUID=B0BC0D73-2098-4531-ABBF-EB1C2D4D91D9",
+      "amount": 0,
+      "due_date": "6/10/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954901Z"
+    },
+    {
+      "id": "COUNCIL-89921204",
+      "title": "[ADVANCE SIGNAL] Committee on Public Safety",
+      "agency": "NYC Council",
+      "jurisdiction": "NYC",
+      "source": "NYC Council Calendar",
+      "source_url": "https://legistar.council.nyc.gov/View.ashx?M=IC&ID=1417913&GUID=C5D97CEC-5BFC-4F22-801F-3A275B8191D9",
+      "amount": 0,
+      "due_date": "6/10/2026",
+      "issue_date": "2026-07-01",
+      "contract_type": "Hearing",
+      "fit_score": 5,
+      "action": "MONITOR",
+      "summary": "NYC Council advance intelligence signal. NYC Council activity on topics related to immigration and legal services. Monitor for upcoming RFP or procurement action.",
+      "keyword_matches": [
+        "committee"
+      ],
+      "certifications_required": [],
+      "fetched_at": "2026-07-01T15:37:04.954911Z"
     },
     {
       "id": "COUNCIL-18ded051",
