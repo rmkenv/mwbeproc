@@ -20,8 +20,9 @@ function Chip({ label, active, onClick }) {
 
 export default function FilterBar({
   search, setSearch,
-  jurisdiction, setJurisdiction, jurisdictions,
   action, setAction, actions,
+  type, setType, types,
+  mwbeOnly, setMwbeOnly,
   sort, setSort, sortOptions,
   resultCount
 }) {
@@ -32,12 +33,13 @@ export default function FilterBar({
         <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text2)', fontSize: 15 }}>🔍</span>
         <input
           type="text"
-          placeholder="Search by title, agency, keyword…"
+          placeholder="Filter by title, agency, PIN, keyword…"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Escape') setSearch('') }}
           style={{
             width: '100%',
-            padding: '10px 12px 10px 38px',
+            padding: '10px 80px 10px 38px',
             background: 'var(--surface)',
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius)',
@@ -46,15 +48,30 @@ export default function FilterBar({
             outline: 'none',
           }}
         />
+        {/* Filtering is live — there's nothing to submit. Say so, and give an
+            obvious way out, so the box doesn't read as a dead input. */}
+        {search
+          ? <button
+              onClick={() => setSearch('')}
+              style={{
+                position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+                padding: '4px 10px', borderRadius: 12, border: '1px solid var(--border)',
+                background: 'var(--surface2)', color: 'var(--text2)', fontSize: 12, cursor: 'pointer',
+              }}
+            >Clear ✕</button>
+          : <span style={{
+              position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+              color: 'var(--text2)', fontSize: 11, opacity: 0.6, pointerEvents: 'none',
+            }}>filters as you type</span>}
       </div>
 
       {/* Filters row */}
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-          {/* Jurisdiction chips */}
+          {/* Record type: open bid vs intent vs past award */}
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {jurisdictions.map(j => (
-              <Chip key={j} label={j} active={jurisdiction === j} onClick={() => setJurisdiction(j)} />
+            {types.map(t => (
+              <Chip key={t.value} label={t.label} active={type === t.value} onClick={() => setType(t.value)} />
             ))}
           </div>
 
@@ -66,6 +83,11 @@ export default function FilterBar({
               <Chip key={a} label={a} active={action === a} onClick={() => setAction(a)} />
             ))}
           </div>
+
+          <div style={{ width: 1, height: 24, background: 'var(--border)' }} />
+
+          {/* M/WBE vehicles — the notices explicitly reserved for certified firms */}
+          <Chip label="M/WBE only" active={mwbeOnly} onClick={() => setMwbeOnly(!mwbeOnly)} />
         </div>
 
         {/* Sort + count */}
