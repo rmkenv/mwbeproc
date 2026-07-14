@@ -1,45 +1,44 @@
-name: Scrape Procurement Portals
+name: Search City Record
 
 on:
   schedule:
-    - cron: "0 13 * * 1-5"   # Mon–Fri at 8am ET (13:00 UTC)
+    - cron: "0 13 * * 1-5"   # Mon–Fri 8am ET — the City Record publishes daily
   workflow_dispatch:
+    inputs:
+      days:
+        description: "Lookback window in days"
+        default: "45"
 
 jobs:
-  scrape:
+  search:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: pip
 
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4 python-dotenv pdfminer.six playwright
+      - run: pip install -r scraper/requirements.txt
 
-      - name: Install Playwright browsers
-        run: playwright install chromium --with-deps
-
-      - name: Run scraper
+      - name: Search City Record
         env:
+          NYC_APP_TOKEN:  ${{ secrets.NYC_APP_TOKEN }}   # optional — raises the Socrata rate limit
           OLLAMA_BASE_URL: ${{ secrets.OLLAMA_BASE_URL }}
-          OLLAMA_MODEL: ${{ secrets.OLLAMA_MODEL }}
-          OLLAMA_VISION_MODEL: ${{ secrets.OLLAMA_VISION_MODEL }}
-          OLLAMA_API_KEY: ${{ secrets.OLLAMA_API_KEY }}
-          FIRM_NAME: ${{ secrets.FIRM_NAME }}
-          MIN_FIT_SCORE: "5"
+          OLLAMA_MODEL:    ${{ secrets.OLLAMA_MODEL }}
+          OLLAMA_API_KEY:  ${{ secrets.OLLAMA_API_KEY }}
+          FIRM_NAME:       ${{ secrets.FIRM_NAME }}
+          MIN_FIT_SCORE:   "5"
+          DAYS_BACK:       ${{ github.event.inputs.days || '45' }}
         run: python scraper/run.py
 
-      - name: Commit updated opportunities
+      - name: Commit results
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add public/data/opportunities.json scraper/seen_ids.json
-          git diff --staged --quiet || git commit -m "data: update opportunities $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+          git diff --staged --quiet || git commit -m "data: city record search $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
           git push
