@@ -16,6 +16,7 @@ import argparse
 import json
 import logging
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -77,12 +78,24 @@ NOISE_CONTEXT = ["reasonable accommodation", "sign language interpret",
                  "accessibility questions", "language interpretation, or sign language"]
 
 
+def hits(text: str, keywords: list[str]) -> list[str]:
+    """Match on WORD BOUNDARIES, not substrings.
+
+    Naive `if kw in text` is a trap here: "tps" lives inside "https", and every
+    City Record notice carries a PASSPort URL. That one substring match scored
+    forklifts and police software at 9/10 PURSUE. Same class of bug waits in
+    "daca" (Curacao), "vawa", "sijs".
+    """
+    return [k for k in keywords
+            if re.search(rf"\b{re.escape(k)}\b", text, re.IGNORECASE)]
+
+
 def score(rec: dict) -> tuple[int, list[str]]:
     text = f"{rec.get('title','')} {rec.get('raw_text','')}".lower()
 
-    core     = [k for k in CORE if k in text]
-    strong   = [k for k in STRONG if k in text]
-    adjacent = [k for k in ADJACENT if k in text]
+    core     = hits(text, CORE)
+    strong   = hits(text, STRONG)
+    adjacent = hits(text, ADJACENT)
 
     # If the ONLY reason this matched is a phrase sitting inside the standard
     # accessibility boilerplate, it's not a lead.
@@ -148,8 +161,10 @@ def action_for(s: int, rec: dict) -> str:
 
 
 SUMMARY_PROMPT = """You are a procurement analyst for {firm}, an MWBE-certified immigration legal services firm.
-Summarize this NYC City Record notice in 2-3 plain sentences: the scope of work, and whether it fits an
-immigration legal services provider. Respond ONLY with JSON, no markdown.
+Summarize this NYC City Record notice in 2-3 plain sentences describing ONLY the scope of work the agency is
+buying: what service, for whom, under what vehicle. Do not restate the firm's specialty, do not editorialize
+about fit, and do not use the phrase "immigration legal services" unless it appears in the notice itself.
+Respond ONLY with JSON, no markdown.
 
 Title: {title}
 Agency: {agency}
@@ -241,6 +256,8 @@ def main():
     scored = []
     for rec in records:
         fit, matches = score(rec)
+        if not matches:
+            continue   # $q matched a stray token, not our subject matter
         rec["fit_score"] = fit
         rec["keyword_matches"] = sorted(set(matches))
         rec["action"] = action_for(fit, rec)
