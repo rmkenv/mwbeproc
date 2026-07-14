@@ -307,36 +307,40 @@ def fetch_todays_pdf(keywords: list[str]) -> tuple[list[dict], Status]:
     end = text.find("PUBLIC COMMENT ON", start)
     section = text[start: end if end != -1 else len(text)]
 
-    # Each notice ends with a publication marker like "E jy14" / "jy8-14".
-    blocks = re.split(r"\n\s*E?\s*[a-z]{1,2}\d{1,2}(?:-\d{1,2})?\s*\n", section)
+    # Anchor each entry to its own PIN rather than splitting on publication
+    # markers. Marker splitting is fragile — when pdfminer's whitespace differs
+    # from what the regex expects, two notices merge into one block and the
+    # keywords from notice A get attributed to notice B's title. That's how
+    # "FORKLIFTS ELECTRIC" ended up flagged as an immigration opportunity.
+    results, seen_pins = [], set()
 
-    results, agency = [], "NYC Agency"
-    for raw in blocks:
-        raw = raw.strip()
-        if len(raw) < 40 or any(b in raw for b in BOILERPLATE):
+    for m in re.finditer(r"PIN#\s*([\w\-/]+)", section):
+        pin = m.group(1)
+        if pin in seen_pins:
             continue
-        if re.search(r"\.\s*\.\s*\.\s*\.\s*\d{3,4}", raw):     # TOC dot leaders
+        seen_pins.add(pin)
+
+        # A notice's title sits just above its PIN; its detail just below.
+        window = section[max(0, m.start() - 900): m.start() + 500]
+        if any(b in window for b in BOILERPLATE):
             continue
 
-        lines = [l.strip() for l in raw.split("\n") if l.strip()]
-        for line in lines[:6]:
-            if (line.isupper() and 5 < len(line) < 80
-                    and not line.startswith(("PIN", "AMT", "TO:", "BID", "FY"))):
-                agency = line.title()
-                break
-
-        hits = [k for k in keywords if k.lower() in raw.lower()]
+        hits = [k for k in keywords
+                if re.search(rf"\b{re.escape(k)}\b", window, re.IGNORECASE)]
         if not hits:
             continue
 
-        pin_m = re.search(r"PIN#\s*([\w\-/]+)", raw)
-        if not pin_m:
-            continue                                  # no PIN = not a solicitation
-        pin = pin_m.group(1)
+        lines = [l.strip() for l in window.split("\n") if l.strip()]
 
+        agency = "NYC Agency"
+        for line in lines:
+            if (line.isupper() and 5 < len(line) < 80
+                    and "PIN#" not in line
+                    and not line.startswith(("PIN", "AMT", "TO:", "BID", "FY"))):
+                agency = line.title()
         title = _pdf_title(lines) or f"{agency} — {hits[0]}"
 
-        upper = raw.upper()
+        upper = window.upper()
         if "INTENT TO AWARD" in upper:
             rtype, ntype = INTENT, "Intent to Award"
         elif "SOLICITATION" in upper:
@@ -346,10 +350,11 @@ def fetch_todays_pdf(keywords: list[str]) -> tuple[list[dict], Status]:
         else:
             rtype, ntype = OTHER, "Notice"
 
-        due = re.search(r"Due\s+(\d{1,2}-\d{1,2}-\d{2,4})", raw)
-        amt = re.search(r"AMT:\s*\$([\d,\.]+)", raw)
-        vend = re.search(r"\bTO:\s*([^,\n]{5,80})", raw)
-        mail = re.search(r"[\w\.\-]+@[\w\.\-]+\.\w+", raw)
+        tail = section[m.start(): m.start() + 500]
+        due  = re.search(r"Due\s+(\d{1,2}-\d{1,2}-\d{2,4})", tail)
+        amt  = re.search(r"AMT:\s*\$([\d,\.]+)", tail)
+        vend = re.search(r"\bTO:\s*([^,\n]{5,80})", tail)
+        mail = re.search(r"[\w\.\-]+@[\w\.\-]+\.\w+", tail)
 
         results.append({
             "id": stable_id("CRPDF", pin),
@@ -361,7 +366,7 @@ def fetch_todays_pdf(keywords: list[str]) -> tuple[list[dict], Status]:
             "notice_type": ntype,
             "record_type": rtype,
             "selection_method": "",
-            "mwbe_vehicle": bool(re.search(r"m/?wbe", raw, re.I)),
+            "mwbe_vehicle": bool(re.search(r"m/?wbe", window, re.I)),
             "pin": pin,
             "amount": money(amt.group(1)) if amt else 0.0,
             "vendor": vend.group(1).strip() if vend else "",
@@ -374,7 +379,7 @@ def fetch_todays_pdf(keywords: list[str]) -> tuple[list[dict], Status]:
             "source": "City Record (today's PDF)",
             "source_url": pdf_url,
             "matched_terms": hits,
-            "raw_text": raw[:2000],
+            "raw_text": window[:2000],
         })
 
     st.found = len(results)
