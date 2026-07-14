@@ -23,10 +23,10 @@ function Stat({ label, value, color, bg }) {
 export default function StatsBar({ stats }) {
   return (
     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
-      <Stat label="Total Opportunities" value={stats.total || 0} />
+      <Stat label="Open Solicitations" value={stats.open || 0} />
       <Stat label="Pursue" value={stats.pursue || 0} color="var(--green)" />
-      <Stat label="Monitor" value={stats.monitor || 0} color="var(--amber)" />
-      <Stat label="Pursue Value" value={fmt(stats.totalValue)} color="var(--blue)" />
+      <Stat label="New This Run" value={stats.isNew || 0} color="var(--amber)" />
+      <Stat label="M/WBE Vehicles" value={stats.mwbe || 0} color="var(--blue)" />
     </div>
   )
 }
