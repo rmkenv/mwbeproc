@@ -36,6 +36,14 @@ MIN_FIT_SCORE   = int(os.getenv("MIN_FIT_SCORE", "5"))
 DAYS_BACK       = int(os.getenv("DAYS_BACK", "45"))
 RETAIN_DAYS     = int(os.getenv("RETAIN_DAYS", "180"))
 
+# Bump this whenever scoring or keyword matching changes. Retained records that
+# were scored by an older version are discarded rather than carried forward —
+# otherwise a record the old scorer wrongly accepted (e.g. "FORKLIFTS ELECTRIC",
+# matched because "tps" is a substring of "https") survives the fix forever,
+# since the corrected fetcher no longer returns it and the merge treats anything
+# it doesn't re-fetch as history worth keeping.
+SCORER_VERSION = 2
+
 ROOT        = Path(__file__).parent.parent
 OUTPUT_PATH = ROOT / "public" / "data" / "opportunities.json"
 SEEN_PATH   = Path(__file__).parent / "seen_ids.json"
@@ -267,6 +275,7 @@ def main():
         rec.update({"summary": fallback_summary(rec), "certifications_required": []}
                    if args.no_llm else enrich(rec))
         rec["is_new"] = rec["id"] not in seen
+        rec["scorer_version"] = SCORER_VERSION
         rec["fetched_at"] = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         rec.pop("raw_text", None)
         scored.append(rec)
@@ -277,8 +286,8 @@ def main():
     cutoff = datetime.now(timezone.utc) - timedelta(days=RETAIN_DAYS)
     kept = []
     for o in load_existing():
-        if o["id"] in ids or "record_type" not in o:
-            continue
+        if o["id"] in ids or o.get("scorer_version") != SCORER_VERSION:
+            continue      # stale schema or stale scoring — let it go
         try:
             if datetime.fromisoformat(o.get("fetched_at", "").replace("Z", "+00:00")) > cutoff:
                 o["is_new"] = False
