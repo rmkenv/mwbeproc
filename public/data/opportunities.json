@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-14T18:44:23.034061Z",
+  "generated_at": "2026-07-15T14:44:11.673598Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 310,
+      "found": 319,
       "queries": 15,
       "error": "",
       "note": ""
@@ -37,122 +37,14 @@
     }
   ],
   "counts": {
-    "total": 12,
+    "total": 7,
     "new_this_run": 0,
-    "solicitations": 4,
-    "intents": 2,
-    "awards": 6,
-    "mwbe": 1
+    "solicitations": 1,
+    "intents": 1,
+    "awards": 5,
+    "mwbe": 0
   },
   "opportunities": [
-    {
-      "id": "CRPDF-aa0a9258fd5b",
-      "request_id": "",
-      "title": "85726B0066-2600055- FORKLIFTS ELECTRIC",
-      "agency": "Division Of Municipal Supply Service",
-      "section": "Procurement",
-      "category": "",
-      "notice_type": "Solicitation",
-      "record_type": "SOLICITATION",
-      "selection_method": "",
-      "mwbe_vehicle": false,
-      "pin": "85726B0066",
-      "amount": 0.0,
-      "vendor": "",
-      "due_date": "2026-08-12",
-      "issue_date": "2026-07-14",
-      "contact_name": "",
-      "contact_email": "",
-      "contact_phone": "",
-      "address": "",
-      "source": "City Record (today's PDF)",
-      "source_url": "https://www1.nyc.gov/assets/dcas/downloads/pdf/cityrecord/cityrecord-07-14-26.pdf",
-      "matched_terms": [
-        "tps"
-      ],
-      "fit_score": 8,
-      "keyword_matches": [
-        "tps"
-      ],
-      "action": "PURSUE",
-      "is_open": true,
-      "summary": "The City is seeking competitive sealed bids for a 5\u2011year contract to supply electric forklifts. This solicitation is for procurement of equipment, not services, and therefore does not align with an immigration legal services provider. No specific certifications or eligibility requirements are mentioned in the notice.",
-      "certifications_required": [],
-      "is_new": false,
-      "fetched_at": "2026-07-14T18:32:37.107545Z"
-    },
-    {
-      "id": "CRPDF-c70c7eb95a8d",
-      "request_id": "",
-      "title": "07126B0002-DHS SPECIFIC CSB",
-      "agency": "Homeless Services",
-      "section": "Procurement",
-      "category": "",
-      "notice_type": "Solicitation",
-      "record_type": "SOLICITATION",
-      "selection_method": "",
-      "mwbe_vehicle": false,
-      "pin": "07126B0002",
-      "amount": 0.0,
-      "vendor": "",
-      "due_date": "2026-08-24",
-      "issue_date": "2026-07-14",
-      "contact_name": "",
-      "contact_email": "tsangtho@dss.nyc.gov",
-      "contact_phone": "",
-      "address": "",
-      "source": "City Record (today's PDF)",
-      "source_url": "https://www1.nyc.gov/assets/dcas/downloads/pdf/cityrecord/cityrecord-07-14-26.pdf",
-      "matched_terms": [
-        "tps"
-      ],
-      "fit_score": 8,
-      "keyword_matches": [
-        "tps"
-      ],
-      "action": "PURSUE",
-      "is_open": true,
-      "summary": "The solicitation seeks an on\u2011call vendor to provide travel reservation and ticketing services for the NYC Department of Homeless Services. The work involves booking transportation and issuing tickets on an as\u2011needed basis. This is a travel services contract, not an immigration legal services engagement.",
-      "certifications_required": [],
-      "is_new": false,
-      "fetched_at": "2026-07-14T18:32:41.863827Z"
-    },
-    {
-      "id": "CRPDF-03970cd0d98c",
-      "request_id": "",
-      "title": "SMD_A&CM_RFQ #521210",
-      "agency": "Housing Authority",
-      "section": "Procurement",
-      "category": "",
-      "notice_type": "Solicitation",
-      "record_type": "SOLICITATION",
-      "selection_method": "",
-      "mwbe_vehicle": false,
-      "pin": "521210",
-      "amount": 0.0,
-      "vendor": "",
-      "due_date": "2026-08-27",
-      "issue_date": "2026-07-14",
-      "contact_name": "",
-      "contact_email": "acm.procurement@nycha.nyc.gov",
-      "contact_phone": "",
-      "address": "",
-      "source": "City Record (today's PDF)",
-      "source_url": "https://www1.nyc.gov/assets/dcas/downloads/pdf/cityrecord/cityrecord-07-14-26.pdf",
-      "matched_terms": [
-        "tps"
-      ],
-      "fit_score": 8,
-      "keyword_matches": [
-        "tps"
-      ],
-      "action": "PURSUE",
-      "is_open": true,
-      "summary": "The NYC Housing Authority is seeking qualified design\u2011build teams to renovate in\u2011unit units across multiple NYCHA buildings, covering plumbing, kitchen/bathroom repairs, heat\u2011pump and electrical upgrades, flood mitigation, elevator modernization, and hazardous material abatement with possible temporary resident relocation. This is a construction\u2011focused procurement, not an immigration legal services engagement, so it does not align with an immigration legal provider\u2019s scope. The RFQ is the first step to qualify for a later RFP on these projects.",
-      "certifications_required": [],
-      "is_new": false,
-      "fetched_at": "2026-07-14T18:32:46.293937Z"
-    },
     {
       "id": "CROL-3ac8106997bb",
       "request_id": "20260605029",
@@ -191,46 +83,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/HR Administration is renewing a contract to provide core civil legal services at the five New York City Family Justice Centers. The services focus on immigration\u2011related legal assistance\u2014including applications, representation before agencies and courts, and support for self\u2011representing clients\u2014for survivors of domestic and gender\u2011based violence and their children.",
+      "summary": "The Department of Social Services, through the Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender-Based Violence, is renewing a contract to provide core civil legal services at the city\u2019s five Family Justice Centers. The work supplies immigration\u2011related legal assistance\u2014including application help, representation before immigration agencies and courts, and support for self\u2011represented clients\u2014to survivors of domestic and gender\u2011based violence.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:12.413624Z"
-    },
-    {
-      "id": "CRPDF-a8d969e03ce4",
-      "request_id": "",
-      "title": "INFORMATION TECHNOLOGY AND TELECOMMUNICATIONS INFRASTRUCTURE \u0084 INTENT TO AWARD CHICAGO SOFT",
-      "agency": "Information Technology And",
-      "section": "Procurement",
-      "category": "",
-      "notice_type": "Intent to Award",
-      "record_type": "INTENT",
-      "selection_method": "",
-      "mwbe_vehicle": false,
-      "pin": "85827Y1376",
-      "amount": 0.0,
-      "vendor": "",
-      "due_date": "2026-07-24",
-      "issue_date": "2026-07-14",
-      "contact_name": "",
-      "contact_email": "",
-      "contact_phone": "",
-      "address": "",
-      "source": "City Record (today's PDF)",
-      "source_url": "https://www1.nyc.gov/assets/dcas/downloads/pdf/cityrecord/cityrecord-07-14-26.pdf",
-      "matched_terms": [
-        "tps"
-      ],
-      "fit_score": 7,
-      "keyword_matches": [
-        "tps"
-      ],
-      "action": "PURSUE",
-      "is_open": true,
-      "summary": "The NYC Department of Information Technology & Telecommunications is awarding a contract for maintenance of proprietary Chicago Soft software. Vendors must submit a response through PASSPort by July 24, 2026. This IT software maintenance work does not align with immigration legal services.",
-      "certifications_required": [],
-      "is_new": false,
-      "fetched_at": "2026-07-14T18:32:50.905988Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:43:56.017182Z"
     },
     {
       "id": "CROL-a579161eb99a",
@@ -269,10 +126,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding contracts to three vendors to provide in\u2011person and video remote interpreting for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpreting, language services, and written translation. The services will support ACS and its provider network in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. Contracts will be awarded through a competitive sealed\u2011proposal solicitation for a term of July\u202f1\u202f2026\u202fthrough\u202fJune\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) seeks three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation. These services will support ACS and its network of providers in complying with Local Law\u202f73, Local Law\u202f30, the ADA Title\u202fII and Title\u202fVI requirements for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded via a competitive sealed\u2011proposal process for a three\u2011year term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:43:57.411453Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:43:29.465186Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -313,10 +171,13 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a contract via competitive sealed proposals for sign language interpretation services, including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation. The services cover American Sign Language, Certified Deaf Interpretation, foreign sign languages, and Communication Access Realtime Translation to support ACS and its provider network in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contract term is July 1, 2026 through June 30, 2029.",
-      "certifications_required": [],
+      "summary": "The Administration for Children\u2019s Services (ACS) ISLA division is awarding a competitive sealed proposal contract for in\u2011person, on\u2011site, and video remote sign language interpretation, including American Sign Language, Certified Deaf Interpretation, foreign sign languages, and Communication Access Realtime Translation (CART) services. The services will support ACS and its network of providers in meeting legal accessibility obligations for deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families, with the contract term running from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "certifications_required": [
+        "Certified Deaf Interpretation (CDI)"
+      ],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:02.245915Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:43:40.496437Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -355,49 +216,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is procuring three vendors to provide in\u2011person and video remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation, and written translation services. These services will support ACS and its network of providers in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families to ensure compliance with applicable local, state, and federal accessibility laws. The contracts will be awarded via Competitive Sealed Proposals for a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The ACS Immigrant Services and Language Affairs division is seeking three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages and Deaf/Hard\u2011of\u2011Hearing, as well as written translation services for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The work will be awarded through a competitive sealed proposals process for contracts running from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:05.967104Z"
-    },
-    {
-      "id": "CRPDF-1b6d96910a71",
-      "request_id": "",
-      "title": "SECURE DETENTION SURVEILLANCE SYSTEM INSTALLATION AND MAINTENANCE",
-      "agency": "NYC Agency",
-      "section": "Procurement",
-      "category": "",
-      "notice_type": "Award",
-      "record_type": "AWARD",
-      "selection_method": "",
-      "mwbe_vehicle": true,
-      "pin": "06826W0053001",
-      "amount": 750000.0,
-      "vendor": "Touchtel Technology Group",
-      "due_date": "",
-      "issue_date": "2026-07-14",
-      "contact_name": "",
-      "contact_email": "",
-      "contact_phone": "",
-      "address": "",
-      "source": "City Record (today's PDF)",
-      "source_url": "https://www1.nyc.gov/assets/dcas/downloads/pdf/cityrecord/cityrecord-07-14-26.pdf",
-      "matched_terms": [
-        "tps"
-      ],
-      "fit_score": 6,
-      "keyword_matches": [
-        "tps"
-      ],
-      "action": "INTEL",
-      "is_open": true,
-      "summary": "The award is for the installation and ongoing maintenance of a secure detention surveillance system, issued as a non\u2011competitive small purchase to a qualified M/WBE vendor. This work involves security hardware and services, not immigration legal services, so it does not align with the firm\u2019s immigration legal service capabilities.",
-      "certifications_required": [
-        "M/WBE",
-        "Prequalification application with compliance to annual corporate filing requirements"
-      ],
-      "is_new": false,
-      "fetched_at": "2026-07-14T18:32:34.318201Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:43:45.684025Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -431,10 +254,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring free legal screenings and services to guide participants of the NYCitizenship Program through the naturalization process, aiming to improve their eligibility for benefits. This work is being awarded through a renewal contract under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and services to participants in the NYCitizenship Program. The work includes free assistance guiding clients through the naturalization process to help them qualify for SSI and reduce reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:15.412252Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:44:01.297355Z"
     },
     {
       "id": "CROL-5d6189aab8a8",
@@ -467,10 +291,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "NYCEDC is seeking proposals from law firms or individual lawyers to provide outside legal counsel for analysis, drafting, and review of applications for tax lot apportionments and zoning lot subdivisions related to Manhattan Tax Block 962, part of Lot 100, for the Science Park & Research Campus (SPARC) Kips Bay development. The services will support NYCEDC\u2019s preparation of new building permit filings and related zoning matters, and will be awarded through a Request for Proposals process.",
+      "summary": "NYCEDC is seeking law firms to provide outside legal counsel services to analyze, draft, and review applications for tax\u2011lot apportionments and zoning\u2011lot subdivisions for Manhattan Tax Block\u202f962, part of Lot\u202f100, supporting the SPARC Kips Bay development. The work will be awarded through a Request for Proposals under the NYCEDC procurement process.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:18.908602Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:44:07.063499Z"
     },
     {
       "id": "CROL-98e1f77ceda3",
@@ -504,10 +329,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "The Campaign Finance Board will award a negotiated acquisition contract to LC Interpreting Services LLC (doing business as SignNexus) for American Sign Language (ASL) interpretation services. The contract is capped at $99,999 and will run from August 1, 2025 through July 31, 2027.",
+      "summary": "The Campaign Finance Board is awarding a negotiated acquisition extension to provide American Sign Language (ASL) interpretation services. The contract, valued up to $99,999, will run from August 1, 2025 through July 31, 2027.",
       "certifications_required": [],
       "is_new": false,
-      "fetched_at": "2026-07-14T18:44:22.937165Z"
+      "scorer_version": 2,
+      "fetched_at": "2026-07-15T14:44:11.576437Z"
     }
   ]
 }
