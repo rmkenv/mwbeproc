@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T14:44:11.673598Z",
+  "generated_at": "2026-07-16T14:55:32.152141Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": true,
+      "ok": false,
       "found": 319,
       "queries": 15,
-      "error": "",
+      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
       "note": ""
     },
     {
@@ -83,11 +83,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services, through the Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender-Based Violence, is renewing a contract to provide core civil legal services at the city\u2019s five Family Justice Centers. The work supplies immigration\u2011related legal assistance\u2014including application help, representation before immigration agencies and courts, and support for self\u2011represented clients\u2014to survivors of domestic and gender\u2011based violence.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract with the Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender-Based Violence to provide core civil legal services at the five New York City Family Justice Centers. The services will assist survivors of domestic and gender-based violence and their children with immigration-related matters, including applications for status, representation before agencies and courts, and support for self-represented clients. The award is a FY27 renewal under the agency\u2019s renewal selection method.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:43:56.017182Z"
+      "fetched_at": "2026-07-16T14:55:11.447096Z"
     },
     {
       "id": "CROL-a579161eb99a",
@@ -126,11 +126,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) seeks three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation. These services will support ACS and its network of providers in complying with Local Law\u202f73, Local Law\u202f30, the ADA Title\u202fII and Title\u202fVI requirements for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded via a competitive sealed\u2011proposal process for a three\u2011year term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The NYC Administration for Children\u2019s Services is awarding three contracts to provide in\u2011person and video\u2011remote interpreting for spoken languages, deaf/hard\u2011of\u2011hearing interpretation, language services, and written translation. These services will support ACS and its provider network in serving limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families, with contracts running from July\u202f1\u202f2026 to June\u202f30\u202f2029 under a competitive sealed\u2011proposal process.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:43:29.465186Z"
+      "fetched_at": "2026-07-16T14:54:47.453441Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -171,13 +171,13 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) ISLA division is awarding a competitive sealed proposal contract for in\u2011person, on\u2011site, and video remote sign language interpretation, including American Sign Language, Certified Deaf Interpretation, foreign sign languages, and Communication Access Realtime Translation (CART) services. The services will support ACS and its network of providers in meeting legal accessibility obligations for deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families, with the contract term running from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a contract, via competitive sealed proposals, to provide sign language interpretation services\u2014including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation of American Sign Language, Certified Deaf Interpretation, foreign sign languages, and CART\u2014for ACS and its network of providers serving limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contract term runs from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [
         "Certified Deaf Interpretation (CDI)"
       ],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:43:40.496437Z"
+      "fetched_at": "2026-07-16T14:54:56.780029Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -216,11 +216,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The ACS Immigrant Services and Language Affairs division is seeking three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages and Deaf/Hard\u2011of\u2011Hearing, as well as written translation services for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The work will be awarded through a competitive sealed proposals process for contracts running from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The NYC Administration for Children's Services is procuring three contracts to deliver in-person and video remote interpretation for spoken languages and for deaf/hard\u2011of\u2011hearing clients, as well as written translation services. The contracts will support compliance with local and federal language access laws and run from July 1, 2026 through June 30, 2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:43:45.684025Z"
+      "fetched_at": "2026-07-16T14:55:01.726603Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -254,11 +254,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and services to participants in the NYCitizenship Program. The work includes free assistance guiding clients through the naturalization process to help them qualify for SSI and reduce reliance on DSS benefits.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a FY27 contract to provide legal screenings and free legal assistance through the naturalization process for participants in the NYCitizenship Program. The services aim to help clients become eligible for greater SSI benefits and reduce reliance on DSS assistance.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:44:01.297355Z"
+      "fetched_at": "2026-07-16T14:55:17.395425Z"
     },
     {
       "id": "CROL-5d6189aab8a8",
@@ -291,11 +291,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "NYCEDC is seeking law firms to provide outside legal counsel services to analyze, draft, and review applications for tax\u2011lot apportionments and zoning\u2011lot subdivisions for Manhattan Tax Block\u202f962, part of Lot\u202f100, supporting the SPARC Kips Bay development. The work will be awarded through a Request for Proposals under the NYCEDC procurement process.",
+      "summary": "The New York City Economic Development Corporation is soliciting proposals from law firms to serve as outside legal counsel to analyze, draft, and review applications for tax\u2011lot apportionments and zoning\u2011lot subdivisions for Manhattan Tax Block 962, part of Lot\u202f100, supporting the Science Park & Research Campus (SPARC) Kips Bay development and related building\u2011permit filings. The engagement requires expertise in the NYC Zoning Resolution, ULURP, special\u2011permit procedures, DOB requirements, and Finance Department tax\u2011lot apportionment rules, and will be awarded through an RFP process.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:44:07.063499Z"
+      "fetched_at": "2026-07-16T14:55:26.496485Z"
     },
     {
       "id": "CROL-98e1f77ceda3",
@@ -329,11 +329,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "The Campaign Finance Board is awarding a negotiated acquisition extension to provide American Sign Language (ASL) interpretation services. The contract, valued up to $99,999, will run from August 1, 2025 through July 31, 2027.",
+      "summary": "The Campaign Finance Board will award a negotiated acquisition contract to LC Interpreting Services LLC (doing business as SignNexus) for American Sign Language (ASL) interpretation services. The contract is capped at $99,999 and will span from August\u202f1\u202f2025 to July\u202f31\u202f2027.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-15T14:44:11.576437Z"
+      "fetched_at": "2026-07-16T14:55:32.050147Z"
     }
   ]
 }
