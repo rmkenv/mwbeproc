@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17T14:27:39.903261Z",
+  "generated_at": "2026-07-20T15:06:12.600583Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 330,
+      "found": 319,
       "queries": 15,
       "error": "",
       "note": ""
@@ -30,15 +30,15 @@
     {
       "source": "City Record (today's PDF)",
       "ok": true,
-      "found": 3,
+      "found": 0,
       "queries": 1,
       "error": "",
-      "note": ""
+      "note": "No keyword matches in today's edition (normal on most days)."
     }
   ],
   "counts": {
     "total": 8,
-    "new_this_run": 2,
+    "new_this_run": 0,
     "solicitations": 1,
     "intents": 0,
     "awards": 7,
@@ -81,11 +81,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract for FJC immigration legal services to provide assistance to its client population. The award will be executed under a renewal procurement vehicle.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide immigration legal services to its client population. The work will be performed under a renewal procurement vehicle using the existing contract framework.",
       "certifications_required": [],
-      "is_new": true,
+      "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:02.735123Z"
+      "fetched_at": "2026-07-20T15:04:58.356637Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -125,11 +125,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services and the Office of Civil Justice, together with the Mayor\u2019s Office to End Domestic and Gender-Based Violence, are renewing a contract to provide trauma\u2011informed immigration\u2011related legal services at the city\u2019s five Family Justice Centers. The services include legal screening, advice, representation before immigration agencies and courts, and assistance with pro se filings for survivors of domestic and gender\u2011based violence and their children. The work is funded through a renewal award vehicle under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services\u2019 Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence are renewing a contract to operate a trauma\u2011informed legal\u2011services program at the city\u2019s five Family Justice Centers. The program will provide core civil legal assistance to survivors of domestic and gender\u2011based violence and their children, focusing on immigration\u2011related matters such as status applications, representation before immigration agencies and courts, legal screening, advice and support for self\u2011represented clients.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:23.157796Z"
+      "fetched_at": "2026-07-20T15:05:51.092217Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -168,7 +168,7 @@
       "is_open": true,
       "summary": "The agency is procuring human client services for the Arches program in high\u2011crime neighborhoods (awarded to Youth Justice Network) and permanent supportive congregate housing and related services for HIV/AIDS clients with mental health or substance\u2011use needs (awarded to Harlem United Community AIDS Center), as well as Family Justice Center immigration legal services (awarded to Sanctuary for). All contracts are being awarded under Competitive Sealed Proposals.",
       "certifications_required": [],
-      "is_new": true,
+      "is_new": false,
       "scorer_version": 2,
       "fetched_at": "2026-07-17T14:27:39.902609Z"
     },
@@ -209,11 +209,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The NYC Administration for Children\u2019s Services is awarding three contracts, via competitive sealed proposals, for in\u2011person and video remote interpretation of spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation, to support limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is procuring vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation and language services, and written translation services. The services will support ACS and its network of providers in serving limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families to meet compliance with local, state, and federal accessibility laws. Contracts will be awarded via a competitive sealed\u2011proposal process for a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:07.228184Z"
+      "fetched_at": "2026-07-20T15:05:08.741126Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -254,11 +254,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) Immigrant Services and Language Affairs division is procuring a vendor to provide sign language interpretation services, including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation for ASL, Certified Deaf Interpretation, foreign sign languages, and CART. The services will support ACS and its provider network in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families to meet statutory accessibility requirements. The contract will be awarded via a competitive sealed proposals process and will run from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "ACS's Immigrant Services and Language Affairs division is procuring a vendor to deliver sign language interpretation services\u2014including in\u2011person, on\u2011site, and video remote interpretation for ASL, Certified Deaf Interpreter, foreign sign languages, and CART\u2014so that deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families can access ACS services. The contract will be awarded through a competitive sealed proposal process and will run from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:13.114185Z"
+      "fetched_at": "2026-07-20T15:05:21.004521Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -297,11 +297,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services is awarding up to three contracts to provide in\u2011person and video\u2011remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, and written translation services. The services will support ACS and its provider network in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families, and will be awarded through a competitive sealed\u2011proposal process for a term from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is procuring vendors to provide in\u2011person and video remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation, language services, and written translation for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded via competitive sealed proposals and run from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:18.404510Z"
+      "fetched_at": "2026-07-20T15:05:36.138571Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -335,11 +335,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and services to participants in the NYCitizenship Program, offering free assistance through the naturalization process. The work is performed under the FY27 Renewal vehicle in the Human Services/Client Services category.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and services to participants in the NYCitizenship Program, offering free assistance through the naturalization process. The services aim to help clients become eligible for greater SSI benefits and reduce reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:26.770753Z"
+      "fetched_at": "2026-07-20T15:06:02.117858Z"
     },
     {
       "id": "CROL-5d6189aab8a8",
@@ -372,11 +372,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "The New York City Economic Development Corporation is soliciting proposals from law firms and lawyers to serve as outside legal counsel. The services will include analyzing, drafting, and reviewing applications for tax lot apportionments and zoning lot subdivisions for Manhattan Tax Block 962, part of Lot\u202f100, to support the Science Park & Research Campus (SPARC) Kips Bay development and related building permit filings. Selections will be made based on the criteria outlined in the Request for Proposals.",
+      "summary": "NYCEDC seeks a law firm or lawyer to provide outside legal counsel for the SPARC Kips Bay Project, focusing on analysis, drafting, and review of applications for tax lot apportionments and zoning lot subdivisions for Manhattan Tax Block 962. The services include advice on the NYC Zoning Resolution, ULURP, special permits, DOB building permits, and Finance Department tax lot requirements, as detailed in the RFP.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-17T14:27:31.167990Z"
+      "fetched_at": "2026-07-20T15:06:12.510433Z"
     }
   ]
 }
