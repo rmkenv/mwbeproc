@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-21T15:00:43.993154Z",
+  "generated_at": "2026-07-22T15:00:24.399581Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,27 +21,27 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 329,
+      "ok": true,
+      "found": 335,
       "queries": 15,
-      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
+      "error": "",
       "note": ""
     },
     {
       "source": "City Record (today's PDF)",
       "ok": true,
-      "found": 0,
+      "found": 3,
       "queries": 1,
       "error": "",
-      "note": "No keyword matches in today's edition (normal on most days)."
+      "note": ""
     }
   ],
   "counts": {
-    "total": 8,
-    "new_this_run": 0,
+    "total": 9,
+    "new_this_run": 1,
     "solicitations": 1,
     "intents": 0,
-    "awards": 7,
+    "awards": 8,
     "mwbe": 0
   },
   "opportunities": [
@@ -68,6 +68,7 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260713023",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "legal services"
@@ -80,11 +81,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract for immigration legal services. The services will be provided to the Family Justice Center for FY27. The award will be issued via a renewal procurement vehicle.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a FY27 contract to provide FJC Immigration Legal Services. The award is issued as a renewal under the Human Services/Client Services category for the specified service.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T14:59:57.756743Z"
+      "fetched_at": "2026-07-22T14:59:36.009960Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -109,6 +110,7 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260605029",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "legal representation",
@@ -123,11 +125,54 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide immigration\u2011related civil legal services at the five New York City Family Justice Centers. Services include legal screening, advice, assistance with applications for temporary and permanent status, and representation before immigration agencies and courts for survivors of domestic and gender\u2011based violence and their children. The work is funded through a renewal vehicle under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services, in collaboration with the Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence, is renewing a contract to provide core civil legal services at the city\u2019s five Family Justice Centers. The program will deliver trauma\u2011informed, immigration\u2011related legal assistance\u2014including screening, advice, representation and support for self\u2011represented clients\u2014to survivors of domestic and gender\u2011based violence and their children. The services are procured through a renewal award under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:33.830201Z"
+      "fetched_at": "2026-07-22T15:00:07.780236Z"
+    },
+    {
+      "id": "CROL-32fc135d0592",
+      "request_id": "20260716018",
+      "title": "FY27 Renewal - FJC Family Law Legal Services",
+      "agency": "Dept. of Social Svcs/Human Resources Administration",
+      "section": "Procurement",
+      "category": "Human Services/Client Services",
+      "notice_type": "Award",
+      "record_type": "AWARD",
+      "selection_method": "Renewal",
+      "mwbe_vehicle": false,
+      "pin": "06923P0015001R001",
+      "amount": 8894861.0,
+      "vendor": "Sanctuary for Families Inc",
+      "due_date": "",
+      "issue_date": "2026-07-22",
+      "contact_name": "Anunciado Deo",
+      "contact_email": "anunciadod@dss.nyc.gov",
+      "contact_phone": "",
+      "address": "",
+      "source": "City Record Online",
+      "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260716018",
+      "matched_terms": [
+        "immigrant",
+        "immigration",
+        "immigration legal services",
+        "legal representation",
+        "legal services"
+      ],
+      "fit_score": 7,
+      "keyword_matches": [
+        "civil legal",
+        "immigration",
+        "legal services"
+      ],
+      "action": "INTEL",
+      "is_open": true,
+      "summary": "The City will renew a contract to provide core civil family\u2011law legal services at the five New York City Family Justice Centers for survivors of domestic and gender\u2011based violence. Services include legal screening, advice, assistance with self\u2011filed petitions and court representation in matters such as divorce, custody, visitation and support. The award is a FY27 renewal under the Department of Social Services/Human Resources Administration.",
+      "certifications_required": [],
+      "is_new": true,
+      "scorer_version": 2,
+      "fetched_at": "2026-07-22T14:59:28.828052Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -193,6 +238,7 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260629041",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
@@ -206,11 +252,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The NYC Administration for Children\u2019s Services is awarding contracts to three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation and language services, and written translation. These services will support ACS and its provider network in complying with local laws and ADA requirements for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts are for a term from July 1, 2026 to June 30, 2029 under a competitive sealed\u2011proposal award.",
+      "summary": "The Administration for Children\u2019s Services is procuring vendors to deliver in\u2011person and video\u2011remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation and language services, and written translation services. The work supports ACS\u2019s compliance with local and federal statutes requiring interpretation and translation for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. Contracts will run from July 1, 2026, through June 30, 2029 under a competitive sealed proposal process.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:06.213579Z"
+      "fetched_at": "2026-07-22T14:59:39.860084Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -235,6 +281,7 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260629016",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
@@ -250,11 +297,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a competitive sealed proposal contract to provide sign language interpretation services\u2014including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation of ASL, Certified Deaf Interpretation, foreign sign languages, and CART\u2014through a three\u2011year agreement from July 1, 2026 to June 30, 2029. The services will support ACS and its network of providers in meeting legal accessibility obligations for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families.",
+      "summary": "The Administration for Children\u2019s Services is awarding a competitive sealed proposal contract for in\u2011person, on\u2011site, and video remote sign\u2011language interpretation\u2014including ASL, Certified Deaf Interpretation, foreign sign language, and CART services\u2014to support its agencies and network providers serving deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families. The contract term is July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:14.829863Z"
+      "fetched_at": "2026-07-22T14:59:46.086848Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -279,6 +326,7 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260617027",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
@@ -292,11 +340,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding three contracts for in\u2011person/VRI interpretation, deaf/hard\u2011of\u2011hearing interpretation, language services, and written translation. The services will support limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families accessing ACS programs, and the contracts will be issued through a competitive sealed\u2011proposal process for a term of July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is procuring in\u2011person and video remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation, and written translation services to support limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded to three vendors through a competitive sealed proposal process and will run from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:23.753453Z"
+      "fetched_at": "2026-07-22T14:59:56.255426Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -330,11 +378,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City will renew a contract to provide legal screenings and services for participants in the NYCitizenship Program, offering free legal assistance to guide them through the naturalization process. The goal is to help these clients become eligible for increased SSI benefits and reduce reliance on DSS benefits.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and free assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The services aim to help participants become eligible for greater SSI benefits and reduce reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:39.369742Z"
+      "fetched_at": "2026-07-22T15:00:14.472016Z"
     },
     {
       "id": "CROL-5d6189aab8a8",
@@ -367,11 +415,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "NYCEDC seeks law firms to provide outside legal counsel for analyzing, drafting, and reviewing applications for tax lot apportionments and zoning lot subdivisions for Manhattan Tax Block 962 (Lot 100) to support the SPARC Kips Bay development and related building permit filings. The services will require expertise in the NYC Zoning Resolution, ULURP, and related Department of Buildings and Finance requirements, and will be awarded through a request for proposals.",
+      "summary": "NYCEDC is soliciting proposals from law firms to provide outside land\u2011use and zoning counsel for the Science Park & Research Campus (SPARC) Kips Bay development. The services include analysis, drafting and review of applications for tax\u2011lot apportionments and zoning\u2011lot subdivisions for Manhattan Tax Block 962, as well as related permitting matters. The work will be awarded via a Request for Proposals process.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-21T15:00:43.902890Z"
+      "fetched_at": "2026-07-22T15:00:24.307870Z"
     }
   ]
 }
