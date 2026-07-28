@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27T15:39:08.001753Z",
+  "generated_at": "2026-07-28T15:15:03.807412Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 286,
+      "found": 295,
       "queries": 15,
       "error": "",
       "note": ""
@@ -81,11 +81,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide FJC Immigration Legal Services to its client population. The renewal will be executed under a renewal selection method as a Human Services/Client Services procurement.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing its FY27 contract to provide FJC Immigration Legal Services to its client population, utilizing a renewal procurement vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:38:32.392885Z"
+      "fetched_at": "2026-07-28T15:14:35.289686Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -168,11 +168,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is awarding a renewal contract to provide family law legal services\u2014such as divorce, custody, visitation, and support matters\u2014to survivors of domestic and gender-based violence and their children at the five New York City Family Justice Centers. The services will include legal screening, advice, pro se assistance, and court representation, delivered through a trauma\u2011informed, collaborative program under the FY27 renewal vehicle.",
+      "summary": "The Department of Social Services and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence are renewing a contract to provide core civil family\u2011law legal services at the city\u2019s five Family Justice Centers. Services include legal screening, advice, assistance with pro se petitions and representation in court for survivors of domestic and gender\u2011based violence and their children. The award is issued as a renewal under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:38:26.380588Z"
+      "fetched_at": "2026-07-28T15:14:28.238392Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -252,11 +252,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding contracts to up to three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation. The services will support ACS and its network of providers in serving limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families to meet compliance with Local Laws 73 and 30, the ADA Title\u202fII, and Title\u202fVI. The contracts are awarded via a competitive sealed\u2011proposal process for a term of July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services is procuring contracts to provide in\u2011person and video\u2011remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation and language services, and written translation services. The work will serve ACS and its network of providers to ensure compliance with Local Laws 73 and 30, the ADA Title\u202fII, and Title\u202fVI for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contracts are awarded through a competitive sealed\u2011proposal process for a term from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:38:41.477862Z"
+      "fetched_at": "2026-07-28T15:14:42.375695Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -297,11 +297,13 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) Immigrant Services and Language Affairs division is seeking a vendor to provide sign language interpretation services, including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation for American Sign Language, Certified Deaf Interpretation, foreign sign languages, and CART. The services will support ACS and its network of providers in complying with local and federal accessibility requirements for deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families. The contract will be awarded through Competitive Sealed Proposals for a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
-      "certifications_required": [],
+      "summary": "The Administration for Children\u2019s Services\u2019 Immigrant Services and Language Affairs division is procuring in\u2011person, on\u2011site and video\u2011remote sign language interpretation, including American Sign Language, Certified Deaf Interpretation, foreign sign languages and CART services, to support compliance with disability and civil\u2011rights laws. The contract will run from July\u202f1\u202f2026 through June\u202f30\u202f2029 and will be awarded via competitive sealed proposals.",
+      "certifications_required": [
+        "Certified Deaf Interpretation (CDI)"
+      ],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:38:53.827183Z"
+      "fetched_at": "2026-07-28T15:14:50.041956Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -340,11 +342,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The NYC Administration for Children\u2019s Services (ACS) is awarding up to three contracts for in\u2011person and video\u2011remote interpretation of spoken languages, interpretation for deaf/hard\u2011of\u2011hearing individuals, and written translation services. The services will support ACS and its provider network in delivering equal\u2011access casework to limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. Contracts will be issued through a competitive sealed proposal process for a term of July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The NYC Administration for Children\u2019s Services is awarding contracts to three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation, and written translation services. The services support limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families under Local Laws 73, 30, ADA Title\u202fII, and Title\u202fVI. Contracts run from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:39:01.362282Z"
+      "fetched_at": "2026-07-28T15:14:57.830623Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -378,11 +380,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a FY27 contract to provide legal screenings and free legal assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The services aim to help clients become eligible for greater SSI benefits and reduce reliance on DSS benefits. The procurement is categorized under Human Services/Client Services and uses a renewal selection method.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and free legal assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The goal is to help these clients become eligible for greater SSI benefits and reduce reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-27T15:39:07.895970Z"
+      "fetched_at": "2026-07-28T15:15:03.699006Z"
     }
   ]
 }
