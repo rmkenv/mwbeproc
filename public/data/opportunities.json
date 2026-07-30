@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T15:07:30.699531Z",
+  "generated_at": "2026-07-30T15:06:30.377471Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 301,
+      "ok": true,
+      "found": 289,
       "queries": 15,
-      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
+      "error": "",
       "note": ""
     },
     {
@@ -81,11 +81,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide FJC Immigration Legal Services to its clientele, using a renewal award procurement vehicle. The service will be delivered under the existing contract terms for FY27.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to obtain FJC Immigration Legal Services. The procurement is being conducted as a renewal under the agency\u2019s existing procurement vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:08.188817Z"
+      "fetched_at": "2026-07-30T15:05:59.694112Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -168,11 +168,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services' Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence are renewing a contract to provide core civil family\u2011law services at the city\u2019s five Family Justice Centers. The services include legal screening, advice, self\u2011representation support, and court representation for survivors of domestic and gender\u2011based violence on matters such as divorce, custody, visitation, and support. This FY27 renewal is a direct award renewal for the family\u2011law legal services program.",
+      "summary": "The Department of Social Services and the Mayor\u2019s Office to End Domestic and Gender-Based Violence are renewing a contract to provide family\u2011law legal services\u2014such as divorce, custody, and support matters\u2014through the city\u2019s five Family Justice Centers. The services are offered to survivors of domestic or gender\u2011based violence and their children, regardless of language, immigration status, income, gender identity, or sexual orientation.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:02.282776Z"
+      "fetched_at": "2026-07-30T15:05:53.425291Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -252,11 +252,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children's Services (ACS) is awarding three contracts for in-person and video remote interpretation for spoken languages, deaf/hard-of-hearing interpretation, language services, and written translation. The services will support ACS and its network of providers in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families, and the contracts will run from July 1, 2026, through June 30, 2029. The procurement will be awarded via a competitive sealed proposal process.",
+      "summary": "The NYC Administration for Children\u2019s Services (ACS) Immigrant Services and Language Affairs division is seeking three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation. The services are for ACS and its network of providers to serve limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded through a competitive sealed proposal process for a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:11.726228Z"
+      "fetched_at": "2026-07-30T15:06:09.388152Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -297,11 +297,13 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services is awarding a competitive sealed\u2011proposal contract to provide sign\u2011language interpretation\u2014including in\u2011person, on\u2011site and on\u2011demand video remote services for ASL, Certified Deaf Interpretation, foreign sign languages and CART\u2014from July\u202f1\u202f2026 through June\u202f30\u202f2029. The services will support ACS and its network of providers in meeting legal accessibility obligations for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families.",
-      "certifications_required": [],
+      "summary": "The NYC Administration for Children\u2019s Services (ACS) Immigrant Services and Language Affairs division is procuring sign language interpretation services, including in\u2011person, on\u2011site and on\u2011demand video remote interpretation of American Sign Language (ASL), Certified Deaf Interpretation (CDI), foreign sign languages, and Communication Access Realtime Translation (CART). The services are intended to provide language access for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families in compliance with applicable local, state, and federal laws. The contract term is July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "certifications_required": [
+        "Certified Deaf Interpretation (CDI)"
+      ],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:17.078204Z"
+      "fetched_at": "2026-07-30T15:06:18.048867Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -340,11 +342,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services is awarding three contracts for in\u2011person and video\u2011remote interpretation, deaf/hard\u2011of\u2011hearing interpretation, language services, and written translation. The services are for ACS and its network of providers to serve limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded via competitive sealed proposals for a term from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is procuring In\u2011Person/VRI spoken\u2011language interpretation, Deaf/Hard\u2011of\u2011Hearing interpretation and language services, and written translation services for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded to three vendors through a competitive sealed\u2011proposal process, with a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:24.156286Z"
+      "fetched_at": "2026-07-30T15:06:25.373293Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -378,11 +380,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and free legal assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The services aim to help clients become eligible for greater SSI benefits and reduce reliance on DSS benefits.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and services to participants in the NYCitizenship Program. The work includes free legal assistance that guides clients through the naturalization process to help them become eligible for greater SSI benefits and reduce reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-07-29T15:07:30.598147Z"
+      "fetched_at": "2026-07-30T15:06:30.282113Z"
     }
   ]
 }
