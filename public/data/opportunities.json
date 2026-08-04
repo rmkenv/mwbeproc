@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-03T15:44:29.976776Z",
+  "generated_at": "2026-08-04T15:26:00.944439Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": false,
-      "found": 266,
+      "found": 11,
       "queries": 15,
       "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
       "note": ""
@@ -68,9 +68,9 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260713023",
       "matched_terms": [
+        "immigrant",
         "immigration",
-        "immigration legal services",
-        "legal services"
+        "immigration legal services"
       ],
       "fit_score": 8,
       "keyword_matches": [
@@ -80,11 +80,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide FJC Immigration Legal Services to its clients. The procurement will be conducted as a renewal under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide immigration legal services to its clients. The award is a renewal under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:05.863944Z"
+      "fetched_at": "2026-08-04T15:25:37.543726Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -153,10 +153,10 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260716018",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
-        "legal representation",
-        "legal services"
+        "legal representation"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -166,11 +166,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services, together with the Mayor\u2019s Office to End Domestic and Gender-Based Violence, is renewing a contract to provide core civil family law legal services\u2014including divorce, custody, and support matters\u2014at the city\u2019s five Family Justice Centers. Services are offered free and confidentially to survivors of domestic and gender\u2011based violence and their children. The award will be made through a renewal procurement vehicle.",
+      "summary": "The City is renewing a contract to provide core civil family\u2011law legal services at the five New York City Family Justice Centers for survivors of domestic and gender\u2011based violence. Services include legal screening, advice, support for self\u2011represented clients, and court representation in matters such as divorce, custody, visitation, and support. The work will be performed under a FY27 renewal vehicle jointly administered by the Department of Social Services Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:01.421793Z"
+      "fetched_at": "2026-08-04T15:25:31.442721Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -236,11 +236,11 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260629041",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access",
-        "legal services"
+        "language access"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -249,11 +249,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services\u2019 Immigrant Services and Language Affairs division is awarding three contracts for in\u2011person and video remote interpretation, deaf/hard\u2011of\u2011hearing interpretation, language services, and written translation. The services will support limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families accessing ACS programs. The contracts are competitively sealed proposals with a term from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
+      "summary": "The NYC Administration for Children\u2019s Services (ACS) is awarding contracts to up to three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation and language services, and written translation services. The contracts, awarded through a competitive sealed\u2011proposal process, will run from July\u202f1\u202f2026 through June\u202f30\u202f2029 and support ACS\u2019s compliance with language\u2011access statutes for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:10.646400Z"
+      "fetched_at": "2026-08-04T15:25:46.354698Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -278,11 +278,11 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260629016",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access",
-        "legal services"
+        "language access"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -293,11 +293,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a competitive sealed\u2011proposal contract for sign language interpretation services, including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation of ASL, Certified Deaf Interpretation, foreign sign languages, and CART. The services will support ACS and its network of providers in serving deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families, with a contract term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a contract, via competitive sealed proposals, to a vendor that will provide sign language interpretation services\u2014including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation\u2014for American Sign Language, Certified Deaf Interpretation, foreign sign languages, and CART. These services will support ACS\u2019s Immigrant Services and Language Affairs division in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contract term is July 1, 2026, through June 30, 2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:16.871525Z"
+      "fetched_at": "2026-08-04T15:25:51.757696Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -322,11 +322,11 @@
       "source": "City Record Online",
       "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260617027",
       "matched_terms": [
+        "immigrant",
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access",
-        "legal services"
+        "language access"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -335,11 +335,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The ACS Immigrant Services and Language Affairs division is awarding three contracts for in\u2011person and video remote interpretation of spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, and written translation services. The contracts, awarded through a competitive sealed\u2011proposal process, will run from July\u202f1\u202f2026 through June\u202f30\u202f2029 to support ACS compliance with applicable language\u2011access laws.",
+      "summary": "ACS\u2019s Immigrant Services and Language Affairs division is seeking up to three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, and written translation services for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded through a competitive sealed\u2011proposal process and run from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:22.640374Z"
+      "fetched_at": "2026-08-04T15:26:00.939583Z"
     },
     {
       "id": "CROL-0e654988e8ff",
