@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04T15:26:00.944439Z",
+  "generated_at": "2026-08-05T15:10:44.471552Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 11,
+      "ok": true,
+      "found": 284,
       "queries": 15,
-      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
+      "error": "",
       "note": ""
     },
     {
@@ -70,7 +70,8 @@
       "matched_terms": [
         "immigrant",
         "immigration",
-        "immigration legal services"
+        "immigration legal services",
+        "legal services"
       ],
       "fit_score": 8,
       "keyword_matches": [
@@ -80,11 +81,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide immigration legal services to its clients. The award is a renewal under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services/Human Resources Administration is issuing a renewal award for FJC Immigration Legal Services. The renewal continues the provision of the contracted services under the existing renewal vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-04T15:25:37.543726Z"
+      "fetched_at": "2026-08-05T15:10:15.957780Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -156,7 +157,8 @@
         "immigrant",
         "immigration",
         "immigration legal services",
-        "legal representation"
+        "legal representation",
+        "legal services"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -166,11 +168,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is renewing a contract to provide core civil family\u2011law legal services at the five New York City Family Justice Centers for survivors of domestic and gender\u2011based violence. Services include legal screening, advice, support for self\u2011represented clients, and court representation in matters such as divorce, custody, visitation, and support. The work will be performed under a FY27 renewal vehicle jointly administered by the Department of Social Services Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence.",
+      "summary": "The Department of Social Services and the Human Resources Administration, together with the Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender-Based Violence, are renewing a FY27 contract to provide core civil family\u2011law legal services at the city\u2019s five Family Justice Centers for survivors of domestic and gender\u2011based violence and their children. Services include legal screening, advice, assistance with self\u2011representation, and courtroom representation in matters such as divorce, custody, visitation, and support.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-04T15:25:31.442721Z"
+      "fetched_at": "2026-08-05T15:10:06.730866Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -240,7 +242,8 @@
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access"
+        "language access",
+        "legal services"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -249,11 +252,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The NYC Administration for Children\u2019s Services (ACS) is awarding contracts to up to three vendors to provide in\u2011person and video\u2011remote interpretation for spoken languages, deaf/hard\u2011of\u2011hearing interpretation and language services, and written translation services. The contracts, awarded through a competitive sealed\u2011proposal process, will run from July\u202f1\u202f2026 through June\u202f30\u202f2029 and support ACS\u2019s compliance with language\u2011access statutes for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families.",
+      "summary": "The Administration for Children\u2019s Services is awarding three contracts, through a competitive sealed\u2011proposal process, to provide in\u2011person and video\u2011remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, language services, and written translation. The services will support ACS and its provider network in serving limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families, and the contracts run from July\u202f1\u202f2026 through June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-04T15:25:46.354698Z"
+      "fetched_at": "2026-08-05T15:10:21.974338Z"
     },
     {
       "id": "CROL-ccf33f437737",
@@ -282,7 +285,8 @@
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access"
+        "language access",
+        "legal services"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -293,11 +297,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services (ACS) is awarding a contract, via competitive sealed proposals, to a vendor that will provide sign language interpretation services\u2014including in\u2011person, on\u2011site, and on\u2011demand video remote interpretation\u2014for American Sign Language, Certified Deaf Interpretation, foreign sign languages, and CART. These services will support ACS\u2019s Immigrant Services and Language Affairs division in serving limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contract term is July 1, 2026, through June 30, 2029.",
+      "summary": "The Administration for Children's Services (ACS) is procuring sign\u2011language interpretation services\u2014including in\u2011person, on\u2011site and video remote interpretation for ASL, Certified Deaf Interpretation, foreign sign languages, and CART\u2014to enable deaf/hard\u2011of\u2011hearing and limited\u2011English\u2011proficient families to access ACS services. The contract will be awarded through a competitive sealed proposal process and will run from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-04T15:25:51.757696Z"
+      "fetched_at": "2026-08-05T15:10:29.649412Z"
     },
     {
       "id": "CROL-24ac434195fb",
@@ -326,7 +330,8 @@
         "immigration",
         "immigration legal services",
         "interpretation services",
-        "language access"
+        "language access",
+        "legal services"
       ],
       "fit_score": 7,
       "keyword_matches": [
@@ -335,11 +340,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "ACS\u2019s Immigrant Services and Language Affairs division is seeking up to three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, and written translation services for limited\u2011English proficient and deaf/hard\u2011of\u2011hearing families. The contracts will be awarded through a competitive sealed\u2011proposal process and run from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
+      "summary": "The Administration for Children\u2019s Services is seeking three vendors to provide in\u2011person and video remote interpretation for spoken languages, Deaf/Hard\u2011of\u2011Hearing interpretation, and written translation services. The services will support ACS and its network of providers in meeting language\u2011access requirements for limited\u2011English\u2011proficient and deaf/hard\u2011of\u2011hearing families. Contracts will be awarded through a competitive sealed\u2011proposal process for a term from July\u202f1\u202f2026 to June\u202f30\u202f2029.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-04T15:26:00.939583Z"
+      "fetched_at": "2026-08-05T15:10:37.030707Z"
     },
     {
       "id": "CROL-0e654988e8ff",
@@ -373,11 +378,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and free assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The services are delivered under the FY27 renewal award vehicle in the Human Services/Client Services category.",
+      "summary": "The agency is renewing a contract to provide legal screenings and free legal assistance to participants in the NYCitizenship Program, guiding them through the naturalization process. The goal is to help participants become eligible for SSI benefits and reduce reliance on DSS services.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-03T15:44:29.889021Z"
+      "fetched_at": "2026-08-05T15:10:44.389071Z"
     }
   ]
 }
