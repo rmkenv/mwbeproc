@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T13:42:36.368165Z",
+  "generated_at": "2026-08-26T13:48:17.579694Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,18 +22,18 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 255,
+      "found": 267,
       "queries": 15,
       "error": "",
       "note": ""
     },
     {
       "source": "City Record (today's PDF)",
-      "ok": true,
+      "ok": false,
       "found": 0,
-      "queries": 1,
-      "error": "",
-      "note": "No keyword matches in today's edition (normal on most days)."
+      "queries": 0,
+      "error": "HTTPError: 404 Client Error: Not Found for url: https://www.nyc.gov:443/assets/dcas/downloads/pdf/cityrecord/cityrecord-08-26-26.pdf",
+      "note": ""
     }
   ],
   "counts": {
@@ -162,11 +162,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is procuring legal services to assist non\u2011citizens with citizenship, permanent residence and other immigration matters, covering immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The contract will be awarded through a negotiated acquisition for FY 27.",
+      "summary": "Youth and Community Development is procuring legal services to assist non\u2011citizens with applications for citizenship, permanent residence, and related matters, covering immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The work will be awarded through a negotiated acquisition for FY 27.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:29.793953Z"
+      "fetched_at": "2026-08-26T13:48:10.328602Z"
     },
     {
       "id": "CROL-021aba56d1eb",
@@ -204,11 +204,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide immigration legal services to clients of the Family Justice Center, using a renewal procurement vehicle.",
+      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract for FJC Immigration Legal Services to provide legal assistance to clients served by its Family Justice Center program. The procurement is being awarded as a FY27 renewal under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:32.842879Z"
+      "fetched_at": "2026-08-26T13:48:13.983814Z"
     },
     {
       "id": "CROL-3ac8106997bb",
@@ -286,11 +286,11 @@
       ],
       "action": "PURSUE",
       "is_open": true,
-      "summary": "The Administration for Children\u2019s Services is seeking a security integrator to install, support, and maintain a Genetec security system and associated infrastructure on the 8th floor of 345 Adams Street. The work will serve the ACS Family Court Legal Services, Division of Family Justice\u2019s Close to Home and Juvenile Justice Initiative units, and the Division of Policy, Planning and Measurement\u2019s Workforce Institute located on that floor. The contract will be awarded through a competitive sealed bid process.",
+      "summary": "The Administration for Children\u2019s Services Police and Security is seeking a security integrator to install, support, and maintain a Genetec security system and related infrastructure on the 8th floor of 345 Adams Street, Brooklyn. The work will serve multiple ACS program offices on that floor and will be awarded through a competitive sealed\u2011bid process for a contract running from January\u202f1\u202f2027 to December\u202f31\u202f2031 with a maximum budget of $519,716.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:34.800071Z"
+      "fetched_at": "2026-08-26T13:48:16.119441Z"
     },
     {
       "id": "CROL-dba4df6cf5a9",
@@ -328,11 +328,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is procuring legal services to assist low\u2011income and vulnerable New Yorkers with immigration status, housing stability, workplace fairness, and government benefits under a competitive sealed proposal process pursuant to Section 3-03 of the NYC Procurement Policy Board Rules.",
+      "summary": "The City is seeking to contract for immigration opportunity initiative and low\u2011wage worker legal services for low\u2011income and other vulnerable New Yorkers throughout the five boroughs. The services will be delivered under a competitive sealed\u2011proposal, pre\u2011qualified\u2011list contract in accordance with Section\u202f3\u201103 of the NYC Procurement Policy Board Rules.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:19.896629Z"
+      "fetched_at": "2026-08-26T13:48:02.123279Z"
     },
     {
       "id": "CROL-afb4f6109a96",
@@ -370,11 +370,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is procuring immigration legal services for low\u2011wage workers throughout the five boroughs, to be delivered by nonprofit partners under the Office of Civil Justice. The work will be awarded through a competitive sealed\u2011proposal process using a pre\u2011qualified list.",
+      "summary": "The City is procuring legal services to assist low\u2011wage workers in New York City with civil matters such as housing, immigration status, workplace issues, and access to government benefits. The services will be provided across all five boroughs to vulnerable, low\u2011income residents. The contract will be awarded through a competitive sealed\u2011proposal process using a pre\u2011qualified list under Section\u202f3\u201103 of the NYC Procurement Policy Board Rules.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:22.233497Z"
+      "fetched_at": "2026-08-26T13:48:03.934386Z"
     },
     {
       "id": "CROL-fefa0544bc17",
@@ -412,11 +412,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is procuring legal services to assist non\u2011citizen clients\u2014including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers\u2014with citizenship, permanent residence, and other immigration\u2011related applications. The work will be delivered under a negotiated acquisition contract.",
+      "summary": "The Youth and Community Development agency is procuring a negotiated acquisition contract to provide legal services to non\u2011citizen survivors of domestic violence, including immigrant youth and trafficking victims, for assistance with citizenship, permanent residence and related applications. The service will be delivered under a single\u2011award negotiated acquisition vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:26.597090Z"
+      "fetched_at": "2026-08-26T13:48:07.274578Z"
     },
     {
       "id": "CROL-2f88ba77df20",
@@ -454,11 +454,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is procuring legal services to assist non\u2011citizen individuals\u2014including immigrant workers, immigrant youth, and survivors of domestic violence or trafficking\u2014with applications for citizenship, permanent residence, and related matters. The services will be delivered under a negotiated acquisition contract administered by the Department of Youth and Community Development.",
+      "summary": "The Youth and Community Development agency is procuring legal services to assist non\u2011citizen individuals\u2014including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers\u2014with applications for citizenship, permanent residence, and other immigration\u2011related matters. The contract will be awarded through a negotiated acquisition.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:28.590590Z"
+      "fetched_at": "2026-08-26T13:48:08.772015Z"
     },
     {
       "id": "CROL-32fc135d0592",
@@ -497,11 +497,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services Office of Civil Justice and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence are renewing a contract to provide core civil family\u2011law legal services at the city\u2019s five Family Justice Centers. The services cover legal screening, advice, assistance with self\u2011represented filings, and court representation for survivors of domestic and gender\u2011based violence on matters such as divorce, custody, visitation, and support. The procurement is a renewal under the Human Services/Client Services category.",
+      "summary": "The Department of Social Services and the Mayor\u2019s Office to End Domestic and Gender\u2011Based Violence are renewing a contract to provide core civil legal services at New York City\u2019s five Family Justice Centers. The services include family\u2011law assistance\u2014such as divorce, custody, visitation, and support matters\u2014for survivors of domestic and gender\u2011based violence and their children. The work will be performed under an FY27 renewal award contract.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:31.495688Z"
+      "fetched_at": "2026-08-26T13:48:11.881752Z"
     },
     {
       "id": "CRPDF-a12e4c8092a1",
@@ -712,11 +712,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring providers to deliver comprehensive support services to immigrant families residing in low\u2011income neighborhoods across New York City. The services include needs assessment, referral and case management to help families access education, health, housing, benefits, tax, workplace and legal/immigration systems. The work will be awarded through a negotiated acquisition.",
+      "summary": "The NYC Department of Youth and Community Development is awarding a negotiated acquisition to extend its Immigrant Families contracts. The contract will provide comprehensive service support to newly\u2011arrived limited\u2011English\u2011proficiency immigrant families residing in low\u2011income neighborhoods across New York City. Services include needs assessment, coordination with community providers, and assistance to help families become self\u2011sufficient and navigate systems such as education, health, housing and legal.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:18.341080Z"
+      "fetched_at": "2026-08-26T13:48:00.264739Z"
     },
     {
       "id": "CROL-c8b385d61259",
@@ -753,11 +753,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Youth and Community Development is procuring a negotiated acquisition to extend existing contracts that provide comprehensive support services to immigrant families living in low\u2011income neighborhoods across New York City. Services include needs assessment, linkage to education, health, housing, benefits, tax, workplace and legal/immigration systems, and assistance in building self\u2011advocacy skills.",
+      "summary": "The Youth and Community Development agency is procuring an extension of contracts to provide comprehensive support services to immigrant families residing in low\u2011income neighborhoods across New York City, delivered via a negotiated acquisition.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:24.685785Z"
+      "fetched_at": "2026-08-26T13:48:05.283304Z"
     },
     {
       "id": "CRPDF-38ba9066ae91",
@@ -873,11 +873,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services/Human Resources Administration is renewing a contract to provide legal screenings and assistance to participants in the NYCitizenship Program, helping them navigate the naturalization process. The services are offered free of charge to program clients to enhance their eligibility for SSI benefits.",
+      "summary": "The City is renewing a contract to provide legal screenings and free assistance to participants in the NYCitizenship Program. The services will guide clients through the naturalization process to help them become eligible for SSI and lessen reliance on DSS benefits.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-08-25T13:42:36.303700Z"
+      "fetched_at": "2026-08-26T13:48:17.514279Z"
     },
     {
       "id": "CRPDF-ca7b382ff408",
