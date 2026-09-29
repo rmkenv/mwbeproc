@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28T19:56:42.885003Z",
+  "generated_at": "2026-09-29T18:24:21.482310Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 169,
+      "found": 215,
       "queries": 15,
       "error": "",
       "note": ""
@@ -37,11 +37,11 @@
     }
   ],
   "counts": {
-    "total": 36,
-    "new_this_run": 0,
+    "total": 37,
+    "new_this_run": 1,
     "solicitations": 6,
     "intents": 0,
-    "awards": 30,
+    "awards": 31,
     "mwbe": 4
   },
   "opportunities": [
@@ -164,11 +164,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring legal services for non\u2011citizens, including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. These services will assist with citizenship, permanent residence, and other immigration-related applications. The work will be awarded through a negotiated acquisition contract by the Youth and Community Development agency.",
+      "summary": "The agency is procuring legal services for non\u2011citizens, including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers, to assist with citizenship, permanent residence and other immigration-related matters. The work will be awarded through a negotiated acquisition by the Youth and Community Development department.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:35.297922Z"
+      "fetched_at": "2026-09-29T18:24:11.782479Z"
     },
     {
       "id": "CROL-f441f01e9f46",
@@ -207,11 +207,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring legal services for non\u2011citizens\u2014including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers\u2014to assist with citizenship, permanent residence, and other immigration\u2011related matters, through a renewal contract. The work will be obtained via a negotiated acquisition by the Youth and Community Development agency.",
+      "summary": "The Youth and Community Development agency is procuring legal services for non\u2011citizens, including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The contracts will be awarded through a negotiated acquisition as a renewal of the existing portfolio while a new RFP is being developed.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:40.965376Z"
+      "fetched_at": "2026-09-29T18:24:17.884174Z"
     },
     {
       "id": "CRPDF-6b4ba744a5dd",
@@ -416,11 +416,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City, via a negotiated acquisition, is seeking a contractor to provide legal counseling, application assistance, and representation to immigrants\u2014including immigrant youths, survivors of domestic violence and trafficking, and non\u2011citizen workers\u2014to help them attain lawful immigration status. The contractor may deliver these services directly or through referrals to meet the clients' social services needs.",
+      "summary": "The City is awarding a negotiated acquisition contract to provide legal counseling, application assistance, and representation to immigrants\u2014including immigrant youths, survivors of domestic violence and trafficking, and non\u2011citizen workers\u2014to help them attain lawful immigration status and address related social service needs. The services will be performed under a non\u2011competitive NAQ for Youth Ministries for Peace and Justice administered by the Youth and Community Development agency.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:37.310159Z"
+      "fetched_at": "2026-09-29T18:24:14.010039Z"
     },
     {
       "id": "CROL-b50e3434076e",
@@ -458,11 +458,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Social Services\u2019 Human Resources Administration is awarding a contract, through a competitive sealed\u2011proposal/pre\u2011qualified\u2011list process, for low\u2011wage worker legal services under the Immigration Opportunity Initiative to assist low\u2011income and vulnerable New Yorkers across all five boroughs.",
+      "summary": "The City is awarding a contract to provide low\u2011wage worker legal services, including assistance with housing, immigration status, and workplace issues, to low\u2011income and vulnerable New Yorkers across all five boroughs. The work will be procured through a competitive sealed\u2011proposal process using a pre\u2011qualified vendor list.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:39.465776Z"
+      "fetched_at": "2026-09-29T18:24:16.470724Z"
     },
     {
       "id": "CRPDF-b744c113fb0c",
@@ -543,11 +543,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is awarding a negotiated acquisition contract for legal services to non\u2011citizens, including immigrant youth, survivors of domestic violence and trafficking, and immigrant workers, to assist with citizenship, permanent\u2011residence and related immigration matters. The contract will extend the agency\u2019s existing portfolio while a new RFP is prepared.",
+      "summary": "The Youth and Community Development agency is procuring legal services to assist non\u2011citizens, such as immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers, with citizenship, permanent residence, and related matters. The contract will be awarded using a negotiated acquisition process.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:42.815593Z"
+      "fetched_at": "2026-09-29T18:24:19.693122Z"
     },
     {
       "id": "CRPDF-b88967b60eee",
@@ -1056,6 +1056,44 @@
       "fetched_at": "2026-09-23T17:38:13.062887Z"
     },
     {
+      "id": "CROL-1f86dc9892b1",
+      "request_id": "20260915010",
+      "title": "NDA Immigrant Services: ESOL/Civics",
+      "agency": "Youth and Community Development",
+      "section": "Procurement",
+      "category": "Human Services/Client Services",
+      "notice_type": "Award",
+      "record_type": "AWARD",
+      "selection_method": "Renewal",
+      "mwbe_vehicle": false,
+      "pin": "26021P0003004R001",
+      "amount": 403206.0,
+      "vendor": "Academy of Medical & Public Health Services, Inc.",
+      "due_date": "",
+      "issue_date": "2026-09-21",
+      "contact_name": "Ann Marie Aspromonte",
+      "contact_email": "aaspromonte@dycd.nyc.gov",
+      "contact_phone": "",
+      "address": "",
+      "source": "City Record Online",
+      "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20260915010",
+      "matched_terms": [
+        "immigrant",
+        "immigration"
+      ],
+      "fit_score": 6,
+      "keyword_matches": [
+        "immigrant"
+      ],
+      "action": "INTEL",
+      "is_open": true,
+      "summary": "The Youth and Community Development agency is issuing a renewal award for a contract to deliver English\u2011to\u2011Speakers\u2011of\u2011Other\u2011Languages (ESOL) and civics instruction to participants of the NDA Immigrant Services program. The work falls under the Human Services/Client Services category and is being procured as a renewal of an existing vehicle.",
+      "certifications_required": [],
+      "is_new": true,
+      "scorer_version": 2,
+      "fetched_at": "2026-09-29T18:24:21.387547Z"
+    },
+    {
       "id": "CROL-0a98825da205",
       "request_id": "20260909010",
       "title": "Comprehensive Services for Immigrants",
@@ -1090,11 +1128,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is acquiring, via a negotiated acquisition, comprehensive service delivery for immigrant families residing in low\u2011income neighborhoods across New York City. Providers will assess families' complex, multilingual needs, coordinate with community partners, and help them access and navigate systems such as education, health care, housing, benefits, tax, employment, and legal/immigration. The goal is to build self\u2011advocacy and promote self\u2011sufficiency.",
+      "summary": "The agency is procuring comprehensive services for immigrant families residing in low\u2011income neighborhoods throughout New York City, including needs identification, coordination with community providers, and assistance accessing education, healthcare, housing, benefits, tax, workplace, and legal systems. The work will be awarded to a provider via a negotiated acquisition under the Youth and Community Development department.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-09-28T19:56:33.953623Z"
+      "fetched_at": "2026-09-29T18:24:10.455581Z"
     },
     {
       "id": "CRPDF-36b42184e7a8",
