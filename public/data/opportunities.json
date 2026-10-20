@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T18:55:38.592588Z",
+  "generated_at": "2026-10-20T17:41:23.992593Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 146,
+      "found": 149,
       "queries": 15,
       "error": "",
       "note": ""
@@ -164,11 +164,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is procuring legal service contracts to assist non\u2011citizens with applications for citizenship, permanent residence, and related matters. Services will be provided to immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The contract will be awarded via a negotiated acquisition.",
+      "summary": "The Youth and Community Development agency is procuring legal services for non\u2011citizens, including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers, to assist with applications for citizenship, permanent residence, and other related matters. The contract will be awarded using a negotiated acquisition vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-19T18:55:35.902219Z"
+      "fetched_at": "2026-10-20T17:41:20.750369Z"
     },
     {
       "id": "CROL-f441f01e9f46",
@@ -416,11 +416,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City of New York, via the Youth and Community Development agency, is issuing a non\u2011competitive negotiated acquisition for legal counseling, application assistance, and representation to immigrants\u2014including youth, survivors of domestic violence and trafficking, and non\u2011citizen workers. The contractor will help these individuals obtain lawful immigration status and address related social service needs, either directly or through referrals.",
+      "summary": "The City is issuing a non\u2011competitive Notice of Award to procure a contractor who will provide legal counseling, application assistance, and representation to immigrants\u2014including youths, survivors of domestic violence or trafficking, and non\u2011citizen workers\u2014to help them obtain lawful status. The services will be delivered under a negotiated acquisition vehicle for the Youth and Community Development agency.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-19T18:55:37.252526Z"
+      "fetched_at": "2026-10-20T17:41:22.236143Z"
     },
     {
       "id": "CROL-b50e3434076e",
@@ -1053,11 +1053,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring comprehensive support services for immigrant families residing in low\u2011income neighborhoods across New York City. Providers will assess families\u2019 complex needs, coordinate with community partners, and help them access resources in areas such as education, health, housing, benefits, tax, workplace, and legal systems. The work will be awarded through a negotiated acquisition by the Department of Youth and Community Development.",
+      "summary": "The Youth and Community Development agency is issuing a negotiated acquisition contract for comprehensive support services to immigrant families residing in low\u2011income neighborhoods across New York City. The contract will provide needs assessments, referral coordination, and skill\u2011building to help families access education, healthcare, housing, benefits, tax, workplace, and legal/immigration systems.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-19T18:55:33.403304Z"
+      "fetched_at": "2026-10-20T17:41:17.292442Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
@@ -1167,11 +1167,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is renewing a contract to provide ESOL and civics instruction to immigrant clients through the NDA Immigrant Services program. The work will be performed under a renewal selection method as a Human Services/Client Services contract.",
+      "summary": "The Youth and Community Development agency is renewing a contract to provide English\u2011as\u2011a\u2011Second\u2011Language (ESOL) and civics instruction to immigrant service participants. The work is classified under Human Services/Client Services and will be awarded using a renewal selection method.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-19T18:55:38.523719Z"
+      "fetched_at": "2026-10-20T17:41:23.923391Z"
     },
     {
       "id": "CROL-0a98825da205",
@@ -1208,11 +1208,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is procuring providers to deliver comprehensive services to immigrant families residing in low\u2011income neighborhoods throughout New York City. The services include identifying complex needs, coordinating with community providers, and helping families access education, healthcare, housing, benefits, tax, workplace, and legal/immigration systems. This work will be awarded through a negotiated acquisition by the Youth and Community Development agency.",
+      "summary": "The agency seeks providers to deliver comprehensive support services to low\u2011income immigrant families throughout New York City. The work includes assessing families\u2019 needs, coordinating with community partners, and helping them navigate systems such as education, health, housing, benefits, tax, workplace, and legal/immigration. The contract will be awarded through a negotiated acquisition.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-19T18:55:34.419810Z"
+      "fetched_at": "2026-10-20T17:41:19.012946Z"
     },
     {
       "id": "CRPDF-36b42184e7a8",
