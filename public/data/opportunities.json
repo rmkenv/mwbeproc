@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-21T17:49:22.514055Z",
+  "generated_at": "2026-10-22T17:47:42.937911Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 156,
+      "ok": true,
+      "found": 157,
       "queries": 15,
-      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
+      "error": "",
       "note": ""
     },
     {
@@ -164,11 +164,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is awarding a negotiated acquisition contract for legal services to non\u2011citizens, including immigrants, immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The services will assist with applications for citizenship, permanent residence, and other immigration\u2011related matters. The contract will be administered through a negotiated acquisition vehicle.",
+      "summary": "The agency is procuring legal service contracts that provide assistance to non\u2011citizens with applications for citizenship, permanent residence, and other immigration\u2011related matters, including services for immigrant youth, survivors of domestic violence and trafficking, and immigrant workers. The work will be performed under a Negotiated Acquisition vehicle by the Youth and Community Development (DYCD) department.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-21T17:49:18.652882Z"
+      "fetched_at": "2026-10-22T17:47:40.474515Z"
     },
     {
       "id": "CROL-f441f01e9f46",
@@ -416,11 +416,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is awarding a non\u2011competitive negotiated acquisition to a contractor to provide legal counseling, application assistance, and representation to immigrants\u2014including immigrant youth, survivors of domestic violence and trafficking, and non\u2011citizen workers\u2014to help them obtain lawful immigration status. The procurement is being made under the Youth Ministries for Peace and Justice (YMPJ) program of the Youth and Community Development agency.",
+      "summary": "The Youth and Community Development agency is issuing a non\u2011competitive negotiated acquisition to procure legal counseling, application assistance, and representation for immigrants\u2014including immigrant youths, survivors of domestic violence and trafficking, and non\u2011citizen workers\u2014so they can obtain lawful immigration status. The contract will replace services previously provided by LSNY Bronx.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-21T17:49:20.498281Z"
+      "fetched_at": "2026-10-22T17:47:41.542860Z"
     },
     {
       "id": "CROL-b50e3434076e",
@@ -1053,11 +1053,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is awarding a negotiated acquisition to provide comprehensive services to immigrant families in low\u2011income neighborhoods throughout New York City. The services include needs assessment and coordination with community partners to help families become self\u2011sufficient across education, health, housing, benefits, tax, workplace and legal systems.",
+      "summary": "DYCD is procuring comprehensive services for immigrant families residing in low\u2011income neighborhoods across New York City. The providers will assess families\u2019 complex needs and, in coordination with community partners, connect them to resources that promote self\u2011sufficiency in areas such as education, health, housing, benefits and legal systems. The work will be awarded through a negotiated acquisition contract.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-21T17:49:15.429205Z"
+      "fetched_at": "2026-10-22T17:47:38.072340Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
@@ -1167,11 +1167,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is renewing a contract to provide ESOL and civics instruction to immigrant service participants. The work will be delivered under a renewal contract vehicle.",
+      "summary": "The Youth and Community Development agency is renewing a contract to provide ESOL and civics instruction to immigrant service clients. The work is awarded under a Human Services/Client Services renewal vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-21T17:49:22.468736Z"
+      "fetched_at": "2026-10-22T17:47:42.863327Z"
     },
     {
       "id": "CROL-0a98825da205",
@@ -1208,11 +1208,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is procuring providers to deliver comprehensive services to immigrant families residing in low\u2011income neighborhoods across New York City. The services include needs assessment, coordination with community partners, and assistance navigating education, health, housing, benefits, tax, workplace, and legal/immigration systems to promote self\u2011sufficiency. The contract will be awarded through a Negotiated Acquisition by the Youth and Community Development agency.",
+      "summary": "The agency is procuring providers to deliver comprehensive services to immigrant families living in low\u2011income neighborhoods across New York City, including needs assessments, coordination with community providers, and assistance navigating education, health, housing, benefits, tax, workplace and legal/immigration systems. The work will be awarded through a negotiated acquisition.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-21T17:49:17.344843Z"
+      "fetched_at": "2026-10-22T17:47:39.375926Z"
     },
     {
       "id": "CRPDF-36b42184e7a8",
