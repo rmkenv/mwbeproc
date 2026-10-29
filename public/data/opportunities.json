@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T18:36:47.005324Z",
+  "generated_at": "2026-10-29T18:45:20.951536Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 151,
+      "ok": true,
+      "found": 146,
       "queries": 15,
-      "error": "HTTPError: 503 Server Error: Service Unavailable for url: https://data.cityofnewyork.us/resource/dg92-zbpx.json?%24select=request_id%2Cstart_date%2Cend_date%2Cagency_name%2Ctype_of_notice_description%2Ccategory_description%2Cshort_title%2Cselection_method_description%2Csection_name%2Cpin%2Cdue_date%",
+      "error": "",
       "note": ""
     },
     {
@@ -1092,11 +1092,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City Youth and Community Development agency is purchasing comprehensive service contracts for immigrant families living in low\u2011income neighborhoods across New York City. The contracts will provide needs assessment, self\u2011advocacy training, and assistance navigating systems such as education, health, housing, benefits, tax, workplace, and legal/immigration. The procurement will be conducted via a negotiated acquisition.",
+      "summary": "The NYC Department of Youth and Community Development is procuring comprehensive services for immigrant families living in low\u2011income neighborhoods throughout the city, including needs assessment, self\u2011advocacy skill building, and assistance navigating education, health, housing, benefits, tax, workplace, and legal systems. The services will be delivered to newly\u2011arrived limited\u2011English\u2011proficiency families via a negotiated acquisition contract.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-28T18:36:41.713791Z"
+      "fetched_at": "2026-10-29T18:45:18.508409Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
@@ -1206,11 +1206,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is awarding a renewal contract to provide ESOL and civics instruction to immigrant clients under the existing Human Services/Client Services procurement vehicle.",
+      "summary": "The City is renewing a contract to provide ESOL and civics instruction for the NDA Immigrant Services program. The services will be delivered under a renewal procurement by the Youth and Community Development agency.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-28T18:36:46.948073Z"
+      "fetched_at": "2026-10-29T18:45:20.880200Z"
     },
     {
       "id": "CROL-0a98825da205",
@@ -1247,11 +1247,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Youth and Community Development agency is procuring comprehensive service delivery for immigrant families residing in low\u2011income neighborhoods across New York City. Providers will identify and address the complex needs of newly\u2011arrived limited\u2011English\u2011proficiency families and connect them with resources in education, health, housing, benefits, tax, workplace, and legal/immigration systems. The contract will be awarded through a negotiated acquisition.",
+      "summary": "The City of New York, through the Youth and Community Development agency, is procuring providers to deliver comprehensive services to immigrant families living in low\u2011income neighborhoods across the city. The work includes identifying families' needs, coordinating with community partners, and helping families access education, health, housing, benefits, tax, workplace, and legal/immigration systems. The contract will be awarded via a negotiated acquisition under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-10-28T18:36:42.909946Z"
+      "fetched_at": "2026-10-29T18:45:19.749877Z"
     },
     {
       "id": "CRPDF-36b42184e7a8",
