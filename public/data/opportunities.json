@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T22:02:12.274135Z",
+  "generated_at": "2026-11-03T19:55:09.467399Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -38,7 +38,7 @@
   ],
   "counts": {
     "total": 41,
-    "new_this_run": 1,
+    "new_this_run": 0,
     "solicitations": 7,
     "intents": 1,
     "awards": 33,
@@ -1088,11 +1088,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "The Campaign Finance Board will enter a Negotiated Acquisition with Lankler Siffert & Wohl LLP to provide legal advice on anticipated litigation, assess legal risk from campaign audits and enforcement, and conduct an independent performance audit of its campaign audit function. The contract is valued up to $250,000 and runs from December 1, 2026 through November 30, 2027, with one optional one\u2011year renewal.",
+      "summary": "The Campaign Finance Board will enter a negotiated acquisition with Lankler Siffert & Wohl LLP to provide legal and consulting services that advise the Board on anticipated litigation and legal risk related to campaign audits and enforcement, and to lead an independent performance audit of the Board\u2019s audit function and process. The contract is valued up to $250,000 for a term from December\u00a01,\u00a02026 through November\u00a030,\u00a02027, with one renewal option.",
       "certifications_required": [],
-      "is_new": true,
+      "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-02T22:02:12.245116Z"
+      "fetched_at": "2026-11-03T19:55:09.429985Z"
     },
     {
       "id": "CROL-d0ae55be7e80",
@@ -1129,11 +1129,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "Youth and Community Development is awarding a negotiated acquisition contract to provide comprehensive services to immigrant families living in low\u2011income neighborhoods throughout New York City. The services include needs assessments and assistance with education, healthcare, housing, benefits, tax, workplace, and legal/immigration systems.",
+      "summary": "The City will award a negotiated acquisition contract to provide comprehensive services to newly\u2011arrived, limited\u2011English\u2011proficiency immigrant families living in low\u2011income neighborhoods throughout New York City. The services will identify families' complex needs and coordinate with community providers to help them become self\u2011sufficient across areas such as education, health, housing, benefits, tax, workplace, and legal/immigration systems.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-02T22:02:08.062177Z"
+      "fetched_at": "2026-11-03T19:55:06.602313Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
@@ -1243,11 +1243,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The City is renewing a contract with NDA Immigrant Services to deliver English\u2011as\u2011a\u2011Second\u2011Language (ESOL) and civics instruction to immigrant clients. The work will be performed under a renewal selection method for the Youth and Community Development agency.",
+      "summary": "Youth and Community Development is renewing a contract to provide ESOL and civics instruction to immigrant service participants. The scope includes English language and civic education services under a renewal award vehicle.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-02T22:02:11.265220Z"
+      "fetched_at": "2026-11-03T19:55:08.083634Z"
     },
     {
       "id": "CROL-0a98825da205",
