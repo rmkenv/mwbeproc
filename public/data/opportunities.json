@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T20:12:35.432746Z",
+  "generated_at": "2026-11-05T20:26:53.136858Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 130,
+      "found": 128,
       "queries": 15,
       "error": "",
       "note": ""
@@ -37,9 +37,9 @@
     }
   ],
   "counts": {
-    "total": 41,
-    "new_this_run": 0,
-    "solicitations": 7,
+    "total": 42,
+    "new_this_run": 1,
+    "solicitations": 8,
     "intents": 1,
     "awards": 33,
     "mwbe": 6
@@ -87,6 +87,45 @@
       "is_new": false,
       "scorer_version": 2,
       "fetched_at": "2026-08-07T14:07:49.525062Z"
+    },
+    {
+      "id": "CROL-9b587fdc106c",
+      "request_id": "20261023009",
+      "title": "Correction: NYC Care Enrollment & Outreach",
+      "agency": "NYC Health + Hospitals",
+      "section": "Procurement",
+      "category": "Services (other than human services)",
+      "notice_type": "Solicitation",
+      "record_type": "SOLICITATION",
+      "selection_method": "Request for Proposals",
+      "mwbe_vehicle": false,
+      "pin": "2863",
+      "amount": 0.0,
+      "vendor": "",
+      "due_date": "2027-01-11",
+      "issue_date": "2026-11-04",
+      "contact_name": "Raffaella Glasser",
+      "contact_email": "rfp_contacts@nychhc.org",
+      "contact_phone": "(646) 815-3747",
+      "address": "50 Water Street, 5th Floor, New York, NY 10004",
+      "source": "City Record Online",
+      "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20261023009",
+      "matched_terms": [
+        "immigrant",
+        "immigration",
+        "language access"
+      ],
+      "fit_score": 9,
+      "keyword_matches": [
+        "immigration"
+      ],
+      "action": "PURSUE",
+      "is_open": true,
+      "summary": "The City is issuing an RFP for a grant to nonprofit partners to conduct enrollment and outreach for the NYC Care health\u2011care access program, targeting New York City residents who lack insurance or cannot afford it. The award will fund activities that connect eligible patients to primary, specialty, behavioral health, and prescription services through NYC Health + Hospitals facilities.",
+      "certifications_required": [],
+      "is_new": true,
+      "scorer_version": 2,
+      "fetched_at": "2026-11-05T20:26:52.212531Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
@@ -1088,11 +1127,11 @@
       ],
       "action": "MONITOR",
       "is_open": true,
-      "summary": "The Campaign Finance Board will enter a negotiated acquisition with Lankler Siffert & Wohl LLP to provide legal advice on anticipated litigation, including risk assessment related to campaign audits and enforcement, and to lead an independent performance audit of its audit function and process. The contract is valued up to $250,000 and runs from Dec\u202f1\u202f2026 to Nov\u202f30\u202f2027, with one optional renewal year.",
+      "summary": "The Campaign Finance Board is entering a negotiated acquisition with Lankler Siffert & Wohl LLP to provide legal services that include advice on anticipated litigation and legal risk related to campaign audits and enforcement, as well as leading an independent performance audit of the board\u2019s audit function. The contract is valued up to $250,000 and runs from December 1, 2026 through November 30, 2027, with an option to extend one year.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-04T20:12:35.401886Z"
+      "fetched_at": "2026-11-05T20:26:53.091046Z"
     },
     {
       "id": "CROL-d0ae55be7e80",
@@ -1129,11 +1168,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The New York City Department of Youth and Community Development is procuring comprehensive services for immigrant families residing in low\u2011income neighborhoods throughout the city, focusing on needs assessment, self\u2011advocacy skill building, and navigation of systems such as education, health, housing, benefits, tax, workplace, and legal/immigration. The services will be delivered under a negotiated acquisition extension of existing Immigrant Families contracts.",
+      "summary": "The Youth and Community Development agency is procuring providers to deliver comprehensive services to immigrant families residing in low\u2011income neighborhoods across New York City. The services involve assessing families' complex needs, coordinating access to resources such as education, healthcare, housing, benefits, tax, workplace, and legal/immigration systems, and building self\u2011advocacy skills. The work will be awarded through a negotiated acquisition under the Human Services/Client Services category.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-04T20:12:33.047261Z"
+      "fetched_at": "2026-11-05T20:26:50.884107Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
