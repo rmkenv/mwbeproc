@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-06T19:47:57.148707Z",
+  "generated_at": "2026-11-09T22:49:27.935248Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 121,
+      "ok": true,
+      "found": 111,
       "queries": 15,
-      "error": "HTTPError: 503 Server Error: Service Unavailable for url: https://data.cityofnewyork.us/resource/dg92-zbpx.json?%24select=request_id%2Cstart_date%2Cend_date%2Cagency_name%2Ctype_of_notice_description%2Ccategory_description%2Cshort_title%2Cselection_method_description%2Csection_name%2Cpin%2Cdue_date%",
+      "error": "",
       "note": ""
     },
     {
@@ -37,10 +37,10 @@
     }
   ],
   "counts": {
-    "total": 42,
+    "total": 41,
     "new_this_run": 0,
     "solicitations": 8,
-    "intents": 1,
+    "intents": 0,
     "awards": 33,
     "mwbe": 6
   },
@@ -121,11 +121,11 @@
       ],
       "action": "PURSUE",
       "is_open": true,
-      "summary": "NYC Health + Hospitals is issuing an RFP for a community grant program that will fund nonprofit organizations to conduct enrollment and outreach activities for the NYC Care health access program. The work targets New York City residents who are ineligible for or cannot afford health insurance, regardless of immigration status, and will be performed under a grant vehicle.",
+      "summary": "NYC Health + Hospitals is issuing an RFP for nonprofit organizations to conduct enrollment and outreach activities for the NYC Care program, which provides sliding\u2011scale primary, preventive, specialty, and behavioral health services to New York City residents who are uninsured or cannot afford insurance, regardless of immigration status. The work will be funded through the NYC Care community grant program.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-06T19:47:55.899287Z"
+      "fetched_at": "2026-11-09T22:49:27.901575Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
@@ -1097,43 +1097,6 @@
       "fetched_at": "2026-08-07T14:07:38.403668Z"
     },
     {
-      "id": "CROL-19eb202c7431",
-      "request_id": "20261022012",
-      "title": "Legal Services",
-      "agency": "Campaign Finance Board",
-      "section": "Procurement",
-      "category": "Services (other than human services)",
-      "notice_type": "Intent to Award",
-      "record_type": "INTENT",
-      "selection_method": "Negotiated Acquisition",
-      "mwbe_vehicle": false,
-      "pin": "004202700006N",
-      "amount": 0.0,
-      "vendor": "",
-      "due_date": "2026-11-06",
-      "issue_date": "2026-11-02",
-      "contact_name": "Michelle Archbald",
-      "contact_email": "purchasing@nyccfb.info",
-      "contact_phone": "(212) 409-1800",
-      "address": "100 Church Street, 12th Floor, New York, NY 10007",
-      "source": "City Record Online",
-      "source_url": "https://a856-cityrecord.nyc.gov/RequestDetail/20261022012",
-      "matched_terms": [
-        "legal services"
-      ],
-      "fit_score": 6,
-      "keyword_matches": [
-        "legal services"
-      ],
-      "action": "MONITOR",
-      "is_open": true,
-      "summary": "The Campaign Finance Board will enter a negotiated acquisition with Lankler Siffert & Wohl LLP to provide legal consulting services that include advice on anticipated litigation, assessment of legal risk arising from campaign audits and enforcement processes, and leadership of an independent performance audit of the board\u2019s campaign audit function. The contract is valued up to $250,000 and runs from Dec\u202f1\u202f2026 through Nov\u202f30\u202f2027, with one optional renewal year.",
-      "certifications_required": [],
-      "is_new": false,
-      "scorer_version": 2,
-      "fetched_at": "2026-11-06T19:47:57.115774Z"
-    },
-    {
       "id": "CROL-d0ae55be7e80",
       "request_id": "20261001014",
       "title": "Comprehensive Services for Immigrants",
@@ -1168,11 +1131,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The Department of Youth and Community Development is procuring providers to deliver comprehensive services to immigrant families residing in low\u2011income neighborhoods across New York City. The services will identify and address the multiple needs of newly\u2011arrived limited\u2011English\u2011proficiency families and connect them with resources to promote self\u2011sufficiency in areas such as education, health, housing, benefits, tax, workplace, and legal systems. The contract will be awarded through a negotiated acquisition.",
+      "summary": "The agency is procuring comprehensive services for immigrant families residing in low\u2011income neighborhoods across New York City, focusing on identifying needs and linking families to resources in education, health, housing, benefits, tax, workplace, and legal/immigration systems. These services will be provided under a negotiated acquisition contract through the Youth and Community Development department.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-06T19:47:54.745665Z"
+      "fetched_at": "2026-11-09T22:49:26.626812Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
