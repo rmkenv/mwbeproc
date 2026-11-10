@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-09T22:49:27.935248Z",
+  "generated_at": "2026-11-10T20:09:16.256752Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": true,
+      "ok": false,
       "found": 111,
       "queries": 15,
-      "error": "",
+      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
       "note": ""
     },
     {
@@ -121,11 +121,11 @@
       ],
       "action": "PURSUE",
       "is_open": true,
-      "summary": "NYC Health + Hospitals is issuing an RFP for nonprofit organizations to conduct enrollment and outreach activities for the NYC Care program, which provides sliding\u2011scale primary, preventive, specialty, and behavioral health services to New York City residents who are uninsured or cannot afford insurance, regardless of immigration status. The work will be funded through the NYC Care community grant program.",
+      "summary": "Solicitation from NYC Health + Hospitals via Request for Proposals. Matched on: immigration. Open the notice for full scope and eligibility.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-09T22:49:27.901575Z"
+      "fetched_at": "2026-11-10T20:09:16.201492Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
@@ -1131,11 +1131,11 @@
       ],
       "action": "INTEL",
       "is_open": true,
-      "summary": "The agency is procuring comprehensive services for immigrant families residing in low\u2011income neighborhoods across New York City, focusing on identifying needs and linking families to resources in education, health, housing, benefits, tax, workplace, and legal/immigration systems. These services will be provided under a negotiated acquisition contract through the Youth and Community Development department.",
+      "summary": "Award from Youth and Community Development via Negotiated Acquisition. Matched on: immigrant, immigration. Open the notice for full scope and eligibility.",
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-09T22:49:26.626812Z"
+      "fetched_at": "2026-11-10T20:09:16.035693Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
