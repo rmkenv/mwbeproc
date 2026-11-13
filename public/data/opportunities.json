@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T20:36:15.496184Z",
+  "generated_at": "2026-11-13T20:13:18.515307Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 103,
+      "ok": true,
+      "found": 101,
       "queries": 15,
-      "error": "HTTPError: 503 Server Error: Service Unavailable for url: https://data.cityofnewyork.us/resource/dg92-zbpx.json?%24select=request_id%2Cstart_date%2Cend_date%2Cagency_name%2Ctype_of_notice_description%2Ccategory_description%2Cshort_title%2Cselection_method_description%2Csection_name%2Cpin%2Cdue_date%",
+      "error": "",
       "note": ""
     },
     {
@@ -125,7 +125,7 @@
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-12T20:36:15.259452Z"
+      "fetched_at": "2026-11-13T20:13:18.460661Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
@@ -1121,6 +1121,7 @@
       "matched_terms": [
         "immigrant",
         "immigration",
+        "immigration legal services",
         "legal services"
       ],
       "fit_score": 6,
@@ -1134,7 +1135,7 @@
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-12T20:36:15.462126Z"
+      "fetched_at": "2026-11-13T20:13:18.234433Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
