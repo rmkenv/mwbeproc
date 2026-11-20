@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19T21:07:26.387380Z",
+  "generated_at": "2026-11-20T20:52:33.674312Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -21,10 +21,10 @@
   "sources": [
     {
       "source": "City Record Online",
-      "ok": false,
-      "found": 89,
+      "ok": true,
+      "found": 85,
       "queries": 15,
-      "error": "ReadTimeout: HTTPSConnectionPool(host='data.cityofnewyork.us', port=443): Read timed out. (read timeout=45)",
+      "error": "",
       "note": ""
     },
     {
@@ -125,7 +125,7 @@
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-19T21:07:26.345886Z"
+      "fetched_at": "2026-11-20T20:52:33.643801Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
@@ -1135,7 +1135,7 @@
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-19T21:07:26.211391Z"
+      "fetched_at": "2026-11-20T20:52:33.531180Z"
     },
     {
       "id": "CRPDF-2fe080be569d",
