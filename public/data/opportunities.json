@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T22:03:16.970910Z",
+  "generated_at": "2026-11-27T21:46:10.990068Z",
   "search_terms": [
     "immigration legal services",
     "immigration",
@@ -22,7 +22,7 @@
     {
       "source": "City Record Online",
       "ok": true,
-      "found": 86,
+      "found": 81,
       "queries": 15,
       "error": "",
       "note": ""
@@ -125,7 +125,7 @@
       "certifications_required": [],
       "is_new": false,
       "scorer_version": 2,
-      "fetched_at": "2026-11-26T22:03:16.926984Z"
+      "fetched_at": "2026-11-27T21:46:10.949016Z"
     },
     {
       "id": "CRPDF-66fa8fd9e816",
